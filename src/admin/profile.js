@@ -6,6 +6,10 @@ import Menu from "./menu"
 import ProdDisplay from "./proddisplay"
 import Popup from "./popup"
 import Sorts from "./sorts"
+import Input from "./input"
+import axios from "axios"
+
+
 
 const Profile = () => {
     const [isOpen, setisOpen] = useState(false)
@@ -137,6 +141,37 @@ const Profile = () => {
             ]
         }
     ])
+    const [upgrade, setupgrade] = useState(0)
+    const [payload, setpayload] = useState(
+        {
+            'partner_id': '36',
+        }
+    )
+    const [msg, setmsg] = useState('')
+    const getbn = (name)=> {
+        setpayload({...payload, bank_name:name})
+    }
+    const getbac = (name)=> {
+        setpayload({...payload, bank_acc_no:name})
+    }
+    const getban = (name)=> {
+        setpayload({...payload, bank_acc_name:name})
+    }
+
+    const axe =async (e)=>{
+        e.preventDefault()
+        console.log('clicked')
+        var data = payload;
+        try {
+			const response = await axios.post('http://geo.vensle.com/api/verified', data);
+            setmsg(response.data.msg);
+            console.log(response.data);
+		} catch (err) {
+            console.log(err)
+			setmsg('An error occured');
+		}
+    }
+    console.log(payload)
     return(
         <div>
             <Menu />
@@ -160,27 +195,16 @@ const Profile = () => {
                         <div className="pf-right">
                             <div className='bdetails'>
                                 <div className="must">
-                                    <div  className="green" title={'type'}><FontAwesomeIcon icon={faEdit}/></div>
+                                    <div  className="upg-acc" title={'Account upgrade'} onClick={(e)=>setupgrade(1)}>Upgrade account</div>
+                                    <div  className="green" title={'Edit profile'}><FontAwesomeIcon icon={faEdit}/></div>
                                 </div>
                             </div>
-                            <h3>Abubakar Donatus</h3>
-                            <h5>Personal Information</h5>
-                                <table>
-                                  <tr>
-                                      <td>Email</td>
-                                      <td>abudonnigeria@gmail.com</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Phone</td>
-                                      <td>922-55444885</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Address</td>
-                                      <td>Ikotun, Lagos Nigeria</td>
-                                  </tr>
-                                </table>
-                            <h5>Business Information</h5>
-                                <table>
+                            {
+                                upgrade === 0 ? 
+                                <div>
+                                    <h3>Abubakar Donatus</h3>
+                                    <h5>Personal Information</h5>
+                                    <table>
                                     <tr>
                                         <td>Email</td>
                                         <td>abudonnigeria@gmail.com</td>
@@ -193,7 +217,35 @@ const Profile = () => {
                                         <td>Address</td>
                                         <td>Ikotun, Lagos Nigeria</td>
                                     </tr>
-                                </table>
+                                    </table>
+                                <h5>Business Information</h5>
+                                    <table>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td>abudonnigeria@gmail.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phone</td>
+                                            <td>922-55444885</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address</td>
+                                            <td>Ikotun, Lagos Nigeria</td>
+                                        </tr>
+                                    </table>
+                            </div>
+                            :
+                            <div className="upgradeform">
+                            <span onClick={(e)=>setupgrade(0)}>X</span>
+                            <h4>Fill the details below to upgrade your account to a partner account</h4>
+                            <Input title={'Bank Name'} icon={''} type={"text"} getreadstate={getbn}/>
+                            <Input title={'Bank account number'} icon={''} type={"text"} getreadstate={getbac}/>
+                            <Input title={'Bank account name'} icon={''} type={"text"} getreadstate={getban}/>
+                            <button onClick={axe}>Upgrade account</button>
+                            <div>{msg}</div> 
+                            </div>
+                            }
+                            
                         </div>
                     </div>
                 </div>

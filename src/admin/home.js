@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { faCoins, faUser, faChevronRight, faBarChart, faChartSimple, faNairaSign, faEllipsis, faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ProdDisplay from "./proddisplay"
@@ -6,7 +6,11 @@ import Sidebar from "./sidebar"
 import Menu from "./menu"
 import SalesSummary from "./salessumm"
 import SalesList from "./saleslist"
+
+import {UserContext} from '../auth/usercontext';
+
 const HAdmin = () => {
+    const {details:{authlev, name,  email, location}, setDetails} = useContext(UserContext)
     const [topic, settopic] = useState('Top Trending Products')
     const [showdrop, setshowdrop] = useState(false)
     const [groceries, setgroceries] = useState([
@@ -199,7 +203,7 @@ const HAdmin = () => {
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
                         <div>Home -> Dashboard</div>
-                        <div><span>Abudonnigeria </span><FontAwesomeIcon icon={faUser}/></div>
+                        <div><span>{name} </span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="adm-main-second">
                         <div className="adm-main-left">

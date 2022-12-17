@@ -14,6 +14,8 @@ import Carousels from "../reusable/carousel"
 import Groce from '../grocerydelivery.webp'
 import Vertice from "./vertice"
 import Fly from "../../src/reusable/fly"
+import Foot from "../reusable/footer"
+import Drop from "../reusable/drop"
 const BSTutorial = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [product, setProducts] = useState([
@@ -153,13 +155,13 @@ const BSTutorial = () => {
             </div>
             <div className="main">
                 <div className="main-sidebar">
-                    <Fly info={"WELCOME"}/>
-                    <Fly info={"HOME PAGE"}/>
-                    <Fly info={"SELLER'S PROFILE"}/>
-                    <Fly info={"DASHBOARD"}/>
-                    <Fly info={"PRODUCTS"}/>
-                    <Fly info={"SETTINGS"}/>
-                    <Fly info={"MESSAGE"}/>
+                    <Drop info={"WELCOME"}/>
+                    <Drop info={"HOME PAGE"}/>
+                    <Drop info={"SELLER'S PROFILE"}/>
+                    <Drop info={"DASHBOARD"}/>
+                    <Drop info={"PRODUCTS"}/>
+                    <Drop info={"SETTINGS"}/>
+                    <Drop info={"MESSAGE"}/>
                 </div>
                 <div className="main-content">
                     <h4>INTRODUCTION</h4>
@@ -208,6 +210,7 @@ const BSTutorial = () => {
                     </ul>
                 </div>
             </div>
+            <Foot />
         </div>
         
     )

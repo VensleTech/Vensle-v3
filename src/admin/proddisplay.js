@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClose, faLocationDot, faCircleDot ,faHamburger, faTruck, faHandshakeSimple, faEdit, faEye, faStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons"
 const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, id, img, title, price, children, thestate, trans}) => {
     const [isOpen, setIsOpen] = useState(false)
+    const getreadstate = (readstate)=> {
+        setIsOpen(readstate)
+      }
     const data = trans
     return (
         
@@ -50,7 +53,7 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, id, img, title, 
                     <div className='popcontainer' > 
                         <div  className="inner-container">
                         <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={(e)=>setIsOpen(!isOpen)}><FontAwesomeIcon icon={faClose} /></div>
-                            <ProdPop id={id} title={title} price={price} img={img}/>
+                            <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate} />
                         </div>
                     </div>: null}
                 </div>
@@ -93,7 +96,7 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, id, img, title, 
                     <div className='popcontainer' > 
                         <div  className="inner-container">
                         <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={(e)=>setIsOpen(!isOpen)}><FontAwesomeIcon icon={faClose} /></div>
-                            <ProdPop id={id} title={title} price={price} img={img}/>
+                            <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate}/>
                         </div>
                     </div>: null}
             </div>
@@ -114,7 +117,7 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, id, img, title, 
                     <div className='popcontainer' > 
                         <div  className="inner-container">
                         <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={(e)=>setIsOpen(!isOpen)}><FontAwesomeIcon icon={faClose} /></div>
-                            <ProdPop id={id} title={title} price={price} img={img}/>
+                            <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate}/>
                         </div>
                     </div>: null}
             </div>}

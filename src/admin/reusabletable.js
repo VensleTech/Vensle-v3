@@ -5,6 +5,9 @@ import ProdPop from "../reusable/prodpop"
 
 const ReusableTable = ({id, img, title, price, trans}) => {
     const [isOpen, setIsOpen] = useState(false)
+    const getreadstate = (readstate)=> {
+        setIsOpen(readstate)
+      }
     return(
         <div className="reusable-table">
             <div>{id}</div>
@@ -17,12 +20,7 @@ const ReusableTable = ({id, img, title, price, trans}) => {
             <div>{price}</div>
             <div className="viewer" onClick={(e)=>setIsOpen(!isOpen)} ><FontAwesomeIcon icon={faEye}/> View</div>
             {isOpen === true ?
-                <div className='popcontainer' > 
-                    <div  className="inner-container">
-                    <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={(e)=>setIsOpen(!isOpen)}><FontAwesomeIcon icon={faClose} /></div>
-                        <ProdPop id={id} title={title} price={price} img={img}/>
-                    </div>
-                </div>: null
+                <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate}/>: null
             }
         </div>
     )

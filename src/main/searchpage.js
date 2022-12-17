@@ -1,9 +1,9 @@
-import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useState, useEffect, useRef } from "react"
+import { Link, useParams } from "react-router-dom"
 import Menu from "../reusable/menu"
 import Pcards from "../reusable/pcards"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons" 
+import { faClose, faLocationDot } from "@fortawesome/free-solid-svg-icons" 
 import { faChevronRight, faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons"
 import { faSquare } from "@fortawesome/free-solid-svg-icons"
 import ReactSlider from 'react-slider'
@@ -11,274 +11,82 @@ import Drop from "../reusable/drop"
 import Flyouts from "../reusable/flyouts"
 import Ops from "../reusable/ops"
 import Fly from "../reusable/fly"
-import Psections from "../reusable/psections"
+import axios from "axios"
+import Psection4 from "../reusable/psections4"
+import Foot from "../reusable/footer"
 const SearchPage = () => {
-    const {id} = useParams()
-    const [style, setstyle] = useState(1)
-    const product= [
-        {
-            id:1,
-            img:"../../pics (5).jpg",
-            title:"Solid White leather shoes",
-            price:"5,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:2,
-            img:"../../pics (3).jpg",
-            title:"Premium sneakers",
-            price:"22,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:0
-                }
-            ]
-        },
-        {
-            id:3,
-            img:"../../pics (4).jpg",
-            title:"Apple i-watch",
-            price:"15,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:4,
-            img:"../../pics (18).jpg",
-            title:"RayBan sun glasses",
-            price:"4,500",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:5,
-            img:"../../pics (19).jpg",
-            title:"Nikon D9000 Camera(Wide angle lens)",
-            price:"325,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:6,
-            img:"../../pics (20).jpg",
-            title:"All STars sneakers",
-            price:"7,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:7,
-            img:"../../pics (22).jpg",
-            title:"Denim School bag",
-            price:"6,300",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        }
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    },[])
 
-    ]
-    const [products, setProducts] = useState([
-        {
-            id:1,
-            img:"../../pics (5).jpg",
-            title:"Solid White leather shoes",
-            price:"5,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:2,
-            img:"../../pics (3).jpg",
-            title:"Premium sneakers",
-            price:"22,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:0
-                }
-            ]
-        },
-        {
-            id:3,
-            img:"../../pics (4).jpg",
-            title:"Apple i-watch",
-            price:"15,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:4,
-            img:"../../pics (18).jpg",
-            title:"RayBan sun glasses",
-            price:"4,500",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:5,
-            img:"../../pics (19).jpg",
-            title:"Nikon D9000 Camera(Wide angle lens)",
-            price:"325,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:6,
-            img:"../../pics (20).jpg",
-            title:"All STars sneakers",
-            price:"7,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:7,
-            img:"../../pics (22).jpg",
-            title:"Denim School bag",
-            price:"6,300",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        }
+    
         
+    const {cat,name} = useParams()
+    const [style, setstyle] = useState(1)
+    const [product, setproduct] = useState([])
+    const [groups, setgroups] = useState([])
+    const [categories, setcategories] = useState([])
+    const [group, setgroup] = useState(0)
+    const [area, setarea] = useState('Powys')
+    const [choice, setchoice] = useState(0)
+    const upp = name.toUpperCase()
+    const low = name.toLowerCase()
+    const sen = name.charAt(0).toUpperCase()+ name.slice(1)
+    const [all, setall] = useState([])
 
-    ])
+     useEffect(()=>{
+        if(cat==="All"){
+            setall(product.filter(items => items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1))
+        }
+        else{
+            setall(product.filter(items => items.category_name.indexOf(cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')) !== -1 && (items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1)))
+        }
+    },[product, name, cat])
+    // const upp = name.toUpperCase
+    useEffect(()=>{
+        getparners()
+    },[])
+    
+    const getparners = async () => {
+        try {
+            const product = await axios.get('http://geo.vensle.com/api/products')
+            setproduct(product.data)
+            const groups = await axios.get('http://geo.vensle.com/api/group')
+            setgroups(groups.data)
+            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            setcategories(categories.data)
+         } catch (error) {
+            console.log(error);
+         }
+    }
+    const page =(e)=>{
+        console.log(window.pageYOffset)
+    }
+    const [fill, setfill] = useState({
+    })
+    const [filt, setfilt] = useState({
+    })
+    const splice =(i)=>{
+        setfilt(current => {
+            const copy = {...current};
+            delete copy[i];
+            return copy
+        })
+    }
+    const getcats = (cat, type)=> {
+        setfilt({...filt, [type]:cat})
+        setarea(cat)
+        console.log(cat)
+        setall(product.filter(items => items.state === cat && (items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1)))
+        console.log(cat + ' '+type)
+    }
+    
     return(
         <div>
             <Menu/>
+            <div></div>
             <div className="breadcrumbs">
-                <div>Home -> Search -> Apple i-Watch</div>
+                <div><Link to={'/'}>Home</Link> -> Search -> {cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')} -> {name.replaceAll('-', ' ').replaceAll('&', '/')}</div>
             </div>
             <div className="main">
                 <div className="main-sidebar">
@@ -290,31 +98,46 @@ const SearchPage = () => {
                         <div className="location">
                             <h4>Location</h4>    
                         </div>
-                        <Fly icon={<FontAwesomeIcon icon={faLocationDot} />} info={' Arkansas, USA'}>
-                            <Flyouts position={'absolute'} margin={'-60px 0 0 300px'} title={'Your Location'} icon={<FontAwesomeIcon icon={faLocationDot} />}/>
+                        <Fly icon={<FontAwesomeIcon icon={faLocationDot} />} info={area} getcats={getcats} titles={'Choose location'}>
                         </Fly>
                         <div className="dist">
-                            <select>
-                                <option>Distance</option>
+                            <select onChange={(e)=>setfilt({...filt, distance:e.target.value})}>
+                                <option value='' disabled>Distance</option>
+                                <option value='100km'>100km</option>
+                                <option value='200km'>200km</option>
+                                <option value='300km'>300km</option>
+                                <option value='400km'>400km</option>
                             </select>
                         </div>
                         <div className="Groups">
                         <p>Group</p>
-                            <select>
+                            <select onChange={(e)=>{setgroup(e.target.value);setall(all.filter(items => items.item_group === parseInt(e.target.value)))}}>
                                 <option>All Groups</option>
+                                {
+                                    groups.map(({id, name})=>(
+                                        <option value={id}>{name}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                         <div className="Categories">
                             <p>Categories</p>
-                            <select>
-                                <option>All Categories</option>
+                            <select onChange={(e)=>setall(all.filter(items => items.category_name === e.target.value))}>
+                                <option onClick={(e)=>setall(product.filter(items => items.category_name.indexOf(cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')) !== -1 && (items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1)))}>All Categories</option>
+                                {
+                                    categories.filter(items => items.id === parseInt(group)).map(({cat_name})=>(
+                                        cat_name.split(',').map((a, i)=>(
+                                            <option value={a}>{a}</option>
+                                        ))
+                                    ))
+                                  }
                             </select>
                         </div>
                         <div className="hr"></div>
-                        <Fly info={'Brands'}>
-                            <Flyouts position={'absolute'} margin={'-450px 0 0 300px'} title={'Top selling brands'} icon={''}/>
-                        </Fly>
-                        <div className="hr"></div>
+                        {
+                            // <Fly info={'Brands'} getcats={getcats}></Fly>
+                            // <div className="hr"></div>
+                        }
                         <div className="brands">
                             Price
                             <div className="slider">
@@ -327,7 +150,12 @@ const SearchPage = () => {
                         </div>
                         <div className="hr"></div>
                         <Drop info={'Discount'}>
-                            <Ops/>
+                            <div className="options">
+                                <div onClick={(e)=>setfilt({...filt, discount:e.target.innerText})}>50%</div>
+                                <div onClick={(e)=>setfilt({...filt, discount:e.target.innerText})}>30%</div>
+                                <div onClick={(e)=>setfilt({...filt, discount:e.target.innerText})}>20%</div>
+                                <div onClick={(e)=>setfilt({...filt, discount:e.target.innerText})}>10%</div>
+                            </div>
                         </Drop>
                         <Drop info={'Sizes'}>
                             <Ops/>
@@ -358,18 +186,30 @@ const SearchPage = () => {
                 <div className="main-right">
                     <div className="mr-top">
                         <div className="mrt-left">
-                            <h3>Apple Watch</h3><span>(1025 products)</span>
+                            <h3>{name.replaceAll('-', ' ').replaceAll('&', '/')}</h3><span>({
+                                all.length +' results'
+                            })</span>
+                                
                         </div>
                         <div className="mrt-right">
                             <p>Sort By</p> 
                             <select>
                                 <option>Popularity</option>
+                                <option value='upload_date'>Newest to oldest</option>
+                                <option va>Oldest to Newest</option>
                             </select>
                         </div>
                     </div>
                     <div className="mr-second">
                         <div className="mrs-left">
-                            <p>Filters</p>
+                        <h3>Filters</h3>
+                            <div className="filtration">
+                            {
+                                Object.entries(filt).slice(-3).map((keys,i)=>(
+                                    <div>{keys[1]}  <FontAwesomeIcon icon={faClose} onClick={(e)=>splice(keys[0])} style={{cursor:'pointer'}}/></div>   
+                                ))
+                            }
+                            </div>
                         </div>
                         <div className="mrs-right">
                             <p><FontAwesomeIcon icon={faBars} onClick={(e)=>setstyle(2)}/></p>
@@ -379,39 +219,48 @@ const SearchPage = () => {
                     {style === 1 ? 
                         <div className="mr-third">
                         {
-                            product.slice(1,7).map(({id, img, title, price, transaction})=>(
-                                <div><Pcards type={1} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={img} trans={transaction}/></div>
+                            all.length === 0 ? 
+                            <div style={{width:'100%', margin:'20px'}}>No results to display</div> :
+                            all.slice(0,20).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                <div>{console.log(all)
+                                }<Pcards type={1} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                             ))
                         }
                         </div> :
                         <div className="mr-fourth">
                         {
-                            product.slice(1,7).map(({id, img, title, price, transaction})=>(
-                                <div><Pcards type={2} width={'100%'} height={'150px'} pdsize={'1.3em'} pcsize={'1.8em'} id={id} title={title} price={price} img={img} trans={transaction}/></div>
+                            all.slice(0,20).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                <div><Pcards type={2} width={'100%'} height={'150px'} pdsize={'1.3em'} pcsize={'1.8em'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                             ))
                         }
                         </div>
                     }
                 </div>
             </div>
-            <div className="details-container-top">
-                <div className="details-left">
-                    <Psections sects={product} start={0} info={"Other Products in this Category "}></Psections>
-                    <Psections sects={product} start={3} info={"Recently Viewed "}></Psections>
-                </div>
-                <div className="details-right">
-                    <div style={{background:'white', padding:'20px', boxSizing:'border-box', display:'grid', gap:'15px'}}>
-                    <h3>Similar Products by seller</h3>
-                    {
-                        product.slice(5, 7).map(({id, img, title, price})=>(
-                            <div><Pcards type={3} pdsize={'.9em'} pcsize={'1em'} id={id} title={title} price={price} img={img}/></div>
-                        ))
-                    } 
-                    </div>
-                    <div className="more" style={{background:'white', padding:'20px 10px', boxSizing:'border-box', marginTop:'7px', cursor:'pointer'}}>More</div>   
-                </div>
+            <div className="recent">
+                {
+                    product.filter(items => items.id === 904).slice(0,1).map(({id, category})=>(
+                        
+                            <div>
+                                <div className="section">
+                                    <div className="title">
+                                        <h2>Recently Viewed Products</h2>
+                                    </div>
+                                    <div className="others">
+                                    {    
+                                        product.filter(items => items.category === category && items.id !== parseInt(id)).slice(0,4).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                            <div><Pcards type={3} pdsize={'.9em'} pcsize={'1em'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                        ))
+                                    }
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    ))
+                }
             </div>
             
+        <Foot />
         </div>
         
     )

@@ -3,9 +3,11 @@ import { faUser, faLocationDot, faFilter, faClose } from "@fortawesome/free-soli
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Sidebar from "./sidebar"
 import Menu from "./menu"
+
 import ProdDisplay from "./proddisplay"
 import Popup from "./popup"
 import Sorts from "./sorts"
+import { useGeoLocation } from "use-geo-location"
 
 const MyProducts = () => {
     const [isOpen, setisOpen] = useState(false)
@@ -173,7 +175,7 @@ const MyProducts = () => {
                         // </div>
                     }
                     <div className="top-trends">
-                    <h3>All Products</h3>
+                        <h3>All Products</h3>
                             
                             <div className="filtration">
                             {
@@ -182,8 +184,8 @@ const MyProducts = () => {
                                 ))
                             }
                             </div>
-                            <div onClick={(e)=>setisOpen(!isOpen)} className="filter"><FontAwesomeIcon icon={faFilter} /> </div>
-                        </div>
+                        <div onClick={(e)=>setisOpen(!isOpen)} className="filter"><FontAwesomeIcon icon={faFilter} /> </div>
+                    </div>
                     <div className="top-trending-list">
                     {
                         groceries.slice(0,8).map(({id, img, title, price, transaction})=>(

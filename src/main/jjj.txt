@@ -1,0 +1,5 @@
+https://n3plcpnl0106.prod.ams3.secureserver.net:2083/
+iwf9y9jj8qns
+%|l_BfMd0SL
+<?php 
+symlink('/home/vensle-be/storage/app/public', '/home/vensle-be/public_html/storage')

@@ -7,7 +7,7 @@ const Drop = ({children, info}) => {
     return(
         <div>
             <div className="brands">
-                <p>{info}</p><FontAwesomeIcon icon={faChevronDown} onClick={()=>setIsOpen(!isOpen)} style={{cursor:'pointer'}}/>
+                <p>{info}</p>{ children ? <FontAwesomeIcon icon={faChevronDown} onClick={()=>setIsOpen(!isOpen)} style={{cursor:'pointer'}}/> :null}
             </div>
             
             <div>

@@ -1,6 +1,6 @@
 import Pcards from "./pcards"
 
-const Psections = ({sects, info, start}) => {
+const Psections = ({sects, info, start, num}) => {
     return (
         <div>
             <div className="section">

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import Menu from "../reusable/menu"
 import Pcards from "../reusable/pcards"
@@ -14,216 +14,27 @@ import Fly from "../reusable/fly"
 import Psections from "../reusable/psections"
 import Carousels from "../reusable/carousel"
 import Vertice from "./vertice"
+import axios from "axios"
+import Foot from "../reusable/footer"
 
 const Subcat = () => {
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    },[])
     const [style, setstyle] = useState(1)
-    const [product, setProducts] = useState([
-        {
-            id:1,
-            img:"./pics (1).jpg",
-            title:"Solid White leather shoes",
-            price:"5,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:2,
-            img:"./pics (3).jpg",
-            title:"Premium sneakers",
-            price:"22,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:0
-                }
-            ]
-        },
-        {
-            id:3,
-            img:"./pics (4).jpg",
-            title:"Apple i-watch",
-            price:"15,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:4,
-            img:"./pics (18).jpg",
-            title:"RayBan sun glasses",
-            price:"4,500",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:5,
-            img:"./pics (19).jpg",
-            title:"Nikon D9000 Camera(Wide angle lens)",
-            price:"325,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:6,
-            img:"./pics (20).jpg",
-            title:"All STars sneakers",
-            price:"7,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:7,
-            img:"./pics (22).jpg",
-            title:"Denim School bag",
-            price:"6,300",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        }
-    ])
-    const [subcats, setsubcats] = useState([
-        {
-            id:1,
-            img:"../../fashion (34).jpg",
-            title:"Watches",
-        },
-        {
-            id:2,
-            img:"../../fashion (38).jpg",
-            title:"Ladis Bags",
-            
-        },
-        {
-            id:3,
-            img:"../../fashion (24).jpg",
-            title:"Denim Jeans",
-            
-        },
-        {
-            id:4,
-            img:"../../fashion (25).jpg",
-            title:"Rings",
-            
-        },
-        {
-            id:5,
-            img:"../../fashion (27).jpg",
-            title:"Men's shoes",
-            
-        },
-        {
-            id:6,
-            img:"../../fashion (37).jpg",
-            title:"Necklaces and bangles",
-            
-        },
-        {
-            id:7,
-            img:"../../fashion (40).jpg",
-            title:"Hats(Unisex)",
-            
-        },
-        {
-            id:8,
-            img:"../../fashion (42).jpg",
-            title:"Men's Suits",
-            
-        },
-        {
-            id:9,
-            img:"../../fashion (32).jpg",
-            title:"Jackets",
-            
-        },
-        {
-            id:10,
-            img:"../../fashion (33).jpg",
-            title:"Ladies Shoes",
-            
-        },
-        {
-            id:11,
-            img:"../../fashion (1).jpg",
-            title:"Ladies tops",
-            
-        },
-        {
-            id:12,
-            img:"../../fashion (33).jpg",
-            title:"Denim School bag",
-            
-        },
-        {
-            id:13,
-            img:"../../fashion (34).jpg",
-            title:"Denim School bag",
-            
-        }
-    ])
+    const [subcats, setsubcats] = useState([])
+    useEffect(()=>{
+        getstuff()
+    },[])
+    const getstuff = async () => {
+        try {
+            const partners = await axios.get('../.http://geo.vensle.com/subcat.json')
+
+            setsubcats(partners.data)
+         } catch (error) {
+            console.log(error);
+         }
+    }
     return(
         <div>
             <Menu/>
@@ -255,7 +66,7 @@ const Subcat = () => {
                 </div>
                     
             </div>
-            
+            <Foot />
         </div>
         
     )
