@@ -42,7 +42,7 @@ const Home = () => {
     const categ = product.filter(items => items.category === 174)
     const menuref = useRef()
     return(
-        <div>
+        <div className="cc">
             <Menu/>
             <div className="banner">
                 <div className="categories"> 
@@ -101,9 +101,6 @@ const Home = () => {
                         product.slice(0,1).map(({id, Images, title, price, transaction, group_name, description, category_name, item_address, item_contact_number, state, country, currency})=>(
                             
                         <div>     
-                        {
-                            console.log(Images.split(',')[0]) 
-                        }   
                             <div className="img">
                                 <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+Images.split(',')[0]} alt=""/>
                             </div>
@@ -149,6 +146,17 @@ const Home = () => {
                                     </div></Link>
                                 </div>
 
+                                <div className="actions2">
+                                    <Link to={"/details/"+id+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}><div className='more-details'>
+                                        <FontAwesomeIcon icon={faBars} /><p>More details</p>
+                                    </div></Link> 
+                                    <div className="call">
+                                        <FontAwesomeIcon icon={faPhone}/>
+                                    </div>
+                                    <div className="chat">
+                                        <FontAwesomeIcon icon={faMessage}/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         ))
@@ -257,7 +265,12 @@ const Home = () => {
                         
                     {
                         product.filter(items => parseInt(items.item_group) === 7).slice(0,1).map(({item_group, group_name})=>(
-                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  -></Link>
+                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  <FontAwesomeIcon icon={faCaretRight} /></Link>
+                        ))
+                    }
+                    {
+                        product.filter(items => parseInt(items.item_group) === 7).slice(0,1).map(({item_group, group_name})=>(
+                            <Link to={"./../products/"+item_group+"/"+group_name.split('(')[0]} className="vall"><div >View all</div></Link>
                         ))
                     }
                     </div>
@@ -274,14 +287,18 @@ const Home = () => {
                                     </div>
                                 ))
                             }
-                            {
-                                console.log(categ)
-                            }
                             </div>
                         </div>
                         <div className="fourth-first-right">
                             {
                                 product.filter(items => parseInt(items.item_group) === 7).slice(4, 6).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                    <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                ))
+                            }
+                        </div>
+                        <div className="scroll-right">
+                            {
+                                product.filter(items => parseInt(items.item_group) === 7).slice(0, 10).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
                                     <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                                 ))
                             }
@@ -307,9 +324,15 @@ const Home = () => {
                             <h3>{group_name.split('(')[0]}</h3>
                         ))
                     }
+                    
                     {
                         product.filter(items => parseInt(items.item_group) === 11).slice(0,1).map(({item_group, group_name})=>(
-                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  -></Link>
+                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  <FontAwesomeIcon icon={faCaretRight} /></Link>
+                        ))
+                    }
+                    {
+                        product.filter(items => parseInt(items.item_group) === 11).slice(0,1).map(({item_group, group_name})=>(
+                            <Link to={"./../products/"+item_group+"/"+group_name.split('(')[0]} className="vall"><div >View all</div></Link>
                         ))
                     }
                     </div>
@@ -338,6 +361,13 @@ const Home = () => {
                                 ))
                             }
                         </div>
+                        <div className="scroll-right">
+                            {
+                                product.filter(items => parseInt(items.item_group) === 11).slice(0, 10).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                    <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                ))
+                            }
+                        </div>
                     </div>
                     {
                         product.filter(items => parseInt(items.item_group) === 11).slice(0,1).map(({item_group, group_name})=>(
@@ -362,7 +392,12 @@ const Home = () => {
                         
                         {
                             product.filter(items => parseInt(items.item_group) === 2).slice(0,1).map(({item_group, group_name})=>(
-                                <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  -></Link>
+                                <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  <FontAwesomeIcon icon={faCaretRight} /></Link>
+                            ))
+                        }
+                        {
+                            product.filter(items => parseInt(items.item_group) === 2).slice(0,1).map(({item_group, group_name})=>(
+                                <Link to={"./../products/"+item_group+"/"+group_name.split('(')[0]} className="vall"><div >View all</div></Link>
                             ))
                         }
                     </div>
@@ -391,6 +426,13 @@ const Home = () => {
                                 ))
                             }
                         </div>
+                        <div className="scroll-right">
+                            {
+                                product.filter(items => parseInt(items.item_group) === 2).slice(0, 10).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                    <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                ))
+                            }
+                        </div>
                     </div>
                     {
                         product.filter(items => parseInt(items.item_group) === 2).slice(0,1).map(({item_group, group_name})=>(
@@ -415,7 +457,12 @@ const Home = () => {
                         
                     {
                         product.filter(items => parseInt(items.item_group) === 5).slice(0,1).map(({item_group, group_name})=>(
-                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  -></Link>
+                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  <FontAwesomeIcon icon={faCaretRight} /></Link>
+                        ))
+                    }
+                    {
+                        product.filter(items => parseInt(items.item_group) === 5).slice(0,1).map(({item_group, group_name})=>(
+                            <Link to={"./../products/"+item_group+"/"+group_name.split('(')[0]} className="vall"><div >View all</div></Link>
                         ))
                     }
                     </div>
@@ -444,6 +491,13 @@ const Home = () => {
                                 ))
                             }
                         </div>
+                        <div className="scroll-right">
+                            {
+                                product.filter(items => parseInt(items.item_group) === 5).slice(0, 10).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                    <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                ))
+                            }
+                        </div>
                     </div>
                     {
                         product.filter(items => parseInt(items.item_group) === 5).slice(0,1).map(({item_group, group_name})=>(
@@ -468,7 +522,12 @@ const Home = () => {
                         
                     {
                         product.filter(items => parseInt(items.item_group) === 9).slice(0,1).map(({item_group, group_name})=>(
-                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  -></Link>
+                            <Link to={"../../subcat"} className="moore"><div >{"Categories under " + group_name.split('(')[0]+""} </div>  <FontAwesomeIcon icon={faCaretRight} /></Link>
+                        ))
+                    }
+                    {
+                        product.filter(items => parseInt(items.item_group) === 9).slice(0,1).map(({item_group, group_name})=>(
+                            <Link to={"./../products/"+item_group+"/"+group_name.split('(')[0]} className="vall"><div >View all</div></Link>
                         ))
                     }
                     </div>
@@ -493,6 +552,13 @@ const Home = () => {
                         <div className="fourth-first-right">
                             {
                                 product.filter(items => parseInt(items.item_group) === 9).slice(4,6).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
+                                    <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                ))
+                            }
+                        </div>
+                        <div className="scroll-right">
+                            {
+                                product.filter(items => parseInt(items.item_group) === 9).slice(0, 10).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
                                     <div onClick={(e)=>setIsOpen(!isOpen)}><Pcards type={1} width={'257px'} height={'320px'} vim={'100%'} pdsize={'1.1em'} pcsize={'1.5em'}id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                                 ))
                             }

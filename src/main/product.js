@@ -1,20 +1,20 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { Link, useParams } from "react-router-dom"
 import Menu from "../reusable/menu"
 import Pcards from "../reusable/pcards"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClose, faLocationDot } from "@fortawesome/free-solid-svg-icons" 
+import { faClose, faFilter, faAngleRight, faLocationDot, faPersonBreastfeeding } from "@fortawesome/free-solid-svg-icons" 
 import { faChevronRight, faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons"
 import { faSquare } from "@fortawesome/free-solid-svg-icons"
-import ReactSlider from 'react-slider'
 import Drop from "../reusable/drop"
-import Flyouts from "../reusable/flyouts"
 import Ops from "../reusable/ops"
 import Fly from "../reusable/fly"
 import axios from "axios"
-import Psection4 from "../reusable/psections4"
+import { UserContext } from "../auth/usercontext"
 import Foot from "../reusable/footer"
+
 const Products = () => {
+    const {details:{location}, setDetails} = useContext(UserContext)
     useEffect(()=>{
         window.scrollTo(0,0)
     },[])
@@ -27,15 +27,27 @@ const Products = () => {
     const [group, setgroup] = useState(0)
     const [area, setarea] = useState('Powys')
     const [all, setall] = useState([])
+    const sidebar = useRef('')
+
+    const reveal = (e) => {
+        if (sidebar.current.style.display === 'block') {
+            sidebar.current.style.display = 'none'
+        }
+        else{
+            sidebar.current.style.display = 'block'
+        }
+        
+    }
     useEffect(()=>{
         setall(product.filter(items => items.item_group === groupid).slice(0,20))
     },[product])
+
     useEffect(()=>{
         getparners()
-    },[])
+    },[product])
     const getparners = async () => {
         try {
-            const product = await axios.get('http://geo.vensle.com/api/products')
+            const product = await axios.get("http://geo.vensle.com/api/groceries/"+location)
             setproduct(product.data)
             const groups = await axios.get('http://geo.vensle.com/api/group')
             setgroups(groups.data)
@@ -45,11 +57,6 @@ const Products = () => {
             console.log(error);
          }
     }
-    const page =(e)=>{
-        console.log(window.pageYOffset)
-    }
-    const [fill, setfill] = useState({
-    })
     const [filt, setfilt] = useState({
     })
     const splice =(i)=>{
@@ -72,10 +79,10 @@ const Products = () => {
             <Menu/>
             <div></div>
             <div className="breadcrumbs">
-                <div><Link to={'/'}>Home</Link> -> Products -> {name}</div>
+                <div><Link to={'/'}>Home</Link> <FontAwesomeIcon icon={faAngleRight} /> Products <FontAwesomeIcon icon={faAngleRight} /> {name}</div>
             </div>
             <div className="main">
-                <div className="main-sidebar">
+                <div className="main-sidebar" ref={sidebar}>
                     <div className="filt-bar">
                         <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                     </div>
@@ -84,7 +91,7 @@ const Products = () => {
                         <div className="location">
                             <h4>Location</h4>    
                         </div>
-                        <Fly icon={<FontAwesomeIcon icon={faLocationDot} />} info={area} getcats={getcats}>
+                        <Fly icon={<FontAwesomeIcon icon={faLocationDot} />} info={area} getcats={getcats} titles={'Location'}>
                         </Fly>
                         <div className="dist">
                             <select onChange={(e)=>setfilt({...filt, distance:e.target.value})}>
@@ -179,9 +186,8 @@ const Products = () => {
                             <h3>{name}</h3><span>({all.length+' results'})</span>
                         </div>
                         <div className="mrt-right">
-                            <p>Sort By</p> 
                             <select>
-                                <option>Popularity</option>
+                                <option>Sort by</option>
                             </select>
                         </div>
                     </div>
@@ -205,7 +211,7 @@ const Products = () => {
                         <div className="mr-third">
                         {
                             all.slice(0, 20).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
-                                <div><Pcards type={1} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                <div><Pcards type={4} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                             ))
                         }
                         </div> :
@@ -241,7 +247,9 @@ const Products = () => {
                     ))
                 }
             </div>
-            
+            <div className="filters" onClick={reveal}>
+                <FontAwesomeIcon icon={faFilter}/>
+            </div>
         <Foot />
         </div>
         

@@ -1,20 +1,20 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { Link, useParams } from "react-router-dom"
 import Menu from "../reusable/menu"
 import Pcards from "../reusable/pcards"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClose, faLocationDot } from "@fortawesome/free-solid-svg-icons" 
-import { faChevronRight, faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons"
+import { faAngleRight, faFilter, faBars } from "@fortawesome/free-solid-svg-icons"
 import { faSquare } from "@fortawesome/free-solid-svg-icons"
-import ReactSlider from 'react-slider'
 import Drop from "../reusable/drop"
-import Flyouts from "../reusable/flyouts"
 import Ops from "../reusable/ops"
 import Fly from "../reusable/fly"
 import axios from "axios"
-import Psection4 from "../reusable/psections4"
 import Foot from "../reusable/footer"
+import { UserContext } from "../auth/usercontext"
+
 const SearchPage = () => {
+    const {details:{location}, setDetails} = useContext(UserContext)
     useEffect(()=>{
         window.scrollTo(0,0)
     },[])
@@ -34,22 +34,33 @@ const SearchPage = () => {
     const sen = name.charAt(0).toUpperCase()+ name.slice(1)
     const [all, setall] = useState([])
 
+    
+    const sidebar = useRef('')
+    const reveal = (e) => {
+        if (sidebar.current.style.display === 'block') {
+            sidebar.current.style.display = 'none'
+        }
+        else{
+            sidebar.current.style.display = 'block'
+        }
+        
+    }
      useEffect(()=>{
         if(cat==="All"){
             setall(product.filter(items => items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1))
         }
         else{
-            setall(product.filter(items => items.category_name.indexOf(cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')) !== -1 && (items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) !== -1)))
+            setall(product.filter(items => items.category_name.indexOf(cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')) !== -1 && (items.title.indexOf(name) !== -1 || items.title.indexOf(upp) !== -1 || items.title.indexOf(low) !== -1 || items.title.indexOf(sen) === -1)))
         }
     },[product, name, cat])
-    // const upp = name.toUpperCase
+    
     useEffect(()=>{
         getparners()
-    },[])
+    },[location])
     
     const getparners = async () => {
         try {
-            const product = await axios.get('http://geo.vensle.com/api/products')
+            const product = await axios.get("http://geo.vensle.com/api/product/"+location)
             setproduct(product.data)
             const groups = await axios.get('http://geo.vensle.com/api/group')
             setgroups(groups.data)
@@ -59,11 +70,6 @@ const SearchPage = () => {
             console.log(error);
          }
     }
-    const page =(e)=>{
-        console.log(window.pageYOffset)
-    }
-    const [fill, setfill] = useState({
-    })
     const [filt, setfilt] = useState({
     })
     const splice =(i)=>{
@@ -86,10 +92,10 @@ const SearchPage = () => {
             <Menu/>
             <div></div>
             <div className="breadcrumbs">
-                <div><Link to={'/'}>Home</Link> -> Search -> {cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')} -> {name.replaceAll('-', ' ').replaceAll('&', '/')}</div>
+                <div><Link to={'/'}>Home</Link> <FontAwesomeIcon icon={faAngleRight} /> Search <FontAwesomeIcon icon={faAngleRight} /> {cat.replaceAll('-', ' ').replaceAll('&', '/').replaceAll(',', '-')} <FontAwesomeIcon icon={faAngleRight} /> {name.replaceAll('-', ' ').replaceAll('&', '/')}</div>
             </div>
             <div className="main">
-                <div className="main-sidebar">
+                <div className="main-sidebar" ref={sidebar}>
                     <div className="filt-bar">
                         <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                     </div>
@@ -192,9 +198,8 @@ const SearchPage = () => {
                                 
                         </div>
                         <div className="mrt-right">
-                            <p>Sort By</p> 
                             <select>
-                                <option>Popularity</option>
+                                <option>Sort By</option>
                                 <option value='upload_date'>Newest to oldest</option>
                                 <option va>Oldest to Newest</option>
                             </select>
@@ -223,7 +228,7 @@ const SearchPage = () => {
                             <div style={{width:'100%', margin:'20px'}}>No results to display</div> :
                             all.slice(0,20).map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency})=>(
                                 <div>{console.log(all)
-                                }<Pcards type={1} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                }<Pcards type={4} width={217} height={330} vim={'100%'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
                             ))
                         }
                         </div> :
@@ -258,6 +263,9 @@ const SearchPage = () => {
                         
                     ))
                 }
+            </div>
+            <div className="filters" onClick={reveal}>
+                <FontAwesomeIcon icon={faFilter}/>
             </div>
             
         <Foot />

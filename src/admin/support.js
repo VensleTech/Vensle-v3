@@ -1,57 +1,78 @@
-import { useState } from "react"
-import { faUser, faLocationDot, faFilter, faPaperPlane, faClose } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect, useContext } from "react"
+import { faUser, faLocationDot, faFilter,faArrowRight, faPaperPlane, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Sidebar from "./sidebar"
 import Menu from "./menu"
 import ReusableTable from "./reusabletable"
 import MessageTable from "./messagetable"
 import Popmessage from "./popmessage"
+import Pusher from 'pusher-js'
+import axios from "axios"
+import { UserContext } from "../auth/usercontext"
+
 const Contact = () => {
+
+    const {details:{id:identifyer, name, authlev, business_name, email, phone, userlocation, address },  setDetails} = useContext(UserContext)
     const [IsOpen, setIsOpen] = useState(true)
-    const [groceries, setgroceries] = useState([
-        {
-            id:1,
-            title:"Solid White leather shoes",
-            sender:"Sandra",
-            msgbody:"I need a urgent supply of Goods"
-        },
-        {
-            id:2,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"Where can we get the product from at good price?"
-        },
-        {
-            id:3,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"Musa just texted me"
-        },
-        {
-            id:4,
-            title:"Solid White leather shoes",
-            sender:"Cassie",
-            msgbody:"Keep the change. I like your customer service"
-        },
-        {
-            id:5,
-            title:"Solid White leather shoes",
-            sender:"Sonia",
-            msgbody:"Call this number and you will be attended to"
-        },
-        {
-            id:6,
-            title:"Solid White leather shoes",
-            sender:"Jacob",
-            msgbody:"I have a hard time processing your request"
-        },
-        {
-            id:7,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"I havent had some good rest in days"
+    const [groceries, setgroceries] = useState([])
+    const [prcard, setprcard] = useState([])
+    const [message, setMessage] = useState('')
+    const [chatscard, setchatscard] = useState([])
+    const [last, setlast] = useState([])
+    const [fresh, setfresh] = useState(0)
+    useEffect(()=>{
+        authorise()
+        // setfresh(rer)
+      }, [])
+
+      const send = async ()=>{
+        console.log('clicked')
+        var data = {
+            senderid:''+identifyer+'',
+            receiverid:''+1,
+            productid:''+0,
+            message:message
+        };
+        setchatscard([...chatscard, {
+              message:message,
+              position:1
+            }]);
+        try {
+            const response = await axios.post('http://geo.vensle.com/api/message', data);
+            
+                console.log(response.data);
+          } catch (err) {
+                  console.log(err)
+            // setpayload('An error occured');
+          }
         }
-    ])
+  
+        // PUSHER
+        useEffect(() => {
+          // Pusher.logToConsole = true;
+          var pusher = new Pusher('2ee6d4aa15f34a5f2876', {
+            cluster: 'eu'
+          });
+          var channel = pusher.subscribe('chat');
+          channel.bind('message', function(data) {
+              // ALL.push(data);
+              setlast(data)
+              setfresh(fresh+1)
+          })
+      }, [])
+  
+      const authorise = () =>{
+          if(last.length > 1 && parseInt(last.receiverid) === 1){
+              console.log(parseInt(last[0].receiverid))
+              // console.log('refresh '+ refr + ' times')
+              console.log('a match')
+          }
+          else{
+              console.log(parseInt(last.receiverid))
+              console.log(1)
+              console.log('not a match')
+          }
+      }
     return(
         <div>
             <Menu />
@@ -59,7 +80,7 @@ const Contact = () => {
                 <Sidebar/>
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
-                        <div>Home -> Messages</div>
+                        <div>Home <FontAwesomeIcon icon={faArrowRight} /> Messages</div>
                         <div><span>Abudonnigeria</span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="top-trending">
@@ -100,19 +121,24 @@ const Contact = () => {
                                 <Popmessage>
                                     <div className="msg-box">
                                         <div className="chat-box">
-                                            <p>James Boluwatife</p>
-                                            <div className="incoming">
-                                                Please can I have this product at
-                                                a cheaper rate
-                                            </div>
-                                            <div className="outgoing">
-                                                Why not! How soon do you need
-                                                the product?
-                                            </div>
+                                            <p>{name}</p>
+                                            {
+                                            chatscard.map(({message, position})=>(
+                                                position === 0 ? 
+                                                <div className="incoming">
+                                                {message}
+                                                </div>
+                                                :
+                                                <div className="outgoing">
+                                                {message}
+                                                </div>
+                                            ))
+                                            }
+                                            
                                         </div>
                                         <div className="message-field">
-                                            <input type="text" placeholder="Write a message"/>
-                                            <FontAwesomeIcon icon={faPaperPlane} className="send-button"/>
+                                            <input type="text" placeholder="Write a message" onChange={(e)=>setMessage(e.target.value)} />
+                                            <div onClick={send}><FontAwesomeIcon icon={faPaperPlane} className="send-button"/></div>
                                         </div>
                                     </div>
                                 </Popmessage>

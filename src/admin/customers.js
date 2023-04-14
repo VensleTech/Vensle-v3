@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { faUser, faLocationDot, faFilter, faEye, faClose } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faLocationDot, faFilter, faCaretRight, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Sidebar from "./sidebar"
 import Menu from "./menu"
@@ -78,7 +78,7 @@ const Customers = () => {
                 <Sidebar/>
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
-                        <div>Home -> Customers</div>
+                        <div>Home <FontAwesomeIcon icon={faCaretRight} /> Customers</div>
                         <div><span>Abudonnigeria</span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="top-trends">

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import Menu from "../reusable/menu"
 import Pcards from "../reusable/pcards"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faLocationDot, faPhone, faStar, faStoreAlt } from "@fortawesome/free-solid-svg-icons" 
+import { faCaretDown, faLocationDot, faPhone, faStar, faStoreAlt } from "@fortawesome/free-solid-svg-icons" 
 import { faChevronRight, faChevronDown, faBars, faSearch, faMessage } from "@fortawesome/free-solid-svg-icons"
 import { faSquare } from "@fortawesome/free-solid-svg-icons"
 import ReactSlider from 'react-slider'
@@ -30,6 +30,7 @@ const Products = () => {
     const [categories, setcategories] = useState([])
     const [group, setgroup] = useState(0)
     const [reveal, setreveal] = useState(0)
+    const [show, setshow] = useState(true)
     useEffect(()=>{
         getparners()
     },[])
@@ -46,19 +47,66 @@ const Products = () => {
          }
     }
     return(
-        <div>
+        <div className="vendor">
             <Menu/>
             <div>
                 <div className="v-img">
                     <img src={banner} alt=""/>
                 </div>
             </div>
-            <div className="breadcrumbs"></div>
             <div className="main-top">
-                <div style={{width:'80%', margin:'0 auto', display:'grid', gridTemplateColumns:'300px 60% auto', alignItems:'center'}}>
+                <div  className="v-bar">
                     <div className="v-logo">
                         <h3>{name.replaceAll('-', ' ')}</h3>
+                        <span onClick={(e)=>setshow(!show)}><FontAwesomeIcon icon={faCaretDown}/></span>
                     </div>
+                    {
+                        show === true ?
+                        <div className="main-side" style={{background:'#FBFBFB'}}>
+                            <div className="hr"></div>
+                            <div className="filt-params">
+                                <div className="location">
+                                    <h4>{name.replaceAll('-', ' ')}</h4>    
+                                </div>
+                                <div className="contact-details">
+                                    <table>
+                                        <tr>
+                                            <td> <FontAwesomeIcon icon={faLocationDot} /></td>
+                                            <td> 
+                                            {
+                                                product.filter(items => items.user_id === parseInt(vendorid)).slice(0,1).map(({address})=>(
+                                                    <p> {address} </p>
+                                                ))
+                                            }
+                                                
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <FontAwesomeIcon icon={faPhone} /></td>
+                                            <td>
+                                            {
+                                                product.filter(items => items.user_id === parseInt(vendorid)).slice(0,1).map(({phone, active})=>(
+                                                <p>{reveal === true ? phone : <p onClick={(e)=>setreveal(!reveal)} style={{cursor:'pointer'}}>Click to reveal</p>}</p>
+                                                ))
+                                            }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <FontAwesomeIcon icon={faStar} /></td>
+                                            <td> 4.33 rating from 3 reviews</td>
+                                        </tr>
+                                        <tr>
+                                            <td> <FontAwesomeIcon icon={faStoreAlt} /></td>
+                                            <td> Store Open</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        :
+                        ''
+                    }
+                    
                     <div className="v-menu">
                     {styled === 1 ? <div style={{borderBottom:'5px solid orangered'}}> Home</div>:<div onClick={(e)=>setstyled(1)}> Home</div>}
                     {styled === 2 ? <div style={{borderBottom:'5px solid orangered'}}> Active Products</div>:<div onClick={(e)=>setstyled(2)}> Active Products</div>}
@@ -156,9 +204,8 @@ const Products = () => {
                             }
                         </div>
                         <div className="mrt-right">
-                            <p>Sort By</p> 
                             <select>
-                                <option>Popularity</option>
+                                <option>Sort by</option>
                             </select>
                         </div>
                     </div>

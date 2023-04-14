@@ -3,7 +3,14 @@ import CarouselsPop from '../reusable/carpop'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart, faStar, faStarHalfAlt, faHandshake, faTruck, faLocationDot, faBars, faCaretLeft, faCaretRight, faMessage, faPhone, faArrowLeft, faNairaSign, faClose} from "@fortawesome/free-solid-svg-icons"
-const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
+const ProdPop = ({information,  getreadstate, route}) => {
+    const {id, feat_image, min_price, max_price, title, price, gimage, imgfolder, category_tree, phone, location, currency} = information
+    function formatMoney(n) {
+      return (Math.round(n * 100) / 100).toLocaleString();
+  }
+  const price2 = formatMoney(price)
+    const pricemin = formatMoney(min_price)
+    const pricemax = formatMoney(max_price)
     const scroller = useRef()
     const textref = useRef()
     const [read, setread] = useState(false)
@@ -15,12 +22,18 @@ const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
     const [adata, setadata] = useState([
 
     ])
+    const curr = localStorage.getItem('curr')
+    function htmlDecode(input){
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes[0].nodeValue;
+      }
+    const pic = useRef('')
       // const [all] = data
       // const {images, features,location, transaction} = all
-    const [group_name, category_name, item_contact_number, state, country, currency] = information
 
     const next = () => {
-    if(sstop < img.split(',').length){
+    if(sstop < gimage.split(',').length){
         setsstart(sstart+1); 
         setsstop(sstop+1)
         scroller.current.scrollBy(100, 0)
@@ -41,52 +54,52 @@ const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
   const billy = (e)=>{
       getreadstate(false)
   }
-  console.log(img)
+  const cutout = () => {
+    setOpenchat(!openchat)
+  }
     return (
         <div className='popcontainer'  onWheel={bill} onClick={bill}> 
             <div  className="inner-container" >
               <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={billy}><FontAwesomeIcon icon={faClose} /></div>
               <div className='details-container'>
-                  <div style={{width:'100%', display:'grid', gap:'20px'}}>
+                  <div style={{width:'100%', display:'grid', gap:'20px'}} className='picture' ref={pic}>
                   {
-                    img.split(',').slice(sstart, sstop).map((a, i)=>(
+                    gimage.split(',').slice(sstart, sstop).map((a, i)=>(
                           <div className='board'>
-                          <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+a} alt=""/>
+                            <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+a} alt=""/>
                               <div className='pre' onClick={prev}><FontAwesomeIcon icon={faCaretLeft}/></div>
                               <div className='nex' onClick={next}><FontAwesomeIcon icon={faCaretRight}/></div>
                           </div>
                       ))
                   }
-                  <div className='h-slide' ref={scroller}>
-                      <p className='prevs' onClick={(e)=>{scroller.current.scrollBy(-100, 0)}}><FontAwesomeIcon icon={faCaretLeft}/></p>
-                      
-                  {
-                    img.split(',').map((a, i)=>(
-                          <div className='image' onClick={(e)=>{setsstart(i); setsstop(i+1);}}>
-                            <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+a} alt=""/>
-                          </div>
-                          
-                      ))
-                  }
-                  <p className='nexts' onClick={(e)=>{scroller.current.scrollBy(100, 0)}}><FontAwesomeIcon icon={faCaretRight}/></p>
+                    <div className='hscont'>
+                    <div className='h-slide' ref={scroller}>
+                    <p className='prevs' onClick={(e)=>{scroller.current.scrollBy(-100, 0)}}><FontAwesomeIcon icon={faCaretLeft}/></p>
+                    
+                {
+                    gimage.split(',').map((a, i)=>(
+                        <div className='image' onClick={(e)=>{setsstart(i); setsstop(i+1);}}>
+                        <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+a} alt=""/>
+                        </div>
+                        
+                    ))
+                }
+                <p className='nexts' onClick={(e)=>{scroller.current.scrollBy(100, 0)}}><FontAwesomeIcon icon={faCaretRight}/></p>
+                </div>
+                    </div>
                   </div>
-                  
-                  </div>
-                  <div>
+                  <div className='ind'>
                   {   
                     openchat === false ?
                       <div className="dr-first">
                           <div className="caption">
                               <h3>{title}</h3> <p><FontAwesomeIcon icon={faHeart} /></p>
-                              {
-                                console.log(adata)
-                              }
                           </div>
                           <div className="dr-price">
                               <h4>Price</h4><span>Rating <FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStarHalfAlt} /></span>
-                              <p> ${price}</p>
+                              <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +'-'+htmlDecode(currency)+pricemax}</p>
                           </div>
-                          <div className="s-location"><FontAwesomeIcon icon={faLocationDot} /> {state}</div>
+                          <div className="s-location"><FontAwesomeIcon icon={faLocationDot} /> {location.split('+|+')[location.split('+|+').length-2]}</div>
                           <div className="trans-type">
                               {
                                 // <table>
@@ -108,7 +121,7 @@ const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
                                   <table>
                                         <tr>
                                             <td>Category</td>
-                                            <td>{category_name}</td>
+                                            <td>{category_tree}</td>
                                         </tr>
                                         <tr>
                                             <td>Condition</td>
@@ -118,16 +131,18 @@ const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
                               </div>
                           </div>
                           <div className='bottom'>
-                              <Link to={"/details/"+id+"/"+group_name.trim().replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')} onClick={billy}><div className='more-details' onClick={bill}>
+                              {
+                                <Link to={"/details/"+route+"/"+id+"/"+category_tree.split("+")[category_tree.split("+").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')} onClick={billy}><div className='more-details' onClick={bill}>
                                   <FontAwesomeIcon icon={faBars} /><p>More details</p>
                               </div></Link>
+                            }
                               <div className="call">
                                   {
-                                  openphone === false ? <FontAwesomeIcon icon={faPhone}  onClick={(e)=>setOpenphone(!openchat)}/>:<p><a href={"tel:"+item_contact_number} style={{color:'white'}}>{item_contact_number}</a></p>
+                                  openphone === false ? <FontAwesomeIcon icon={faPhone}  onClick={(e)=>setOpenphone(!openchat)}/>:<p><a href={"tel:"+phone} style={{color:'white'}}>{phone}</a></p>
                                   } 
                                   
                               </div>
-                              <div className="chat" onClick={(e)=>setOpenchat(!openchat)}>
+                              <div className="chat" onClick={cutout}>
                                   <FontAwesomeIcon icon={faMessage} />
                               </div>
                           </div>
@@ -135,7 +150,7 @@ const ProdPop = ({id,  title, price, img, information,  getreadstate}) => {
                       :
                       <div className='message-container'>
                           <div className='head'>
-                              <div><FontAwesomeIcon icon={faArrowLeft} onClick={(e)=>setOpenchat(!openchat)}/></div>
+                              <div><FontAwesomeIcon icon={faArrowLeft} onClick={cutout}/></div>
                                   <div className='cap'>
                                       <h5>Write a message</h5>
                                   </div>

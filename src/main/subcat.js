@@ -28,7 +28,7 @@ const Subcat = () => {
     },[])
     const getstuff = async () => {
         try {
-            const partners = await axios.get('../.http://geo.vensle.com/subcat.json')
+            const partners = await axios.get('http://1270.0.1:8000/json-api/subcat.json')
 
             setsubcats(partners.data)
          } catch (error) {
@@ -45,21 +45,21 @@ const Subcat = () => {
             <div className="mains">
                 <div className="left">
                 {
-                    subcats.slice(0, 3).map(({id, img, title, price, transaction})=>(
+                    subcats.slice(0, 3).map(({id, img, title})=>(
                         <Vertice id={id} img={img} title={title} />
                     ))
                 }
                 </div>
                 <div className="middle">
                 {
-                    subcats.slice(3, 7).map(({id, img, title, price, transaction})=>(
+                    subcats.slice(3, 7).map(({id, img, title})=>(
                         <Vertice id={id} img={img} title={title} />
                     ))
                 }
                 </div>
                 <div className="right">
                 {
-                    subcats.slice(7, 11).map(({id, img, title, price, transaction})=>(
+                    subcats.slice(7, 11).map(({id, img, title})=>(
                         <Vertice id={id} img={img} title={title} />
                     ))
                 }

@@ -1,55 +1,65 @@
-import { useState } from "react"
-import { faUser, faLocationDot, faFilter } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect, useContext } from "react"
+import { faUser, faLocationDot, faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Sidebar from "./sidebar"
 import Menu from "./menu"
 import ReusableTable from "./reusabletable"
 import MessageTable from "./messagetable"
+import axios from "axios"
+import { UserContext } from "../auth/usercontext"
+import Pusher from 'pusher-js'
+
+
+// AN ISSUE EXISTS HERE
 const Messages = () => {
-    const [groceries, setgroceries] = useState([
-        {
-            id:1,
-            title:"Solid White leather shoes",
-            sender:"Sandra",
-            msgbody:"I need a urgent supply of Goods"
-        },
-        {
-            id:2,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"Where can we get the product from at good price?"
-        },
-        {
-            id:3,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"Musa just texted me"
-        },
-        {
-            id:4,
-            title:"Solid White leather shoes",
-            sender:"Cassie",
-            msgbody:"Keep the change. I like your customer service"
-        },
-        {
-            id:5,
-            title:"Solid White leather shoes",
-            sender:"Sonia",
-            msgbody:"Call this number and you will be attended to"
-        },
-        {
-            id:6,
-            title:"Solid White leather shoes",
-            sender:"Jacob",
-            msgbody:"I have a hard time processing your request"
-        },
-        {
-            id:7,
-            title:"Solid White leather shoes",
-            sender:"Melissa",
-            msgbody:"I havent had some good rest in days"
+    const {details:{id:identifyer, name, authlev, business_name, email, phone, userlocation, address },  setDetails} = useContext(UserContext)
+   
+    const [messages, setmessages] = useState([])
+    let allmsg =[]
+    const [last, setlast] = useState([])
+    const [refr, setrefr] = useState(0)
+    useEffect(()=>{
+        axe()
+    }, [refr])
+    useEffect(()=>{
+        authorise()
+    }, [last])
+    // console.log(last[0])
+    const axe =async ()=>{
+        // console.log('coming up')
+        var data ={accountid:''+identifyer};
+
+        console.log(data)
+        try {
+			const response = await axios.post('http://geo.vensle.com/api/lastmessage', data);
+            console.log(response.data)
+            setmessages(response.data);
+            // setlast(response.data[0].msg);
+            console.log(response.data);
+		} catch (err) {
+            console.log(err)
+			// setpayload('An error occured');
+		}
+    }
+    // PUSHER
+    useEffect(() => {
+        var pusher = new Pusher('2ee6d4aa15f34a5f2876', {
+          cluster: 'eu'
+        });
+        var channel = pusher.subscribe('chat');
+        channel.bind('message', function(data) {
+            // allmsg.push(data);
+            setlast(data)
+        })
+    }, [])
+    const authorise = () =>{
+        if(last.length > 1 && parseInt(last.receiverid) === identifyer){
+            setrefr(refr+1)
         }
-    ])
+        else{
+            console.log('not a match')
+        }
+    }
     return(
         <div>
             <Menu />
@@ -57,30 +67,15 @@ const Messages = () => {
                 <Sidebar/>
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
-                        <div>Home -> Messages</div>
-                        <div><span>Abudonnigeria</span><FontAwesomeIcon icon={faUser}/></div>
+                        <div>Home <FontAwesomeIcon icon={faCaretRight} /> Messages</div>
+                        <div><span>{name}</span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="top-trending">
                         <h3>Messages</h3>
-                        <div> <FontAwesomeIcon icon={faLocationDot} />Nigeria</div>
+                        <div> <FontAwesomeIcon icon={faLocationDot} />{userlocation.country}</div>
                     </div>
                     <div className="top-trending-list">
-                    {
-                        // groceries.slice(0,8).map(({id, img, title, price, transaction})=>(
-                        //     <div><Pcards type={2} width={'100%'} height={'100px'} pdsize={'.8em'} pcsize={'.9em'} id={id} title={title} price={price} img={img} trans={transaction} /></div>
-                        // ))
-                    }
                     <div className="table-container">
-                        <div className="table-top">
-                            <div>
-                                <select>
-                                    <option>Inbox</option>
-                                    <option>Outbox</option>
-                                    <option>Drafts</option>
-                                </select>
-                            </div>
-                            <p></p>
-                        </div>
                         <div className="reusable-table-two" style={{border:'none', textTransform:'uppercase', fontSize:'smaller', fontWeight:'700', color:'rgba(0,0,0,.6)', height:'20px', padding:'20px 0 0 0', marginBottom:'20px'}}>
                             <div>SN</div>
                             <div>From</div>
@@ -89,11 +84,12 @@ const Messages = () => {
                             <div>Action</div>
                         </div>
                         {
-                            groceries.slice(0,8).map(({id, title, sender, msgbody})=>(
-                            <div><MessageTable id={id} title={title} sender={sender} body={msgbody}/></div>
+                            messages.map(({id, chatname, chatid, msg, time, prod, receiver}, i)=>(
+                            <div key={id}><MessageTable id={i} sender={chatname} body={msg} time={time} chatid={chatid} prod={prod} pair={receiver} identify={identifyer} last={last} rer={refr}/></div>
                         ))
                         }
                     </div>
+                    
                     </div>
                 </div>
 

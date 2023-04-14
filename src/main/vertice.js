@@ -8,12 +8,12 @@ const Vertice = ({id, img, title, start, end, group}) => {
         <div>
             <div className="vertice">
                 <div className="img">
-                    <img src={img} alt=""/>
+                    <img src={"http://geo.vensle.com/storage/category/"+img} alt=""/>
                 </div>
                 <div className='pdetails'>
                     <div className="prodname">
                         <p>{title}</p>
-                        <div style={{cursor:'pointer'}}><Link to={"../../products/"+group+"/"+title}><FontAwesomeIcon icon={faArrowAltCircleRight} title={"Go to "+title}/></Link></div>
+                        <div style={{cursor:'pointer'}}><Link to={"/"+group+"/"+title}><FontAwesomeIcon icon={faArrowAltCircleRight} title={"Go to "+title}/></Link></div>
                     </div>
                 </div>
             </div>

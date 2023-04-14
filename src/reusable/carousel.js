@@ -1,29 +1,17 @@
 import { Carousel } from 'react-carousel-minimal';
 
 function Carousels({slide, thumbs}) {
-  console.log(slide)
-  console.log(thumbs)
+  // console.log(slide)
+  // console.log(thumbs)
  const data = [
     {
-      image: "./pics (12).jpg",
+      image: "./jop.avif",
     },
     {
-      image: "./pics (13).jpg",
+      image: "./joop.avif",
     },
     {
-      image: "./pics (14).jpg",
-    },
-    {
-      image: "./pics (23).jpg",
-    },
-    {
-      image: "./pics (8).jpg",
-    },
-    {
-      image: "./pics (6).jpg",
-    },
-    {
-      image: "./pics (7).jpg",
+      image: "./jooop.avif",
     }
   ];
 
@@ -42,7 +30,7 @@ function Carousels({slide, thumbs}) {
           <Carousel
             data={data}
             width="100%"
-            height="400px"
+            height="300px"
             radius="0px"
             automatic={slide}
             slideNumberStyle={slideNumberStyle}
@@ -59,4 +47,3 @@ function Carousels({slide, thumbs}) {
 }
 
 export default Carousels;
-

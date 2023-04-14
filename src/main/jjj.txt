@@ -3,3 +3,8 @@ iwf9y9jj8qns
 %|l_BfMd0SL
 <?php 
 symlink('/home/vensle-be/storage/app/public', '/home/vensle-be/public_html/storage')
+
+
+features
+1. add a feature that can allow someone to add more phone numbers
+2. get ability to choose the products that will show on the front end from the backend

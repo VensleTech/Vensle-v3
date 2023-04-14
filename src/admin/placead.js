@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { faUser, faLocationDot, faFilter, faImage, faClose } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faChevronCircleRight, faFilter, faCaretRight, faClose } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import banner1 from '../fashion (27).jpg'
 import banner2 from '../grocerydelivery.webp'
@@ -26,7 +26,7 @@ const Placead = () => {
                 <Sidebar/>
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
-                        <div>Home -> Upload</div>
+                        <div>Home <FontAwesomeIcon icon={faCaretRight} /> Create Ad</div>
                         <div><span>{name}</span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     
@@ -35,21 +35,26 @@ const Placead = () => {
                         <div><img src={banner1} alt="" /></div>
                         <Link to={"/admin/upload"} className="inbox-arrow">
                             <div>Regular Product</div>
-                            <div>-></div>
+                            <div><FontAwesomeIcon icon={faChevronCircleRight}/></div>
                         </Link>
                     </div>
-                    <div className="inbox">
-                    <div><img src={banner2} alt="" /></div>
-                       <Link to={"/admin/grocery"}  className="inbox-arrow">
-                            <div>Groceries</div> 
-                            <div>-></div>
-                       </Link>
-                    </div>
+                    {
+                        authlev === 2 ?
+                        <div className="inbox">
+                            <div><img src={banner2} alt="" /></div>
+                            <Link to={"/admin/grocery"}  className="inbox-arrow">
+                                    <div>Groceries</div> 
+                                    <div><FontAwesomeIcon icon={faChevronCircleRight}/></div>
+                            </Link>
+                        </div>
+                        :
+                        ''
+                    }
                     <div className="inbox">
                     <div><img src={banner3} alt="" /></div>
                         <Link to={"/admin/request"}  className="inbox-arrow">
                             <div>Request a Product</div>
-                            <div>-></div>
+                            <div><FontAwesomeIcon icon={faChevronCircleRight}/></div>
                         </Link>
                     </div>
                     </div>

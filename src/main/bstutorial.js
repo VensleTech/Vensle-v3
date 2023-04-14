@@ -1,167 +1,50 @@
 
 import Menu from "../reusable/menu"
-import { useState, useRef} from "react"
+import { useState, useRef, useEffect} from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Link } from "react-router-dom"
 import { faList, faPhone, faMessage, faBowlFood, faWheatAwn, faShirt, faBaby, faScrewdriverWrench } from "@fortawesome/free-solid-svg-icons"
 import { faPaintbrush, faTree, faVolleyball, faBars, faMicrophone, faBook, faHouseChimney, faClose, faCaretLeft, faCaretRight} from "@fortawesome/free-solid-svg-icons"
-import Loafers from "../loafers.jpg"
-import Iphone from "../iphone.webp"
-import pimage from '../prod.png'
-import Pcards from "../reusable/pcards"
-import ProdPop from "../reusable/prodpop"
-import Carousels from "../reusable/carousel"
-import Groce from '../grocerydelivery.webp'
-import Vertice from "./vertice"
-import Fly from "../../src/reusable/fly"
+
 import Foot from "../reusable/footer"
 import Drop from "../reusable/drop"
 const BSTutorial = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [product, setProducts] = useState([
-        {
-            id:1,
-            img:"./pics (5).jpg",
-            title:"Solid White leather shoes",
-            price:"5,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:2,
-            img:"./pics (3).jpg",
-            title:"Premium sneakers",
-            price:"22,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:0
-                }
-            ]
-        },
-        {
-            id:3,
-            img:"./pics (4).jpg",
-            title:"Apple i-watch",
-            price:"15,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:4,
-            img:"./pics (18).jpg",
-            title:"RayBan sun glasses",
-            price:"4,500",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:5,
-            img:"./pics (19).jpg",
-            title:"Nikon D9000 Camera(Wide angle lens)",
-            price:"325,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:6,
-            img:"./pics (20).jpg",
-            title:"All STars sneakers",
-            price:"7,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:7,
-            img:"./pics (22).jpg",
-            title:"Denim School bag",
-            price:"6,300",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
+    const reveal = (ref) => {
+        if (ref.current.style.display === 'grid') {
+            ref.current.style.display = 'none'
         }
-    ])
-    const menuref = useRef()
-    return(
+        else{
+            ref.current.style.display = 'grid'
+        }
+        
+    }
+    useEffect(()=>{
+        window.scrollTo(0,0)
+      },[])
+    const flash = useRef('')
+        const ham = useRef('')
+      return (
         <div>
-            <Menu/>
-            <div className="breadcrumbs">
-                <div>Home -> Tutorials</div>
+          <div className="topbar">
+                <div className="logo">
+                    <Link to={'/'}>Vensle</Link>
+                </div>
+                <div className="rightside">
+                    <div></div>
+                    <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveal(ham)}/></div>
+                    <div><Link to={'/signin'}>Sign in/Sign up</Link></div>
+                    <div ref={flash} ><Link to={'/admin/upload'} style={{color:'black'}}>Start Selling</Link></div>
+                </div>
             </div>
-            <div className="main">
+            <div className='PPol main-s'>
                 <div className="main-sidebar">
-                    <Drop info={"WELCOME"}/>
-                    <Drop info={"HOME PAGE"}/>
-                    <Drop info={"SELLER'S PROFILE"}/>
-                    <Drop info={"DASHBOARD"}/>
-                    <Drop info={"PRODUCTS"}/>
-                    <Drop info={"SETTINGS"}/>
-                    <Drop info={"MESSAGE"}/>
+                    <Link to={'/tutorial'}><Drop info={<strong>HOME PAGE</strong>}/></Link>
+                    <Link to={'/tutorial-view'}><Drop info={"VIEW MORE PAGE"}/></Link>
+                    <Link to={'/tutorial-seller'}><Drop info={"SELLER'S PROFILE"}/></Link>
+                    <Link to={'/tutorial-dash'}><Drop info={"DASHBOARD"}/></Link>
+                    <Link to={'/tutorial-products'}><Drop info={"PRODUCTS"}/></Link>
+                    <Link to={'/tutorial-settings'}><Drop info={"SETTINGS"}/></Link>
+                    <Link to={'/tutorial-message'}> <Drop info={"MESSAGE"}/></Link>
                 </div>
                 <div className="main-content">
                     <h4>INTRODUCTION</h4>

@@ -1,7 +1,9 @@
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
+
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 const Foot = () => {
     const [partners, setpartners] = useState([])
     // useEffect(()=>{
@@ -19,19 +21,18 @@ const Foot = () => {
         <div className="foot">
             <div className="foot-top">
                 <div>
-                    <h3>Buy</h3>
-                    <p>Delivery Options</p>
-                    <p>Repot a product</p>
-                    <p>How to return a product</p>
-                    <p>Categories</p>
-                    <p>Bidding  help</p>
+                    <h3>Company</h3>
+                    <p><Link to={'/privacy-policy'} style={{color:'black'}}>Privacy Policy</Link></p>
+                    <p><Link to={'/terms-of-use'} style={{color:'black'}}>Terms of Use</Link></p>
+                    <p><Link to={'/product-listing'} style={{color:'black'}}>Product Listing</Link></p>
+                    <p>Report a product</p>
+                    <p><Link to={'/faq'} style={{color:'black'}}>FAQ</Link></p>
                 </div>
                 <div>
                     <h3>Sell</h3>
-                    <p>Start Selling</p>
-                    <p>Learn to sell</p>
-                    <p>Quick setup</p>
-                    <p>Create a profile</p>
+                    <p><Link to={'/admin/place'} style={{color:'black'}}>Start Selling</Link></p>
+                    <p><Link to={'/tutorial'} style={{color:'black'}}>Learn to sell</Link></p>
+                    <p><Link to={'/tutorial-settings'} style={{color:'black'}}>Quick setup</Link></p>
                 </div>
                 <div>
                     <h3>About</h3>
@@ -49,7 +50,7 @@ const Foot = () => {
                     <p>Pinterest</p>
                     <p>Youtube</p>
                 </div>
-                <div>
+                <div >
                     <h3>Vensle International</h3>
                     <div className="countries">
                         <p>United Kingdom</p>
@@ -68,12 +69,6 @@ const Foot = () => {
                 </div>
             </div>
             <div className="logos"> 
-                <div><img src="../../images/brands (5).jpg" alt=""/></div>
-                <div><img src="../../images/brands (7).jpg" alt=""/></div>
-                <div><img src="../../images/brands (6).jpg" alt=""/></div>
-                <div><img src="../../images/brands (1).webp" alt=""/></div>
-                <div><img src="../../images/brands (4).jpg" alt=""/></div>
-                <div><img src="../../images/brands (3).webp" alt=""/></div>
             </div>
             
             <div className="foot-bottom">

@@ -1,34 +1,46 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import ProdPop from "./prodpop"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClose, faHamburger, faTruck, faHandshakeSimple } from "@fortawesome/free-solid-svg-icons"
-const Pcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price, information}) => {
+import { faClose, faHamburger, faTruck, faNairaSign, faDollarSign } from "@fortawesome/free-solid-svg-icons"
+import {CurrencyContext} from "../auth/currencycontext"
+
+const Pcards = ({information, vim, width,height,pdsize,pcsize, type,route}) => {
+    // destructure information
+
+    const {id, feat_image, min_price, max_price, title, price, gimage, imgfolder, category_tree, phone, location, currency} = information
+    // const curr = localStorage.getItem('curr')
     const [isOpen, setIsOpen] = useState(false)
     function formatMoney(n) {
         return (Math.round(n * 100) / 100).toLocaleString();
     }
-    price = formatMoney(price)
+    const price2 = formatMoney(price)
+    const pricemin = formatMoney(min_price)
+    const pricemax = formatMoney(max_price)
+    // console.log(pricemin)
     const getreadstate = (readstate)=> {
         setIsOpen(readstate)
       }
-    // const data = trans
+    // const data = '&#65284;'
+    function htmlDecode(input){
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes[0].nodeValue;
+      }
+    //   console.log(htmlDecode(data))
     return (
         
-        <div>
-            {
-                // thestate === true ? children : null
-            }
+        <div className="ccc">
             {type === 1 ? 
                 <div className="vertical" style={{width:width, height:height}} >
                     <div className="img" style={{height:vim}}  onClick={(e)=>setIsOpen(!isOpen)}>
-                        <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+img.split(',')[0]} alt=""/>
+                        <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                     </div>
                     <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
                         <div className="prodname" style={{fontSize:pdsize}}>
                             <p>{title}</p>
                         </div>
                         <div className="price" style={{fontSize:pdsize}}  >
-                            <p>${price}</p>
+                            <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +' - '+htmlDecode(currency)+pricemax}</p>
                         </div>
                     </div>
                     <div className='bdetails'>
@@ -45,19 +57,19 @@ const Pcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price
                         </div>
                     </div>
                     {isOpen === true ?
-                     <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate} information={information}/>: null}
+                     <ProdPop getreadstate={getreadstate} information={information} route={route}/>: null}
                 </div>
 : type === 2 ?
             <div className="horizontal" style={{width:width, height:height, gridTemplateColumns:height+' auto auto'}}  >
                 <div className="img" style={{width:height, height:height}} onClick={(e)=>setIsOpen(!isOpen)}>
-                    <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+img.split(',')[0]} alt=""/>
+                    <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                 </div>
                 <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
                         <div className="prodname" style={{fontSize:pdsize}} >
                             <p>{title}</p>
                         </div>
                         <div className="price" style={{fontSize:pcsize}}  >
-                            <p>${price}</p>
+                           <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +'-'+htmlDecode(currency)+pricemax}</p>
                         </div>
                 </div>
                 <div className='bdetails'>
@@ -74,24 +86,41 @@ const Pcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price
                       </div>
                     </div>
                     {isOpen === true ?
-                        <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate} information={information}/>: null}
+                        <ProdPop id={id} title={title} price={price} img={gimage} getreadstate={getreadstate} information={information} route={route}/>: null}
             </div>
-            :
+            : type === 3 ? 
             <div className="vhor" style={{width:width, height:height}}  >
                 <div className="img" style={{width:height, height:height}} onClick={(e)=>setIsOpen(!isOpen)}>
-                    <img src={"https://vensle.com/vensle-assets/backend/images/uploads/"+id+"/"+img.split(',')[0]} alt=""/>
+                    <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                 </div>
                 <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
                     <div className="prodname" style={{fontSize:pdsize}} >
                         <p>{title}</p>
                     </div>
                     <div className="price" style={{fontSize:pcsize}}>
-                        <p>${price}</p>
+                       <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+min_price +'-'+htmlDecode(currency)+max_price}</p>
                     </div>
                 </div>
                 {isOpen === true ?
-                    <ProdPop id={id} title={title} price={price} img={img} getreadstate={getreadstate} information={information}/>: null}
-            </div>}
+                    <ProdPop id={id} title={title} price={price} img={gimage} getreadstate={getreadstate} information={information} route={route}/>: null}
+            </div>
+        :
+                <div className="vertical2" style={{width:width, height:height, backgroundColor:'white', border:'1px solid #F0F0F0', borderRadius:'10px'}} >
+                    <div className="img" style={{height:vim}}  onClick={(e)=>setIsOpen(!isOpen)}>
+                        <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
+                    </div>
+                    <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                        
+                        <div className="price" style={{fontSize:pdsize}}  >
+                        <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +' - '+htmlDecode(currency)+pricemax}</p>
+                        </div>
+                        <div className="prodname" style={{fontSize:pdsize}}>
+                            <p>{title.substring(0, 36)}{title.length > 36 ? '...' : ''}</p>
+                        </div>
+                    </div>
+                    {isOpen === true ?
+                     <ProdPop getreadstate={getreadstate} information={information} route={route} />: null}
+                </div>}
         </div>
         
     )

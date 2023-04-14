@@ -2,6 +2,7 @@ import simage from '../stud3.webp'
 import {Link, useNavigate} from 'react-router-dom'
 import {useState, useEffect, useContext} from 'react'
 import {UserContext} from '../auth/usercontext'
+import Details from '../main/details'
 
 
 function Signin() {
@@ -9,7 +10,7 @@ function Signin() {
     const [success, setsuccess] = useState('Log in')
     const [clicked, setclicked] = useState(0)
     const nav = new useNavigate()
-    const {setDetails} = useContext(UserContext) 
+    const {details, setDetails} = useContext(UserContext) 
     useEffect(() => {
         // localStorage.setItem('logs', JSON.stringify(details))
         const truth = localStorage.getItem('logs');
@@ -49,12 +50,12 @@ function Signin() {
         .then(function (response) {
             
             const {name, idnumber, level} = response.data.credentials
-            setDetails({
+            setDetails(...details, {
                 name:name,
                 authlev:level,
-                idnumber: idnumber
+                idnumber: idnumber,
             })
-            localStorage.setItem('logs', JSON.stringify(response.data))
+            // localStorage.setItem('logs', 'kkkk')
             console.log(JSON.stringify(response.data));
                 if(level === undefined || level === '0'){
                     setsuccess('You have not yet been approved')

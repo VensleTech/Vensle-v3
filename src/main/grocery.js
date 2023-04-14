@@ -6,7 +6,7 @@ import Revcards from "../reusable/revcards"
 import pimage from '../prod.png'
 import Carousels from '../reusable/carousel'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHeart, faStar, faStarHalfAlt, faLocationDot, faMessage, faClose } from "@fortawesome/free-solid-svg-icons"
+import { faHeart, faStar, faStarHalfAlt, faLocationDot, faMessage, faAngleRight } from "@fortawesome/free-solid-svg-icons"
 import Carouse from "../reusable/carouse"
 import Popmessage from "../admin/popmessage"
 import Poprev from "../admin/poprev"
@@ -56,7 +56,7 @@ const Gdetails = () => {
         <div>
             <Menu/>
             <div className="breadcrumbs">
-                <div><Link to={'/'}>Home</Link> -> Products -> {name.replaceAll('-', ' ').replaceAll('&', '/')}</div>
+                <div><Link to={'/'}>Home</Link> <FontAwesomeIcon icon={faAngleRight} /> Products <FontAwesomeIcon icon={faAngleRight} /> {name.replaceAll('-', ' ').replaceAll('&', '/')}</div>
             </div>
             <div className="details-container-top">
                 <div className="details-left">
@@ -251,7 +251,7 @@ const Gdetails = () => {
                                             <h2>Other Products in this Category</h2>
                                             {
                                                 // product.filter(items => items.category === category && items.id !== id).slice(0,1).map(({item_group, group_name})=>(
-                                                //     <Link to={"/products/"+item_group+"/"+group_name.split('(')[0]} className="moore"><div >More</div>  -></Link>
+                                                //     <Link to={"/products/"+item_group+"/"+group_name.split('(')[0]} className="moore"><div >More</div>  <FontAwesomeIcon icon={faAngleRight} /></Link>
                                                 // ))
                                             }
                                         </div>
@@ -276,7 +276,7 @@ const Gdetails = () => {
                                             <h2>Recently Viewed Products</h2>
                                             {
                                                 product.filter(items => items.category === cat_name && items.id !== id).slice(0,1).map(({item_group, group_name})=>(
-                                                    <Link to={"/products/"+item_group+"/"+group_name.split('(')[0]} className="moore"><div >More</div>  -></Link>
+                                                    <Link to={"/products/"+item_group+"/"+group_name.split('(')[0]} className="moore"><div >More</div>  <FontAwesomeIcon icon={faAngleRight} /></Link>
                                                 ))
                                             }
                                         </div>
@@ -303,7 +303,7 @@ const Gdetails = () => {
                             ))
                         ))
                     }
-                    <div className="more" style={{background:'', padding:'20px', boxSizing:'border-box', marginTop:'7px', cursor:'pointer'}}>More -></div>   
+                    <div className="more" style={{background:'', padding:'20px', boxSizing:'border-box', marginTop:'7px', cursor:'pointer'}}>More <FontAwesomeIcon icon={faAngleRight} /></div>   
                     </div>
                     
                 </div>

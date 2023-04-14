@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { faUser, faLocationDot, faFilter, faClose } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect, useContext } from "react"
+import { faUser, faLocationDot, faListDots, faClose,faCaretRight, faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import Drop from "../reusable/drop"
@@ -11,137 +11,50 @@ import Menu from "./menu"
 import ReusableTable from "./reusabletable"
 import Popup from "./popup"
 import Sorts from "./sorts"
-
+import axios from "axios"
+import {UserContext} from '../auth/usercontext';
+import { Link } from "react-router-dom"
+import OrdersTable from "./orderstable"
 const MyOrders = () => {
+    const {details:{authlev, name,  specialref, userlocation}, setDetails} = useContext(UserContext)
     const [isOpen, setisOpen] = useState(false)
+    const [topic, settopic] = useState('Orders from me')
+    const [showdrop, setshowdrop] = useState('')
+    const [showdrops, setshowdrops] = useState('')
+    const [current, setcurrent] = useState('Orders for me')
     const [groceries, setgroceries] = useState([
-        {
-            id:1,
-            img:"../../pics (5).jpg",
-            title:"Solid White leather shoes",
-            price:"5,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:2,
-            img:"../../pics (3).jpg",
-            title:"Premium sneakers",
-            price:"22,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:0
-                }
-            ]
-        },
-        {
-            id:3,
-            img:"../../pics (4).jpg",
-            title:"Apple i-watch",
-            price:"15,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:0,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:4,
-            img:"../../pics (18).jpg",
-            title:"RayBan sun glasses",
-            price:"4,500",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:5,
-            img:"../../pics (19).jpg",
-            title:"Nikon D9000 Camera(Wide angle lens)",
-            price:"325,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:6,
-            img:"../../pics (20).jpg",
-            title:"All STars sneakers",
-            price:"7,000",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        },
-        {
-            id:7,
-            img:"../../pics (22).jpg",
-            title:"Denim School bag",
-            price:"6,300",
-            transaction:[
-                {
-                    id:1,
-                    type:'Must meet to buy',
-                    avail:1,
-                },
-                {
-                    id:2,
-                    type:'Delivery',
-                    avail:1
-                }
-            ]
-        }
+       
     ])
+    const [payload, setpayload] = useState({
+        'customerref': specialref
+    })
+    useEffect(()=>{
+        getparners('fromme', authlev)
+    },[])
+    const getparners = async (val, auth) => {
+        if (auth !== 1) {
+            const data = payload;
+            console.log(val)
+            try {
+                const product = await axios.post('http://geo.vensle.com/api/'+val, data)
+                setgroceries(product.data)
+                console.log(product.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else{
+            const data = payload;
+            console.log(val)
+            try {
+                const product = await axios.get('http://geo.vensle.com/api/order')
+                setgroceries(product.data)
+                console.log(product.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
     return(
         <div>
             <Menu />
@@ -149,43 +62,60 @@ const MyOrders = () => {
                 <Sidebar/>
                 <div className="adm-main">
                     <div className="breadcrumbs-bar">
-                        <div>Home -> Orders</div>
-                        <div><span>Abudonnigeria</span><FontAwesomeIcon icon={faUser}/></div>
+                        <div>Home <FontAwesomeIcon icon={faCaretRight} /> Orders</div>
+                        <div><span>{name}</span><FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="top-trending">
                         <h3>Orders</h3>
-                        <div> <FontAwesomeIcon icon={faLocationDot} />Nigeria</div>
+                        {/* <div> <FontAwesomeIcon icon={faLocationDot} />{userlocation.country}</div> */}
                     </div>
                     <div className="top-trending-list">
-                    {
-                        // groceries.slice(0,8).map(({id, img, title, price, transaction})=>(
-                        //     <div><Pcards type={2} width={'100%'} height={'100px'} pdsize={'.8em'} pcsize={'.9em'} id={id} title={title} price={price} img={img} trans={transaction} /></div>
-                        // ))
-                    }
                     <div className="table-container">
+                    
                         <div className="table-top">
-                            <div>
-                            {
-                                // <input type='text' placeholder="Today" />
-                            }
+                        {
+                            authlev === 2 || authlev === 0 ?
+                            <div className="top-trending">
+                                <h3>{topic}</h3>
+                                <FontAwesomeIcon icon={faChevronDown} onClick={(e)=>setshowdrop(!showdrop)} style={{cursor:'pointer'}}/>
+                                {
+                                    showdrop === true ? 
+                                    <div className="dropdow">
+                                        <div onClick={(e)=>{
+                                            settopic(e.target.innerText);
+                                            setshowdrop(!showdrop);
+                                            setcurrent(topic);
+                                            topic === 'Orders from me' ? getparners('tome') : getparners('fromme')
+                                         }}>{current}</div>
+                                    </div> :
+                                    null
+                                }
                             </div>
-                            <div onClick={(e)=>setisOpen(!isOpen)}> FIlters <FontAwesomeIcon icon={faFilter} /> </div>
+                            :
+                            ''
+                            // <div style={{padding:'20px', backgroundColor:'#EB3223', fontWeight:'600', borderRadius:'5px'}}>
+                            //     <Link to={'/admin/confirm'}>Confirm Order</Link>
+                            // </div>
+                        }
+                            
+                            
                         </div>
-                        <div className="reusable-table" style={{border:'none', textTransform:'uppercase', fontSize:'smaller', fontWeight:'700', color:'rgba(0,0,0,.6)', height:'20px', padding:'20px 0 0 0', marginBottom:'20px'}}>
+                        <div className="reusable-table-orders" style={{border:'none', textTransform:'uppercase', fontSize:'smaller', fontWeight:'700', color:'rgba(0,0,0,.6)', height:'20px', padding:'20px 0 0 0', marginBottom:'20px'}}>
                             <div>SN</div>
-                            <div>Image</div>
-                            <div>Product name</div>
+                            <div>Order Ref</div>
                             <div>Location</div>
                             <div>Time ordered</div>
                             <div>Price</div>
-                            <div>Action</div>
+                            <div></div>
                         </div>
-                        {
-                            groceries.slice(0,8).map(({id, img, title, price, transaction})=>(
-                            <div><ReusableTable id={id} title={title} price={price} img={img} trans={transaction}/></div>
+                        <div className="hr"/>
+                    {
+                        groceries.map(({id, orderid, location, created_at, cost}, i)=>(
+                            <OrdersTable sn={i} orderid={orderid} location={location} created_at={created_at} cost={cost}/>
                         ))
-                        }
+                    }    
                     </div>
+                    
                     {
                         isOpen === true ? 
                         <div className='popcontainer' > 
@@ -205,6 +135,7 @@ const MyOrders = () => {
                             </div>
                         </div> : null
                     }
+                    
                     </div>
                 </div>
 

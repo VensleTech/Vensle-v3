@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef, createRef} from "react"
 import {Link} from 'react-router-dom'
 import { faHeart, faLocationDot, faBars,faClose, faStar, faEye, faHandshake, faTruck, faStarHalfAlt, faNairaSign, faMessage, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -9,95 +9,155 @@ import Pcards from "../reusable/pcards"
 import Fly from "../reusable/fly"
 import ProdPop from "../reusable/prodpop"
 import Popmessage from "./popmessage"
+import axios from "axios"
+import Mcards from "../reusable/mcards"
+import Pusher from 'pusher-js'
 
-const MessageTable = ({id, img, heading, sender, body}) => {
+const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer}) => {
     const [isOpen, setIsOpen] = useState(false)
-    const data = [{
-        id:1,
-        title:'Premium Sneakers',
-        price:'22,000',
-        location:'Washington DC',
-        transaction:'Meet to Buy',
-        features:[
-          {
-            id:1,
-            type:'Category',
-            info:'Fashion'
-          },
-          {
-            id:2,
-            type:'Condition',
-            info:'Neatly used and clean'
-          },
-          {
-            id:3,
-            type:'Description',
-            info:'White color, touch screen and lightweight'
-          }
-        ],
-        images:
-          [
-            {
-              image: "../../pics (4).jpg",
-            },
-            {
-              image: "../../iwatch (13).jpg",
-            },
-            {
-              image: "../../iwatch (14).jpg",
-            },
-            {
-              image: "../../iwatch (1).jpg",
-            },
-            {
-              image: "../../iwatch (2).jpg",
-            },
-            {
-              image: "../../iwatch (3).jpg",
-            },
-            {
-              image: "../../iwatch (4).jpg",
-            },
-            {
-              image: "../../iwatch (5).jpg",
-            },
-            {
-              image: "../../iwatch (6).jpg",
-            },
-            {
-              image: "../../iwatch (7).jpg",
-            },
-            {
-              image: "../../iwatch (8).jpg",
-            },
-            {
-              image: "../../iwatch (9).jpg",
-            },
-            {
-              image: "../../iwatch (10).jpg",
-            },
-            {
-              image: "../../iwatch (11).jpg",
-            },
-            {
-              image: "../../iwatch (12).jpg",
-            },
-            {
-              image: "../../iwatch (15).jpg",
-            }
-          ]
+    const [prcard, setprcard] = useState([])
+    const [prodid, setprodid] = useState(prod)
+    const [message, setMessage] = useState('')
+    const [chatscard, setchatscard] = useState([])
+    const [last, setlast] = useState([])
+    const [fresh, setfresh] = useState(0)
+    let ALL = []
+    const acpr = useRef([])
+    const chatting = useRef(null)
+    acpr.current=[];
+
+    const addto =(all)=>{
+      if(all && !acpr.current.includes(all)){
+        acpr.current.push(all)
+      }
+    }
+    // setTimeout(() => {
+    //   setfresh(fresh+4)
+    // }, 4000);
+
+
+    useEffect(()=>{
+      authorise()
+      // setfresh(rer)
+    }, [rer])
+
+    useEffect(()=>{
+        axe()
+    }, [chatid])
+
+    useEffect(()=>{
+      chat()
+      chatting.current?.scrollIntoView({behaviour: 'smooth'})
+  }, [prodid, last])
+
+  useEffect(()=>{
+    chatting.current?.scrollIntoView({behaviour: 'smooth'})
+  }, [chatscard])
+
+  useEffect(() => {
+      highlight()
+  }, [prcard])
+
+    const axe =async ()=>{
+        var data ={accountid:''+identify+'',messageid:chatid};
+        try {
+			const response = await axios.post('http://geo.vensle.com/api/productsofchat', data);
+            setprcard(response.data);
+            // console.log(response.data);
+		} catch (err) {
+            console.log(err)
+			// setpayload('An error occured');
+		}
+    } 
+    const chat =async ()=>{
+        console.log('working')
+        var data ={accountid:''+identify+'',messageid:chatid,productid:prodid};
+        try {
+			const response = await axios.post('http://geo.vensle.com/api/chat', data);
+            setchatscard(response.data);
+            // console.log(response.data);
+      } catch (err) {
+              console.log(err)
+        // setpayload('An error occured');
+      }
+    }
+    const send = async ()=>{
+      console.log('clicked')
+      var data = {
+          senderid:''+identify+'',
+          receiverid:''+pair+'',
+          productid:prodid,
+          message:message
+      };
+      setchatscard([...chatscard, {
+            message:message,
+            position:1
+          }]);
+      try {
+          const response = await axios.post('http://geo.vensle.com/api/message', data);
+          
+              console.log(response.data);
+        } catch (err) {
+                console.log(err)
+          // setpayload('An error occured');
         }
-    ];
-    const [all] = data
-    const {images, features, title, price, location, transaction} = all
-  
+      }
+
+      // PUSHER
+      useEffect(() => {
+        // Pusher.logToConsole = true;
+        var pusher = new Pusher('2ee6d4aa15f34a5f2876', {
+          cluster: 'eu'
+        });
+        var channel = pusher.subscribe('chat');
+        channel.bind('message', function(data) {
+            // ALL.push(data);
+            setlast(data)
+            setfresh(fresh+1)
+        })
+    }, [])
+
+    const authorise = () =>{
+        if(last.length > 1 && parseInt(last.receiverid) === identify){
+            console.log(parseInt(last[0].receiverid))
+            // console.log('refresh '+ refr + ' times')
+            console.log('a match')
+        }
+        else{
+            // console.log(parseInt(last[0].receiverid))
+            console.log(identify)
+            console.log('not a match')
+        }
+    }
+
+    // highlight the last product
+
+    const highlight = () => {
+      if(acpr.current.length > 0){
+      acpr.current[acpr.current.length-1].style.opacity = 1
+      const lore = acpr.current.filter(element=> element !== acpr.current[acpr.current.length-1])
+        for (let i = 0; i < lore.length; i++) {
+          lore[i].style.opacity = 0.3
+        }
+      }
+      }
     return(
-        <div className="reusable-table-two">
-            <div>{id}</div>
+        <div className="reusable-table-two-">
+        <div className="big-scr">
+            <div>{id+1}</div>
             <div>{sender}</div>
             <div>{body}</div>
-            <div>5 minutes ago</div>
+            <div>12:16</div>
             <div className="viewer" onClick={(e)=>setIsOpen(!isOpen)} ><FontAwesomeIcon icon={faEye}/> View</div>
+        </div>
+            <div className="small-table" onClick={(e)=>setIsOpen(!isOpen)}>
+                        <div className="dp">{sender.substr(0,1)}</div>
+                        <div className="chat-inform">
+                            <div>{sender}</div>
+                            <div>{body}</div>
+                        </div>
+                        <div className="time">7:17am</div>
+            </div>
             {isOpen === true ?
                 <div className='popcontainer' > 
                     <div  className="inner-container" style={{display:'block'}}>
@@ -105,57 +165,81 @@ const MessageTable = ({id, img, heading, sender, body}) => {
                             <div>Thread</div>
                             <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={(e)=>setIsOpen(!isOpen)}><FontAwesomeIcon icon={faClose} /></div>
                         </div>
-                        <Popmessage id={id} title={heading} price={body} img={img}>
+                        <Popmessage id={id} >
                             <div className="msg-box">
+                                <div className="msg-pop2">
+                                    {
+                                      // prcard.map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency}, index)=>(
+                                      //     <div 
+                                      //     onClick={(e)=>{setprodid(''+id+''); 
+                                      //     // console.log(e.currentTarget)
+                                      //     // console.log(acpr.current[index])
+                                      //         if(e.currentTarget === acpr.current[index]){
+                                      //           acpr.current[index].style.opacity = 1
+                                      //             // acpr.current[index].style.border = '1px solid red'
+                                      //           const lore = acpr.current.filter(element=> element !== e.currentTarget)
+                                      //           for (let i = 0; i < lore.length; i++) {
+                                      //             lore[i].style.opacity = 0.3
+                                      //           }
+                                      //         }
+                                      //       } 
+                                      //     }
+                                      //     style={{cursor:'pointer', borderRadius:'10px', marginBottom:'10px'}} 
+                                      //     key={index}
+                                      //     ref={addto}
+                                      //     >
+                                      //     <Mcards type={2} width={'100%'} height={'100px'} pdsize={'1.1em'} pcsize={'1.2em'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                      //   ))
+                                    }
+                                    
+                                </div>
                                 <div className="chat-box">
-                                    <p>James Boluwatife</p>
-                                    <div className="incoming">
-                                        Please can I have this product at
-                                        a cheaper rate
-                                    </div>
-                                    <div className="outgoing">
-                                        Why not! How soon do you need
-                                        the product?
-                                    </div>
+                                    <p>{sender}</p>
+                                    {
+                                      chatscard.map(({message, position})=>(
+                                        position === 0 ? 
+                                        <div className="incoming">
+                                          {message}
+                                        </div>
+                                        :
+                                        <div className="outgoing">
+                                          {message}
+                                        </div>
+                                      ))
+                                    }
+                                    
+                                    <div ref={chatting} />
                                 </div>
                                 <div className="message-field">
-                                    <input type="text" placeholder="Write a message"/>
-                                    <FontAwesomeIcon icon={faPaperPlane} className="send-button"/>
+                                    <input type="text" placeholder="Write a message" onChange={(e)=>setMessage(e.target.value)} />
+                                    <div onClick={send}><FontAwesomeIcon icon={faPaperPlane} className="send-button"/></div>
                                 </div>
                             </div>
                             <div className="msg-pop">
-                                <div className='displ'>
-                                    <img src={images[0].image} alt=''/>
-                                </div>
-                                <div className="dr-first">
-                                    <div className="caption">
-                                        <h3>{title}</h3> <p><FontAwesomeIcon icon={faHeart} /></p>
-                                    </div>
-                                    <div className="dr-price">
-                                        <h4>Price</h4><span>Rating <FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStar} /><FontAwesomeIcon icon={faStarHalfAlt} /></span>
-                                        <p><FontAwesomeIcon icon={faNairaSign} /> {price}</p>
-                                    </div>
-                                    <div>
-                                        <div className="table-within">
-                                            <h3>Features</h3>
-                                            <table>
-                                            {
-                                            features.map(({type, info})=>(
-                                                <tr>
-                                                    <td>{type}</td>
-                                                    <td>{info}</td>
-                                                </tr>
-                                            ))
-                                            }
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div className='bottom'>
-                                        <Link to={"/details/"+id}><div className='more-details'>
-                                            <FontAwesomeIcon icon={faBars} /><p>More details</p>
-                                        </div></Link>
-                                    </div>
-                                </div>
+                                {
+                                  // prcard.map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency}, index)=>(
+                                  //     <div 
+                                  //     onClick={(e)=>{setprodid(''+id+''); 
+                                  //     // console.log(e.currentTarget)
+                                  //     // console.log(acpr.current[index])
+                                  //         if(e.currentTarget === acpr.current[index]){
+                                  //           acpr.current[index].style.opacity = 1
+                                  //             // acpr.current[index].style.border = '1px solid red'
+                                  //           const lore = acpr.current.filter(element=> element !== e.currentTarget)
+                                  //           for (let i = 0; i < lore.length; i++) {
+                                  //             lore[i].style.opacity = 0.3
+                                  //           }
+                                  //         }
+                                  //       } 
+                                  //     }
+                                  //     style={{cursor:'pointer', borderRadius:'10px', marginBottom:'10px'}} 
+                                  //     key={index}
+                                  //     ref={addto}
+                                  //     >
+                                  //     <Mcards type={2} width={'100%'} height={'100px'} pdsize={'1.1em'} pcsize={'1.2em'} id={id} title={title} price={price} img={Images} information={[group_name, category_name, item_contact_number, state, country, currency]}/></div>
+                                  //   ))
+                                }
+                                
                             </div>
                         </Popmessage>
                     </div>
