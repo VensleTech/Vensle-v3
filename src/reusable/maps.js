@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useContext, useMemo} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faSearch, faClose, faLocationDot, faNairaSign, faDollarSign, faUser, faBars, faShoppingCart, faShoppingBag, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
+import { faList, faSearch, faClose, faLocationDot, faNairaSign, faDollarSign, faUser, faBars, faShoppingCart, faShoppingBag, faShoppingBasket, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import {UserContext} from "../auth/usercontext"
 import { GoogleMap, useLoadScript, MarkerF, CircleF } from "@react-google-maps/api";
 import { useGeoLocation } from "use-geo-location";
 
 const Map  = ({getref, getrad, rad, height}) => {
+    useEffect(()=>{
+        document.body.style.overflow = 'hidden';
+    },[])
     // google boiler
     const {isLoaded} =useLoadScript({
         googleMapsApiKey:process.env.REACT_APP_GMAP
@@ -19,10 +22,12 @@ const Map  = ({getref, getrad, rad, height}) => {
 
 
     // states
-    const [drop, setdrop] = useState(0)
-    const [radius, setradius] = useState(3000)
+    const [drop, setdrop] = useState(false)
+    const [dropkm, setdropkm] = useState(0)
+    const [radius, setradius] = useState(2000)
     const [zoom, setzoom] = useState(11)
     const [newadd, setnewadd] = useState(userlocation)
+    const [inpval, setinpval] = useState(userlocation.city)
     const [addresses, setaddresses] = useState([])
 
     // destructure newadd
@@ -65,7 +70,7 @@ const Map  = ({getref, getrad, rad, height}) => {
             city:address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name,
         })
        setzoom(11)
-       setradius(3000)
+       setradius(2000)
     }
 
     // 3. Update the location across board
@@ -86,7 +91,7 @@ const Map  = ({getref, getrad, rad, height}) => {
     // 4. Choose the zoom level
     const zoomer = (val) => {
         switch (parseInt(val)) {
-            case 3000:
+            case 2000:
                 setzoom(12.5)
                 return;
             case 5000:
@@ -101,8 +106,23 @@ const Map  = ({getref, getrad, rad, height}) => {
             case 20000:
                 setzoom(8.5)
                 return;
-            case 25000:
+            case 50000:
                 setzoom(7.5)
+                return;
+            case 100000:
+                setzoom(5.6)
+                return;
+            case 200000:
+                setzoom(4.5)
+                return;
+            case 300000:
+                setzoom(4.3)
+                return;
+            case 400000:
+                setzoom(4.6)
+                return;
+            case 500000:
+                setzoom(4.4)
                 return;
             default:
                 break;
@@ -111,7 +131,7 @@ const Map  = ({getref, getrad, rad, height}) => {
     const options = {
         strokeColor: '#FF0000',
         strokeOpacity: 0.4,
-        strokeWeight: 1,
+        strokeWeight: .5,
         fillColor: '#FF0000',
         fillOpacity: 0.15,
     }
@@ -120,7 +140,7 @@ const Map  = ({getref, getrad, rad, height}) => {
                 <div className="lp-inner">
                     <div className="lp-inner-one">
                         <p>Change location </p>
-                        <div onClick={getref}><FontAwesomeIcon icon={faClose} /></div>
+                        <div onClick={(e)=>{document.body.style.overflow = 'unset'; getref()}}><FontAwesomeIcon icon={faClose} /></div>
                     </div>
                     <div className="scroll-inner">
                         <div className="lp-curr">Search by town, city, neighbourhood or postal code.</div>
@@ -128,7 +148,7 @@ const Map  = ({getref, getrad, rad, height}) => {
                             <div><FontAwesomeIcon icon={faLocationDot} /></div>
                             <div>
                                 <p>Location</p>
-                                <input type='text' placeholder="Enter a location" onChange={(e)=>fetchlocs(e.target.value)}/>
+                                <input type='text' placeholder="Enter a location" onChange={(e)=>{fetchlocs(e.target.value); setinpval(e.target.value)}} value={inpval} onFocus={(e)=>e.target.value = ''}/>
                             </div>
                             {
                                 drop === 1 ? 
@@ -137,7 +157,7 @@ const Map  = ({getref, getrad, rad, height}) => {
                                     addresses.map((locations, i)=>(
                                         <div className="list">
                                             <p><FontAwesomeIcon icon={faLocationDot}/> </p>
-                                            <p onClick={(e)=>{changeaddr(locations); setdrop(0);}}>{locations.formatted_address }</p>
+                                            <p onClick={(e)=>{changeaddr(locations); setdrop(0); setinpval(locations.address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name)}}>{locations.formatted_address }</p>
                                         </div>
                                     ))
                                 }
@@ -148,13 +168,25 @@ const Map  = ({getref, getrad, rad, height}) => {
                         </div>
                         <div className="lp-inner-three">
                         <p>Radius</p>
-                        <select onChange={e=>{setradius(e.target.value); zoomer(e.target.value)}}>
-                                <option value='3000'>3 km</option>
-                                <option value='5000'>5 km</option>
-                                <option value='10000'>10 km</option>
-                                <option value='15000'>15 km</option>
-                                <option value='20000'>20 km</option>
-                            </select>
+                            <div className="kmdisp" onClick={(e)=>setdropkm(!dropkm)}>{radius/1000+' km'} <FontAwesomeIcon icon={faCaretDown}/></div>
+                            {
+                                dropkm === true ? 
+                                    <div className="drops">
+                                        <div className='lists' onClick={e=>{setradius(2000); zoomer(2000); setdropkm(!dropkm)}} >2 km</div>
+                                        <div className='lists' onClick={e=>{setradius(5000); zoomer(5000); setdropkm(!dropkm)}} >5 km</div>
+                                        <div className='lists' onClick={e=>{setradius(10000); zoomer(10000); setdropkm(!dropkm)}} >10 km</div>
+                                        <div className='lists' onClick={e=>{setradius(15000); zoomer(15000); setdropkm(!dropkm)}} >15 km</div>
+                                        <div className='lists' onClick={e=>{setradius(20000); zoomer(20000); setdropkm(!dropkm)}} >20 km</div>
+                                        <div className='lists' onClick={e=>{setradius(50000); zoomer(50000); setdropkm(!dropkm)}} >50 km</div>
+                                        <div className='lists' onClick={e=>{setradius(100000); zoomer(100000); setdropkm(!dropkm)}} >100 km</div>
+                                        <div className='lists' onClick={e=>{setradius(200000); zoomer(200000); setdropkm(!dropkm)}} >200 km</div>
+                                        <div className='lists' onClick={e=>{setradius(300000); zoomer(300000); setdropkm(!dropkm)}} >300 km</div>
+                                        <div className='lists' onClick={e=>{setradius(400000); zoomer(400000); setdropkm(!dropkm)}} >400 km</div>
+                                        <div className='lists' onClick={e=>{setradius(500000); zoomer(500000); setdropkm(!dropkm)}} >500 km</div>
+                                    </div>
+                                    :
+                                    ''
+                            }
                         </div>
                         <div className="maps">
                         {
@@ -168,7 +200,7 @@ const Map  = ({getref, getrad, rad, height}) => {
                         }
                         </div>
                     </div>
-                    <div className="lp-inner-four" onClick={(e)=>{changeloc() }}>
+                    <div className="lp-inner-four" onClick={(e)=>{{document.body.style.overflow = 'unset';changeloc()} }}>
                         APPLY
                     </div>
                 </div>

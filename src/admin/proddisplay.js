@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClose, faEllipsis, faCircleDot ,faHamburger, faTruck, faHandshakeSimple, faEdit, faEye, faStar, faStarHalfStroke, faChevronDown, faChevronCircleDown, faCheckDouble, faCheck, faCheckSquare } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 
-const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, prod, getrefstate, approval, update}) => {
+const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, prod, getrefstate, approval, update, authlev}) => {
     const curr = localStorage.getItem('curr')
-    const {id, feat_image:img, min_price, max_price, title, price,imgfolder:folder,approved, currency, recommended, superdeals, viewerschoice, toptrending, toppurchased} = prod
+    const {id, feat_image:img, min_price, max_price, title, price,imgfolder:folder,approved, location, currency, item_condition, recommended, superdeals, viewerschoice, toptrending, toppurchased, full_name, category_tree, description} = prod
     const [isOpen, setIsOpen] = useState(false)
     const [showdrop, setshowdrop] = useState(false)
     const [causerefresh, setcauserefresh] = useState(0)
@@ -98,19 +98,44 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, prod, getrefstat
                 <div className="img" style={{width:height, height:height}} onClick={(e)=>setIsOpen(!isOpen)}>
                     <img src={"http://geo.vensle.com/storage/"+folder+"/"+img} alt=""/>
                 </div>
-                <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
-                        <div className="prodname" style={{fontSize:pdsize}} >
-                            <p>{title}</p>
-                        </div>
-                        <div className="price" style={{fontSize:pcsize}}  >
-                            <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +' - '+htmlDecode(currency)+pricemax}</p>
-                        </div>
-                        {
-                            success === true ?
-                                <div>Successfully updated</div>
-                            :
-                            ''
-                        }
+                <div style={{display:'grid', gridTemplateColumns:'250px 200px 2.5fr'}}> 
+                    <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                            <div className="prodname" style={{fontSize:pdsize}} >
+                                <p>{title}</p>
+                            </div>
+                            <div className="price" style={{fontSize:pcsize}}  >
+                                <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +' - '+htmlDecode(currency)+pricemax}</p>
+                            </div>
+                            {
+                                success === true ?
+                                    <div>Successfully updated</div>
+                                :
+                                ''
+                            }
+                    </div>
+                    
+                    <div className='pdetails lose' onClick={(e)=>setIsOpen(!isOpen)}>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Vendor: <strong>{full_name}</strong></p>
+                            </div>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Product Category: <strong>{category_tree.split(',')[category_tree.split(',').length-1]}</strong></p>
+                            </div>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Status: <strong>{approved === '1' ? 'Approved':'Not yet approved'}</strong></p>
+                            </div>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Status: <strong>{item_condition === '1' ? 'New':'Used'}</strong></p>
+                            </div>
+                    </div>
+                    <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Location: <strong>{location.split('+|+')[0]}</strong></p>
+                            </div>
+                            <div className="prodname" style={{fontSize:'1em'}} >
+                                <p>Description: <strong>{description}</strong></p>
+                            </div>
+                    </div>
                 </div>
                 <div className='bdetails' style={{position:'relative'}}>
                     <div className="pmenu">
@@ -118,7 +143,8 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, prod, getrefstat
                     </div>
                     {
                         (prod.approved === "1" || prod.approved === 1) && showdrop === true ? 
-                        <div className="dropdown" style={{top:'10px', right:'0'}}>
+                            authlev === 1 ?
+                            <div className="dropdown" style={{top:'10px', right:'0'}}>
                         {
                             console.log(prod.approved)
                         }
@@ -129,8 +155,13 @@ const ProdDisplay = ({type, width, height, vim, pdsize, pcsize, prod, getrefstat
                             <div><span onClick={(e)=>{setshowdrop(!showdrop);setsec(id, 'toptrending', '1')}}>Top Trending</span> {toptrending === "1" || toptrending === 1 ? <div className="inn"><FontAwesomeIcon icon={faCheck}/> <span onClick={(e)=>{setshowdrop(!showdrop);setsec(id,'toptrending', '0')}}>Remove</span> </div>: ''}</div>
                             <div><span onClick={(e)=>{setshowdrop(!showdrop);setsec(id, 'toppurchased', '1')}}>Top Purchased</span> {toppurchased === "1" || toppurchased === 1 ? <div className="inn"><FontAwesomeIcon icon={faCheck}/> <span onClick={(e)=>{setshowdrop(!showdrop);setsec(id,'toppurchased', '0')}}>Remove</span> </div>: ''}</div>
                         </div>
+                        :
+                        <div className="dropdown" style={{top:'10px', right:'0'}}>
+                            <div><span onClick={(e)=>{setshowdrop(!showdrop);setsec(id, 'recommended', '1')}} >Delete product</span> {recommended === "1" || recommended === 1 ? <div className="inn"><FontAwesomeIcon icon={faCheck}/> <span onClick={(e)=>{setshowdrop(!showdrop);setsec(id,'recommended', '0')}}>Remove</span> </div>: ''}</div>
+                            {/* <div><span onClick={(e)=>{setshowdrop(!showdrop);setsec(id, 'superdeals', '1')}}>Super Deals</span> {superdeals === "1" || superdeals === 1 ? <div className="inn"><FontAwesomeIcon icon={faCheck}/> <span onClick={(e)=>{setshowdrop(!showdrop);setsec(id,'superdeals', '0')}}>Remove</span> </div>: ''}</div> */}
+                        </div>
                             :
-                        (prod.approved === "0" || prod.approved === 0) && showdrop === true ? 
+                        (prod.approved === "0" || prod.approved === 0) && showdrop === true && authlev === 1? 
                         <div className="dropdown" style={{top:'10px', right:'0'}}>
                             <div onClick={(e)=>{setshowdrop(!showdrop);getpartners(id)}}><b>Approve Product</b></div>
                         </div> :

@@ -38,9 +38,9 @@ const Sidebar = () => {
                 <Flys icon={<FontAwesomeIcon icon={faBox} />} info={'Products'}>
                     <div className="options">
                         <div><Link to={'../../admin/products'}>All products</Link></div>
-                        <div><Link to={'../../admin/products'}>Pending products</Link></div>
+                        {/* <div><Link to={'../../admin/products'}>Pending products</Link></div>
                         <div><Link to={'../../admin/requests'}>All requests</Link></div>
-                        <div><Link to={'../../admin/products'}>Product category</Link></div>
+                        <div><Link to={'../../admin/products'}>Product category</Link></div> */}
                     </div>
                 </Flys>
                 <Link to={'/admin/orders'}><Flys icon={<FontAwesomeIcon icon={faBoxesPacking} />} info={'Orders'}/></Link>
@@ -59,7 +59,7 @@ const Sidebar = () => {
                 <Flys icon={<FontAwesomeIcon icon={faBox} />} info={'Products'}>
                     <div className="options">
                         <div><Link to={'/admin/place'}>Create New Item</Link></div>
-                        <div><Link to={'../../admin/products/sold'}>Sold Items</Link></div>
+                        <div><Link to={'../../admin/products'}>My uploads</Link></div>
                         <div><Link to={'../../admin/requests'}>My requests</Link></div>
                         <div><Link to={'../../admin/products/bought'}>Bought Items</Link></div>
                         <div><Link to={'../../admin/drafts'}>Drafts</Link></div>

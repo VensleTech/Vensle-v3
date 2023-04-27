@@ -19,10 +19,11 @@ import axios from "axios"
 import { UserContext } from "../auth/usercontext"
 import Reauth2 from "../reusable/reauth2"
 import {decode} from 'html-entities';
+import Relogged from "../reusable/reauth2"
 
 
 const Details = () => {
-    const {details:{location, item, currency}, details, setDetails} = useContext(UserContext)
+    const {details:{location, item, currency, specialref}, details, setDetails} = useContext(UserContext)
     const container =useRef('')
     useEffect(()=>{
         window.scrollTo(0,0)
@@ -233,10 +234,11 @@ const Details = () => {
                     </div>    
                     <div className="dr-first-">
                             <div className="caption">
-                                <h3>Brand New - In stock</h3> <p><FontAwesomeIcon icon={faHeart} /></p>
+                                <h3>Brand New - In stock</h3> 
+                                {/* <p><FontAwesomeIcon icon={faHeart} /></p> */}
                             </div>
                             <div className="dr-price">
-                                <h4>Price</h4><span></span>
+                                {/* <h4>Price</h4><span></span> */}
                                 <p>{products.price !== undefined ? decode(products.currency)+price2 : decode(products.currency)+pricemin +'-'+decode(products.currency)+pricemax}</p>
                             </div>
                             <div className="s-location"><FontAwesomeIcon icon={faLocationDot} /> {products.location.split('+')[products.location.split('+').length-1]}</div>
@@ -296,10 +298,16 @@ const Details = () => {
                                }
                                 </div>
                                 }
-                                <Reauth2>
-                                    <textarea placeholder={"Hi "+products.full_name+" I am interested in your product"}/>
+                                
+                                <textarea placeholder={"Hi "+products.full_name+" I am interested in your product"}/>
+                                {
+                                    !specialref ? <button className="click-send" ><Link to={'/signin'}><div>Sign up</div></Link></button>  
+                                    : 
                                     <button className="click-send" ><FontAwesomeIcon icon={faMessage}></FontAwesomeIcon> Send</button>
-                                </Reauth2>
+                                    
+                                }  
+                                    
+                                
                             </div>
                         </div>        
                     

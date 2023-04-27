@@ -108,7 +108,7 @@ function App() {
           <Route path="/groceries" element={<Groceries />} />
 
           <Route path="/admin" element={<Reauth><HAdmin /></Reauth>} />
-          <Route path="/admin/products" element={<Reauth><Readmin><MyProducts /></Readmin></Reauth>} />
+          <Route path="/admin/products" element={<Reauth><MyProducts /></Reauth>} />
           <Route path="/admin/orders" element={<Reauth><MyOrders /></Reauth>} />
           <Route path="/admin/upload" element={<Reauth><Upload /></Reauth>} />
           <Route path="/admin/grocery" element={<Reauth><Grocery /></Reauth>} />

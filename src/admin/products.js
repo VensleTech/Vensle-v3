@@ -1,5 +1,5 @@
 import { useState,useEffect, useContext } from "react"
-import { faUser, faLocationDot, faFilter, faClose,faCaretRight } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faLocationDot, faFilter, faClose,faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Sidebar from "./sidebar"
 import Menu from "./menu"
@@ -14,7 +14,7 @@ import Map from "../reusable/maps"
 
 const MyProducts = () => {
     const [isOpen, setisOpen] = useState(false)
-    const {details:{userlocation, name},products, setDetails} = useContext(UserContext)
+    const {details:{userlocation, name,id,authlev},products, setDetails} = useContext(UserContext)
     // useEffect(() => {
     //     setfill(Object.entries(fill))
     //     console.log(filt)
@@ -41,13 +41,26 @@ const MyProducts = () => {
     
     const getparners = async () => {
         console.log(category)
-        var product
+        
+        const data = {
+            userid : id+''
+        }
         try {
-            product = await axios.get("http://geo.vensle.com/api/"+category[0]+"/"+userlocation.country)
-            setproduct(product.data)
-            console.log(product.data)
+            if (authlev !== 1) {
+                const product = await axios.post("http://geo.vensle.com/api/"+category[0]+"/"+userlocation.country, data)
+                setproduct(product.data)
+                console.log(product.data)
+            }
+            else{
+                const product = await axios.get("http://geo.vensle.com/api/"+category[0]+"/"+userlocation.country)
+                setproduct(product.data)
+                console.log(product.data)
+            }
+            
+            
         } catch (error) {
             console.log(error);
+            setproduct([])
         }
     }
     const splice =(i)=>{
@@ -115,7 +128,7 @@ const MyProducts = () => {
                     <div className="catchoice">
                     <span>Product Category</span>
                         <div style={{position:'relative'}}>
-                                <div className="inpbox" onClick={(e)=>{setshow(!show)}}>{selected}</div>
+                                <div className="inpbox" onClick={(e)=>{setshow(!show)}}>{selected} <FontAwesomeIcon icon={faCaretDown}/></div>
                                 {
                                     show === true ?
                                     <div className="dropbox">
@@ -131,7 +144,7 @@ const MyProducts = () => {
                     <div className="top-trending-list">
                     {
                         product.slice(0,8).map((products)=>(
-                            <div><ProdDisplay type={2} width={'100%'} height={'150px'} pdsize={'1.3em'} pcsize={'1.8em'} prod={products} getrefstate={refresh} approval={category[1]} update={category[2]}/></div>
+                            <div><ProdDisplay type={2} width={'100%'} height={'150px'} pdsize={'1.3em'} pcsize={'1.8em'} prod={products} getrefstate={refresh} approval={category[1]} update={category[2]} authlev={authlev}/></div>
                         ))
                     }
                     </div>

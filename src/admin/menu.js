@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext} from "react"
-import { faUser, faAdd, faQuestionCircle, faHome, faBox, faPersonDress, faBoxesPacking, faGear, faMessage, faSearch, faBell, faSignOut } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faAdd, faUpload, faHome, faBox, faPersonDress, faBoxesPacking, faGear, faMessage, faSearch, faBell, faSignOut } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Drop from "../reusable/drop"
 import Ops from "../reusable/ops"
@@ -60,6 +60,7 @@ const Menu = () => {
                 authlev === 2 || authlev === 0 ?
                 <div className="basemenu">
                     <Link to={"/admin/profile"}><div><FontAwesomeIcon icon={faHome}/><p></p>Home</div></Link>
+                    <Link to={"/admin/products"}><div><FontAwesomeIcon icon={faUpload}/><p>Uploads</p></div></Link>
                     <Link to={"/admin/place"}><div><FontAwesomeIcon icon={faAdd}/><p>Sell</p></div></Link>
                     <Link to={"/admin/messages"}><div><FontAwesomeIcon icon={faMessage}/><p>Messages</p></div></Link>
                     <Link to={"/admin/orders"}><div><FontAwesomeIcon icon={faBoxesPacking}/><p>Orders</p></div></Link>

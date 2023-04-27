@@ -8,7 +8,7 @@ import Foot from "../reusable/footer";
 import Menus from "../reusable/menus";
 import { UserContext } from "../auth/usercontext";
 import { Link } from "react-router-dom";
-
+import disableScroll from 'disable-scroll';
 
 const Base  = () => {
     const {details:{userlocation},setDetails} = useContext(UserContext)
@@ -72,6 +72,7 @@ const Base  = () => {
             img:'./vector8.jpg'
         }
     ]
+    // disableScroll.on();
     return(
         <div className='gray'>
         <div>

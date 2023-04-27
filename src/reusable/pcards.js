@@ -32,10 +32,10 @@ const Pcards = ({information, vim, width,height,pdsize,pcsize, type,route}) => {
         <div className="ccc">
             {type === 1 ? 
                 <div className="vertical" style={{width:width, height:height}} >
-                    <div className="img" style={{height:vim}}  onClick={(e)=>setIsOpen(!isOpen)}>
+                    <div className="img" style={{height:vim}}  onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                         <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                     </div>
-                    <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                    <div className='pdetails' onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                         <div className="prodname" style={{fontSize:pdsize}}>
                             <p>{title}</p>
                         </div>
@@ -61,10 +61,10 @@ const Pcards = ({information, vim, width,height,pdsize,pcsize, type,route}) => {
                 </div>
 : type === 2 ?
             <div className="horizontal" style={{width:width, height:height, gridTemplateColumns:height+' auto auto'}}  >
-                <div className="img" style={{width:height, height:height}} onClick={(e)=>setIsOpen(!isOpen)}>
+                <div className="img" style={{width:height, height:height}} onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                     <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                 </div>
-                <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                <div className='pdetails' onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                         <div className="prodname" style={{fontSize:pdsize}} >
                             <p>{title}</p>
                         </div>
@@ -90,10 +90,10 @@ const Pcards = ({information, vim, width,height,pdsize,pcsize, type,route}) => {
             </div>
             : type === 3 ? 
             <div className="vhor" style={{width:width, height:height}}  >
-                <div className="img" style={{width:height, height:height}} onClick={(e)=>setIsOpen(!isOpen)}>
+                <div className="img" style={{width:height, height:height}} onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                     <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                 </div>
-                <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                <div className='pdetails' onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                     <div className="prodname" style={{fontSize:pdsize}} >
                         <p>{title}</p>
                     </div>
@@ -106,10 +106,10 @@ const Pcards = ({information, vim, width,height,pdsize,pcsize, type,route}) => {
             </div>
         :
                 <div className="vertical2" style={{width:width, height:height, backgroundColor:'white', border:'1px solid #F0F0F0', borderRadius:'10px'}} >
-                    <div className="img" style={{height:vim}}  onClick={(e)=>setIsOpen(!isOpen)}>
+                    <div className="img" style={{height:vim}}  onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                         <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/>
                     </div>
-                    <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
+                    <div className='pdetails' onClick={(e)=>{setIsOpen(!isOpen); document.body.style.overflow = 'hidden';}}>
                         
                         <div className="price" style={{fontSize:pdsize}}  >
                         <p>{price !== undefined ? htmlDecode(currency)+price2 : htmlDecode(currency)+pricemin +' - '+htmlDecode(currency)+pricemax}</p>

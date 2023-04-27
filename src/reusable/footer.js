@@ -1,31 +1,72 @@
-import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faEnvelope, faMessage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 const Foot = () => {
-    const [partners, setpartners] = useState([])
-    // useEffect(()=>{
-    //     getparners()
-    // },[])
-    // const getparners = async () => {
-    //     try {
-    //         const partners = await axios.get('../.http://geo.vensle.com/partners.json')
-    //         setpartners(partners.data)
-    //      } catch (error) {
-    //         console.log(error);
-    //      }
-    // }
+    const [email, setemail] = useState('')
+    const [msg, setmsg] = useState('Subscribe')
+    
+    
+    const push = async () => {
+        const data = {
+            email:email
+        }
+        try {
+            const partners = await axios.post('http://geo.vensle.com/api/subscribe', data)
+            setmsg('Subscribed')
+            console.log(partners)
+         } catch (error) {
+            console.log(error);
+         }
+    }
     return (
         <div className="foot">
+            <div className="newsletter">
+                <div className="news-l">
+                    <FontAwesomeIcon icon={faEnvelope}/>
+                    <div>
+                        <h3>SUBSCRIBE TO OUR NEWSLETTER</h3>
+                        <p>Get all the latest information on Events, Sales and Offers.</p>
+                    </div>
+                </div>
+                <div className="news-r">
+                    <div>
+                    <input type='text' placeholder="Your email address" onChange={(e)=>setemail(e.target.value)}/>
+                    </div>
+                    <button onClick={push}>{msg}</button>
+                </div>
+            </div>
             <div className="foot-top">
+                <div className="about">
+                    <h3>About Us</h3>
+                    <div>
+                    <p>Vensle.com is an online marketplace that bring buyers and sellers in a neighbourhood together. 
+                        You can sell or buy new and used items to people around you. With vensle.com buying and 
+                        selling is very fast and easy.</p>
+
+                    <p>You can visit our frequently asked question FAQ or you can click on the Sell/Buy Tutorial 
+                        link to have a comprehensive guide of all the functionalities and how you can take good 
+                        advantage of them. Thank you for using vensle.com</p>
+
+                    </div>
+                    <div className="joinus">
+                        <h3>Join us on</h3>
+                        <div>
+                            <img src="../twitter.png" alt="twitter"/>
+                            <img src="../face.png" alt="facebook"/>
+                            <img src="../whatsapp.png" alt="whatsapp"/>
+                        </div>
+                        
+                    </div>
+                </div>
+                
                 <div>
                     <h3>Company</h3>
                     <p><Link to={'/privacy-policy'} style={{color:'black'}}>Privacy Policy</Link></p>
                     <p><Link to={'/terms-of-use'} style={{color:'black'}}>Terms of Use</Link></p>
                     <p><Link to={'/product-listing'} style={{color:'black'}}>Product Listing</Link></p>
-                    <p>Report a product</p>
                     <p><Link to={'/faq'} style={{color:'black'}}>FAQ</Link></p>
                 </div>
                 <div>
@@ -34,7 +75,7 @@ const Foot = () => {
                     <p><Link to={'/tutorial'} style={{color:'black'}}>Learn to sell</Link></p>
                     <p><Link to={'/tutorial-settings'} style={{color:'black'}}>Quick setup</Link></p>
                 </div>
-                <div>
+                {/* <div>
                     <h3>About</h3>
                     <p>Company info</p>
                     <p>News</p>
@@ -42,15 +83,9 @@ const Foot = () => {
                     <p>Careers</p>
                     <p>Advertise with us</p>
                     <p>Policies</p>
-                </div>
-                <div>
-                    <h3>Stay Connected</h3>
-                    <p>Facebook</p>
-                    <p>Twitter</p>
-                    <p>Pinterest</p>
-                    <p>Youtube</p>
-                </div>
-                <div >
+                </div> */}
+                
+                {/* <div >
                     <h3>Vensle International</h3>
                     <div className="countries">
                         <p>United Kingdom</p>
@@ -66,10 +101,10 @@ const Foot = () => {
                         <p>Benin</p>
                         <p>Ivory Coast</p>
                     </div>
-                </div>
+                </div> */}
             </div>
-            <div className="logos"> 
-            </div>
+            {/* <div className="logos"> 
+            </div> */}
             
             <div className="foot-bottom">
                 <div className="hr"></div>

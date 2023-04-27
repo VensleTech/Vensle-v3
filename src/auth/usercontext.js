@@ -47,7 +47,7 @@ const UsedContext = (props) => {
     //        (ii)get stored details in the local storage on load
     useEffect(()=>{
         getloc()
-        bring()
+        // bring()
     },[])
     //      2. fire the google address locator function on coords change
     useEffect(()=>{
@@ -55,10 +55,35 @@ const UsedContext = (props) => {
     },[coords])
     //      3. fire the products fetch  function on details.userlocation change
     useEffect(()=>{
-        currgetter(details.userlocation.country)
         getproducts()
     },[details.userlocation.country])
 
+    useEffect(()=>{
+        currgetter(details.userlocation.country)
+    },[details.userlocation.country], details.authlev)
+    // 4. Check if signed in
+
+    useEffect(() => {
+        // localStorage.setItem('logs', JSON.stringify(details))
+        console.log(details)
+        currgetter(details.userlocation.country)
+        const truth = localStorage.getItem('logs');
+        if(truth){
+            const kept = JSON.parse(localStorage.getItem('logs'))
+            const {id,name, authlev, business_name, email, address,phone,specialref, currency } = kept
+            setDetails({...details, 
+                id:id,
+                name:name,
+                authlev:authlev,
+                specialref:specialref,
+                business_name: business_name,
+                email: email,
+                phone: phone,
+                address: address,
+                currency: currency
+            })
+        }
+    }, [])
 
 
 

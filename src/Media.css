@@ -490,6 +490,7 @@
         padding: 20px;
         margin-top: 50px;
         font-size: .85em;
+        margin-bottom: 50px;
         background-color: #fff;
     }
     .adm-main .top-trending h3{
@@ -577,6 +578,9 @@
         grid-template-columns: repeat(2, 49%);
         gap: 1%;
         margin:0;
+        max-height: 300px;
+        margin: 0;
+        overflow: auto;
     }
     .table-container{
         margin-bottom: 50px;
@@ -821,7 +825,7 @@
         font-size: .9em;
       }
       .inpbox{
-        width: 150px
+        width: 200px
       }
       .top-trends {
         grid-template-columns: repeat(2, auto);
@@ -1055,6 +1059,34 @@
       }
       .main-s{
         grid-template-columns: 1fr;
+      }
+      .nex svg, .pre svg{
+        background-color: #3131318e;
+        padding: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: block;
+      }
+      .board:hover > .nex svg, .board:hover > .pre svg{
+        display: block;
+      }
+      .newsletter{
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 15px 10px;
+      }
+      .newsletter h3{
+        font-size: 1em;
+      }
+      .news-l{
+        margin-bottom: 20px;
+      }
+      .news-r{
+        grid-template-columns: 1fr;
+      }
+      .lose{
+        display: none;
       }
   }
 

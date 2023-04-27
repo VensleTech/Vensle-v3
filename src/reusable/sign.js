@@ -4,7 +4,7 @@ import ap from '../apple-icon.webp'
 import go from '../google.png'
 import fb from '../Facebook.webp'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBasketShopping, faSearch, faClose, faUserAlt, faCancel, faHome, faAdd, faMessage, faPerson, faInfo, faInfoCircle, faQuestion, faQuestionCircle, faUser, faBars, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
+import { faBasketShopping, faSearch, faClose, faUser, faBars, faCircleXmark, faEye, faEyeLowVision } from "@fortawesome/free-solid-svg-icons"
 import Search from "./search"
 import Popup from "../admin/popup"
 import Input from "../admin/input"
@@ -16,6 +16,7 @@ import Menu from "./menu"
 import Details from "../main/details"
 import { LoginSocialApple, LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login"
 import { createButton, FacebookLoginButton } from "react-social-login-buttons"
+import random from "random-string-generator"
 
 
 const Sign = () => {
@@ -39,29 +40,11 @@ const Sign = () => {
     const [msg, setmsg] = useState('')
     const [sucl2, setsucl2] = useState('')
     const [msg2, setmsg2] = useState('')
+    const [shp, setshp] = useState(false)
     const flash = useRef('')
     const ham = useRef('')
     
-    useEffect(() => {
-        // localStorage.setItem('logs', JSON.stringify(details))
-        console.log(details)
-        const truth = localStorage.getItem('logs');
-        if(truth){
-            const kept = JSON.parse(localStorage.getItem('logs'))
-            const {id,name, authlev, business_name, email, address,phone,specialref } = kept
-            setDetails({...details, 
-                id:id,
-                name:name,
-                authlev:authlev,
-                specialref:specialref,
-                business_name: business_name,
-                email: email,
-                phone: phone,
-                address: address
-            })
-            nav(redirectpath, {replace:true})
-        }
-    }, [])
+    
    
     const axe =async (e)=>{
         e.preventDefault()
@@ -116,6 +99,7 @@ const Sign = () => {
 		} catch (err) {
 			setsucl2('')
 			setmsg2(err.response.data.errors);
+            window.scrollTo(0,0)
 		}
     }
     const fbs =async (data)=>{
@@ -346,13 +330,17 @@ const Sign = () => {
                                             <input type='text' placeholder="Address" onChange={(e)=>setpayload2({...payload2, address:e.target.value})}/>
                                         </div>
                                         <label>Password *</label>
+                                        <span style={{textAlign:'right',color:'gray',fontSize:'.6em', border:'1px solid gray', padding:'5px', borderRadius:'4px', cursor:'pointer'}} onClick={(e)=>setpayload2({...payload2,password:random(16)})}>Generate Password</span>
                                         <div className="input">
-                                            <input type='password' placeholder="Password" onChange={(e)=>setpayload2({...payload2,password:e.target.value})}/>
+                                            <input type={shp === true ?'text':'password'} placeholder="Password" onChange={(e)=>setpayload2({...payload2,password:e.target.value})} value={payload2.password}/>
+                                            <p><FontAwesomeIcon icon={shp === true ?faEyeLowVision:faEye} onClick={(e)=>setshp(!shp)}/></p>
                                         </div>
                                         <label>Confirm Password *</label>
                                         <div className="input">
-                                            <input type='password' placeholder=" Confirm Password" onChange={(e)=>setpayload2({...payload2, confirm:e.target.value})}/>
+                                            <input type={shp === true ?'text':'password'} placeholder=" Confirm Password" onChange={(e)=>setpayload2({...payload2, confirm:e.target.value}) }value={payload2.password}/>
+                                            
                                         </div>
+                                        
                                         <div className="submit" onClick={axes}>
                                             Register
                                         </div>
