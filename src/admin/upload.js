@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from "react"
-import { faUser, faLocationDot, faCaretRight, faImage, faClose, faCircleXmark, faChevronCircleRight, faCheck, faChevronCircleLeft } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faLocationDot, faCaretRight, faImage, faClose, faSpinner, faChevronCircleRight, faCheck, faChevronCircleLeft, faPlus, faEraser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import load from '../ball.gif'
 import Sidebar from "./sidebar"
@@ -7,18 +7,21 @@ import Menu from "./menu"
 import Input from "./input"
 import axios from "axios"
 import { decode } from "html-entities"
-
 import {UserContext} from '../auth/usercontext';
 import Map from "../reusable/maps"
 import { useNavigate } from "react-router-dom"
 import LocatFinder from "../reusable/locafinder"
+import Success from "../reusable/success"
+import Confirm from "../reusable/confirm"
+
 const Upload = () => {
     const curr = localStorage.getItem('curr')
     const nav = useNavigate()
     const {details:{authlev, name,  id, userlocation, currency}, details, setDetails} = useContext(UserContext)
     const [visible, setvisible] = useState(1)
     const [opendrop, setopendrop] = useState(false)
-    const [visible3, setvisible3] = useState(1)
+    const [successful, setsuccessful] = useState(false)
+    const [confirm, setconfirm] = useState(false)
     const [bcstore, setbcstore] = useState({})
     const [trans, settrans] = useState([])
     const [catone, setcatone] = useState([])
@@ -48,25 +51,24 @@ const Upload = () => {
     const priceinput = useRef('')
     const descinput = useRef('')
     const cloner = useRef('')
+    const radio1 = useRef('')
+    const radio2 = useRef('')
+    const radio3 = useRef('')
+    const img_counter = useRef('')
     useEffect(()=>{
         getparners()
         categoryone(0, setcatone)
     },[])
     useEffect(()=>{
         document.body.addEventListener('click', (e)=>{
-            
-            if(cloner.current.contains(e.target)){
-
-            }
-            else{
-                
+            if(cloner && !cloner.current.contains(e.target)){
                 setopendrop(false)
             }
         })
-    })
+    }, [cloner])
     const getparners = async () => {
         try {
-            const trans = await axios.get("http://geo.vensle.com/api/trans")
+            const trans = await axios.get("http://vensle.com/api/api/trans")
             settrans(trans.data)
         } catch (error) {
             
@@ -74,16 +76,24 @@ const Upload = () => {
     }
     const categoryone = async (id, step) => {
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/category/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/category/"+id)
             step(categs.data)
-            
+           // console.log(categs.data)
             category_message.current.innerText=''
             clone.current.style.border='none'
         } catch (error) {
             
         }
     }
-    
+    const getreadstate = (readstate)=> {
+        if (readstate === true) {
+            setconfirm(false)
+            formreset()
+        }
+        else{
+            setconfirm(false)
+        }
+    }
     const imgref = useRef('')
     const [feats, setfeats] = useState([
     ])
@@ -95,6 +105,7 @@ const Upload = () => {
         description:'',
         featured_image:'0',
         delivery:1,
+        location: userlocation.region+'+|+'+userlocation.city+'+|+'+userlocation.country,
     })
     
     const [files, setfiles] = useState([])
@@ -114,15 +125,31 @@ const Upload = () => {
     // purefunctions
     const fileDrop = (e) =>{
         e.preventDefault()
+       // console.log(files.length)
        for(let index = 0; index < e.dataTransfer.files.length; index++) {
-            setfiles([...files, [e.dataTransfer.files[index]]])
-            setpreview([...preview, {imag: URL.createObjectURL(e.dataTransfer.files[index])}])
+            const fileSize = e.dataTransfer.files[index].size / 1024 / 1024;
+           // console.log(fileSize)
+            if (fileSize > 5) {
+                img_message.current.innerText = "The image size must not be more than 5MB"
+            }
+            else{
+                if(files.length > 19){
+                    img_message.current.innerText = "You cannot go beyond 20 images"
+                }
+                else{
+                    setfiles([...files,[ e.dataTransfer.files[0]]])
+                    setpreview([...preview, {imag: URL.createObjectURL(e.dataTransfer.files[0])}])
+                    img_counter.current.innerText = 19 - files.length+' image(s) left'
+                    img_message.current.innerText = ""
+                }
+            }
         }
     }
     const fileDrop2 = (e) =>{
         e.preventDefault()
+       // console.log(files.length)
         const fileSize = e.target.files[0].size / 1024 / 1024;
-        if (fileSize > 5 || fileSize < 0.6) {
+        if (fileSize > 5) {
             img_message.current.innerText = "The image size must be a minimum of 600kb and a maximum of 5MB"
         }
         else{
@@ -132,6 +159,7 @@ const Upload = () => {
             else{
                 setfiles([...files,[ e.target.files[0]]])
                 setpreview([...preview, {imag: URL.createObjectURL(e.target.files[0])}])
+                img_counter.current.innerText = 19 - files.length+' image(s) left'
                 img_message.current.innerText = ""
             }
         }
@@ -147,6 +175,8 @@ const Upload = () => {
             const [i, ...rest] = current;
             return rest;
           });
+          img_counter.current.innerText = 21 - files.length+' image(s) left'
+          img_message.current.innerText = ""
         
     }
     const splicep =(i)=>{
@@ -172,14 +202,14 @@ const Upload = () => {
         
 
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/category/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/category/"+id)
             if(categs.data.length > 1){
                 setvisible(num)
             } 
             else{
                 try{
-                    const tree = await axios.get("http://geo.vensle.com/api/fresh/tree/"+id)
-                    // 
+                    const tree = await axios.get("http://vensle.com/api/api/fresh/tree/"+id)
+                   console.log(tree.data)
                     setpayload({...payload, category:tree.data.join(',')})
                     setopendrop(!opendrop)
                 }
@@ -188,6 +218,7 @@ const Upload = () => {
                 }
                 setbcstore({...bcstore, [sub]:name})
                 // catenate(name)
+                clone.current.value=name
             }
         } catch (error) {
             
@@ -199,6 +230,7 @@ const Upload = () => {
         e.preventDefault()
         setclicked(true)
         const empty = Object.keys(payload).filter(key => payload[key] === null || payload[key] === undefined || payload[key] === "")
+       // console.log(empty)
         if(empty.length >= 1 && files.length < 1){
             setclicked(false)
             for (let index = 0; index < empty.length; index++) {
@@ -281,7 +313,7 @@ const Upload = () => {
         }
     }
     const handleclick =(val, refs, refss, field)=>{
-        const tester = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        const tester = /[`!@#$%^&*()_+\-=\[\]{}\\|<>\?~]/;
         
         if(tester.test(val) === true){
             
@@ -308,6 +340,7 @@ const Upload = () => {
             setpayload({...payload, price:val})
         }
     }
+   // console.log(bcstore)
     const axe =async (e)=>{
             e.preventDefault()
             
@@ -317,7 +350,7 @@ const Upload = () => {
             data.append('price', payload.price);
             data.append('item_condition', payload.item_condition);
             data.append('category', payload.category);
-            data.append('location', userlocation.region+'+|+'+userlocation.city+'+|+'+userlocation.country);
+            data.append('location', payload.location);
             data.append('description',payload.description);
             data.append('currency',currency);
             data.append('approved', '0');
@@ -326,118 +359,43 @@ const Upload = () => {
             for (let index = 0; index < files.length; index++) {
                 data.append('images['+index+']', files[index][0]);
             } 
-            // for (let index = 0; index < payload.features.length; index++) {
-            //     data.append('features['+index+']', payload.features[index]);
-            // }
             data.append('delivery', payload.delivery);
-
-            
             try {
-                const response = await axios.post('http://geo.vensle.com/api/prods', data);
-                setmsg(response.data.message);
-                console.log(response.data)
+                const response = await axios.post('http://vensle.com/api/api/prods', data);
+                // setmsg(response.data.message);
+               // console.log(response.data)
                 setpayload({
-                    title:'',
-                    price:'',
-                    item_condition:'',
-                    category:'',
-                    description:'',
                     featured_image:'0',
                     delivery:1,
                 })
-                clone.current.value = ''
-                nameinput.current.value = ''
-                descinput.current.value = ''
-                priceinput.current.value = ''
-                setfiles([])
-                setpreview([])
+                formreset()
                 setclicked(false)
+                setsuccessful(true)
                 window.scrollTo(0,0)
-                // nav('/adminsetfiles([])/products')
-                // setval('cookie')
                 setTimeout(() => {
-                    setmsg('')
+                    setsuccessful(false)
                 }, 3000);
             } catch (err) {
-                // console.log(err)
+                //// console.log(err)
+                setclicked(false)
                 seterror(err.response.data.errors);
             }
         }
 
-
-    // callbacks
-    // const getname = (name)=> {
-    //     if(iname.test(name) === false){
-    //         setpayload({...payload, title:name})
-    //         seterror(current => {
-    //           const {title,submit, ...rest} = current;
-    //           return rest;
-    //         });
-    //       }else{
-    //         seterror({...error, title:'Kindly provide a valid item name'})
-    //       }
-        
-    // }
-    // const getprice = (name)=> {
-    //     if(price.test(name) === false){
-    //         setpayload({...payload, price:name})
-    //         seterror(current => {
-    //           const {price,submit, ...rest} = current;
-    //           return rest;
-    //         });
-    //       }else{
-    //         seterror({...error, price:'Kindly provide a valid price'})
-    //       }
-    // }
-    // const getcondition = (name)=> {
-    //     if(name){
-    //         setpayload({...payload, item_condition:name})
-    //         seterror(current => {
-    //           const {condition,submit, ...rest} = current;
-    //           return rest;
-    //         });
-    //       }else{
-    //         seterror({...error, condition:'Choose item condition'})
-    //       }
-    // }
-    // const gettranstype = (name)=> {
-    //     setpayload({...payload, delivery:name})
-    // }
-    // const getfeatures = (name, index)=> {
-    //     const idata = [...feats]
-    //     idata[name[1]] = name[0]
-    //     setfeats(idata)
-    //     setpayload({...payload, features:feats})
-    // }
-    // // const geterror = (name)=> {
-    // //     seterror({...error, submit:'Kindly complete all the fields correctly'})
-    // // }
-    // const getdescription = (name)=> {
-    //     if(iname.test(name) === false){
-    //         setpayload({...payload, description:name})
-    //         seterror(current => {
-    //           const {description, submit, ...rest} = current;
-    //           return rest;
-    //         });
-    //       }else{
-    //         seterror({...error, description:'Special characters are not acceptable here'})
-    //       }
-    // }
+    const formreset=()=>{
+        clone.current.value = ''
+        nameinput.current.value = ''
+        descinput.current.value = ''
+        priceinput.current.value = ''
+        img_counter.current.innerText = ''
+        radio1.current.checked = false
+        radio2.current.checked = false
+        radio3.current.checked = false
+        setbcstore({})
+        setfiles([])
+        setpreview([])
+    }
     
-    // callbacks
-    const close = ()=> {
-        setpopmap(false)
-    }
-    const rad = (name)=> {
-        setradius(name)
-    }
-    if(Object.keys(userlocation).length === 0){
-        return (
-            <div className="loading">
-                <img src={load} alt=""/>
-            </div>
-        )
-    }
     
     return(
         <div>
@@ -483,7 +441,7 @@ const Upload = () => {
                                         <div className="adm-main-second" style={{display:'grid', gridTemplateColumns:'100%'}}>
                                             <div style={{margin:'10px 0'}}><label className="input-title">Choose Category</label><span ref={category_message} style={{color:'red', margin:'0 20px', fontSize:'.75em'}}></span></div>
                                             <div className="clone" ref={cloner}>
-                                                <input type='text' ref={clone} placeholder='Select a category' value={Object.values(bcstore).pop()} onClick={(e)=>setopendrop(!opendrop)}/>
+                                                <input type='text' ref={clone} placeholder='Select a category'  onClick={(e)=>setopendrop(!opendrop)}/>
                                                { 
                                                 opendrop === true ?
                                                 <div className="drop"  ref={dropref}>
@@ -492,9 +450,9 @@ const Upload = () => {
                                                         visible === 1 ?
                                                         catone.map(({id:one, name:nam, image})=>(
                                                             <div key={one}  className='name'>
-                                                                <div onClick={(e)=>{categoryone(one, setcattwo); Check(2, one); setbcstore({subone:nam}) }} className='nam'>
+                                                                <div onClick={(e)=>{categoryone(one, setcattwo); Check(2, one, nam, 'subone')}} className='nam'>
                                                                     <div className="img">
-                                                                        <img src={"http://geo.vensle.com/storage/category/"+image} alt=""/>
+                                                                        <img src={"http://vensle.com/api/storage/category/"+image} alt=""/>
                                                                     </div>
                                                                     <div>{nam}</div>
                                                                 </div>
@@ -511,9 +469,9 @@ const Upload = () => {
                                                             cattwo.map(({id:two, name:names,parent:parentone, image:images})=>(
                                                                 <div key={two}>
                                                                    
-                                                                    <div className='subchild' onClick={(e)=>{categoryone(two, setcatthree); Check(3, two); setbcstore({...bcstore, subtwo:names})}}>
+                                                                    <div className='subchild' onClick={(e)=>{categoryone(two, setcatthree); Check(3, two, names, 'subtwo')}}>
                                                                         <div className="img">
-                                                                            <img src={"http://geo.vensle.com/storage/category/"+images} alt=""/>
+                                                                            <img src={"http://vensle.com/api/storage/category/"+images} alt=""/>
                                                                         </div>
                                                                         <div>{names}</div>
                                                                     </div>
@@ -533,7 +491,7 @@ const Upload = () => {
                                                                     <div key={id}>
                                                                         <div className='subchild' onClick={(e)=>{categoryone(id, setcatfour); Check(2, id, name, 'subthree');}}>
                                                                             <div className="img">
-                                                                                <img src={"http://geo.vensle.com/storage/category/"+image} alt=""/>
+                                                                                <img src={"http://vensle.com/api/storage/category/"+image} alt=""/>
                                                                             </div>
                                                                             <div>{name}</div>
                                                                         </div>
@@ -552,7 +510,7 @@ const Upload = () => {
                                                             <div key={id}>
                                                                 <div className='subchild' onClick={(e)=>{categoryone(id, setcatfour); setbcstore({...bcstore,  subfour:name})}}>
                                                                     <div className="img">
-                                                                        <img src={"http://geo.vensle.com/storage/category/"+image} alt=""/>
+                                                                        <img src={"http://vensle.com/api/storage/category/"+image} alt=""/>
                                                                     </div>
                                                                     <div>{name}</div>
                                                                 </div>
@@ -577,14 +535,8 @@ const Upload = () => {
                                         </div>
                                         
                                 </div>
-                                <div className="click-to-upload2"  onClick={(e)=>imgref.current.click()}>
-                                    <div><FontAwesomeIcon icon={faImage} /></div>
-                                    <div>Add image</div>
-                                    <input type="file" ref={imgref} onChange={fileDrop2}  accept="application/jpg" />
-                                </div>
-                                <span ref={img_message} style={{color:'red', margin:'0 20px', fontSize:'.75em'}}></span>
-                                <div className="imgs-container2">
                                 
+                                <div className="imgs-container2">
                                 {
                                     preview.map(({imag}, i)=>(
                                         <div className="img-box">
@@ -598,6 +550,12 @@ const Upload = () => {
                                         </div>
                                     ))
                                 }
+                                <p ref={img_counter} style={{color:'red', margin:'20px 20px', fontSize:'.85em', textAlign:'center', width:'100%'}}></p>
+                                <div className="click-to-upload2"  onClick={(e)=>imgref.current.click()}>
+                                    <div><FontAwesomeIcon icon={faImage} /></div>
+                                    <div>Add image</div>
+                                    <input type="file" ref={imgref} onChange={fileDrop2} />
+                                </div>
                                 </div>
                                 <div className="adm-main-second" style={{display:'grid', gridTemplateColumns:'repeat(2, 49%)', gap:'1%'}}>
                                     <div className="main-input">
@@ -615,9 +573,9 @@ const Upload = () => {
                                         <label className="input-title">Condition</label><span ref={cond_message} style={{color:'red', margin:'0 20px', fontSize:'.75em'}}></span>
                                         <div className="input-field" ref={itemcondition}>
                                             <div style={{display:'grid', gridTemplateColumns:'repeat(3, auto)', margin:'0 20px'}}>
-                                                <div className="radio" ><input type="radio" name='condition' value='New' onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>New</div>
-                                                <div className="radio" ><input type="radio" name='condition' value='Used' onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>Used</div>
-                                                <div className="radio" ><input type="radio" name='condition' value='N/A' onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>N/A</div>
+                                                <div className="radio" ><input type="radio" name='condition' value='New' ref={radio1} onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>New</div>
+                                                <div className="radio" ><input type="radio" name='condition' value='Used' ref={radio2} onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>Used</div>
+                                                <div className="radio" ><input type="radio" name='condition' value='N/A' ref={radio3} onClick={(e)=>{setpayload({...payload, item_condition:e.target.value}); cond_message.current.innerText=''; itemcondition.current.style.border='1px solid gray'}}/>N/A</div>
                                             </div>
                                         </div> 
                                     </div>
@@ -632,6 +590,7 @@ const Upload = () => {
                             </div>
                             
                             <div className="adm-main-left">
+                            { files.length > 0 ? '' :
                                 <div className="click-to-upload" 
                                 onDrop={fileDrop}
                                 onDragOver={dragOver}
@@ -641,8 +600,9 @@ const Upload = () => {
                                 >
                                     <div><FontAwesomeIcon icon={faImage} /></div>
                                     <div>Click to upload or drag and drop image </div>
-                                    <input type="file" ref={imgref} onChange={fileDrop2}  accept="application/jpg" values={val}/>
+                                    
                                 </div>
+                            }<input type="file" ref={imgref} onChange={fileDrop2}/>
                                <span ref={img_message} style={{color:'red', margin:'0 20px', fontSize:'.75em'}}></span>
                                 <div className="imgs-container">
                                 
@@ -659,21 +619,33 @@ const Upload = () => {
                                         </div>
                                     ))
                                 }
+                                { files.length < 1 || files.length > 19 ? '' :
+                                    <div className="plus" onClick={(e)=>imgref.current.click()}>
+                                        <div className="plus-b"><FontAwesomeIcon icon={faPlus}/></div>
+                                    </div>
+                                }
                                 </div>
+                                <p ref={img_counter} style={{color:'red', margin:'20px 20px', fontSize:'.85em', textAlign:'center', width:'100%'}}></p>
                             </div>
                         
                         </div>
+                        <div className="buttons-bottom">
                         {
-                            clicked === true ? <button style={{marginTop:'30px'}}>Creating</button> : <button onClick={validate} style={{marginTop:'30px'}}>Create</button> 
+                            clicked === true ? <button style={{marginTop:'30px',display:'inline-flex'}}><FontAwesomeIcon icon={faSpinner} spin/></button> : <button onClick={validate} style={{marginTop:'30px', display:'inline-flex', gap:'20px'}}> <FontAwesomeIcon icon={faPlus}/> Create</button> 
                         }
-                        
-                        
-                        {/* <div>{msg}</div> */}
+                        <button onClick={(e)=>setconfirm(!confirm)} style={{marginTop:'30px', backgroundColor:'rgb(219 219 219)', color:'black', display:'inline-flex', gap:'20px'}}><FontAwesomeIcon icon={faEraser}/> Reset</button>
+                        </div>
                     </div>
                 </div>
                 {
-                    popmap===true ?
-                    <Map getref={close} getrad={rad} rad={radius} height={'300px'}/>
+                    successful===true ?
+                    <Success />
+                    :
+                    ''
+                }
+                {
+                    confirm===true ?
+                    <Confirm getreadstate={getreadstate}/>
                     :
                     ''
                 }

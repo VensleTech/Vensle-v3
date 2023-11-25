@@ -18,8 +18,8 @@ function Signin() {
             const kept = JSON.parse(localStorage.getItem('logs'))
             const {credentials:{name, idnumber, level}} = kept
             const{ token } = kept
-            console.log(name)
-            console.log(token)
+           // console.log(name)
+           // console.log(token)
             setDetails({
                 name:name,
                 authlev:parseInt(level),
@@ -39,7 +39,7 @@ function Signin() {
         var data = qs.stringify(pack);
         var config = {
         method: 'post',
-        url: 'http://geo.vensle.com/api/login',
+        url: 'http://vensle.com/api/api/login',
         headers: { 
             'Content-Type': 'application/x-www-form-urlencoded'
         },
@@ -56,20 +56,20 @@ function Signin() {
                 idnumber: idnumber,
             })
             // localStorage.setItem('logs', 'kkkk')
-            console.log(JSON.stringify(response.data));
+           // console.log(JSON.stringify(response.data));
                 if(level === undefined || level === '0'){
                     setsuccess('You have not yet been approved')
                 }
                 else{
                     nav('/dashboard')
-                    console.log('success')
+                   // console.log('success')
                 }
                 
         })
         .catch(function (error) {
             setsuccess('Invalid email or password')
             setclicked(1)
-        console.log(error);
+       // console.log(error);
         });
     }
     const [pack, setpack] = useState('')
@@ -86,8 +86,8 @@ function Signin() {
                     <p>Sign in to your account</p>
                     <form className='sforms'>
                         <div>
-                            <input type="text" placeholder="Staff ID" onChange={(e)=>{setpack({...pack, idnumber:e.target.value}); console.log(pack.email)}}></input>
-                            <input type="password" placeholder="Password" onChange={(e)=>{setpack({...pack, password: e.target.value}); console.log(pack.password)}}></input>
+                            <input type="text" placeholder="Staff ID" onChange={(e)=>{setpack({...pack, idnumber:e.target.value});// console.log(pack.email)}}></input>
+                            <input type="password" placeholder="Password" onChange={(e)=>{setpack({...pack, password: e.target.value});// console.log(pack.password)}}></input>
                             <button className='signin' onClick={log}>{success}</button>
                         </div>
                     </form>

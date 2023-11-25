@@ -24,12 +24,12 @@ const Search = () => {
     },[])
     const getparners = async () => {
         try {
-            const categories = await axios.get('http://geo.vensle.com/api/group')
+            const categories = await axios.get('http://vensle.com/api/api/group')
             setcategories(categories.data)
-            const groupcategories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const groupcategories = await axios.get('http://vensle.com/api/api/groupcat')
             setgcategories(groupcategories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     return (

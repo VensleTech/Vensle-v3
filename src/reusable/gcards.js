@@ -22,7 +22,7 @@ const Gcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price
             {type === 1 ? 
                 <div className="vertical" style={{width:width, height:height}}  onClick={(e)=>setIsOpen(!isOpen)}>
                     <div className="img" style={{height:vim}}>
-                        <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                        <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                     </div>
                     <div className='pdetails'>
                         <div className="prodname" style={{fontSize:pdsize}}>
@@ -51,7 +51,7 @@ const Gcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price
 : type === 2 ?
             <div className="horizontal" style={{width:width, height:height, gridTemplateColumns:height+' auto auto'}}onClick={(e)=>setIsOpen(!isOpen)}>
                 <div className="img" style={{width:height, height:height}}>
-                    <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                    <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                 </div>
                 <div className='pdetails' >
                         <div className="prodname" style={{fontSize:pdsize}}>
@@ -80,7 +80,7 @@ const Gcards = ({type, width, height, vim, pdsize, pcsize, id, img, title, price
             :
             <div className="vhor" style={{width:width, height:height}}  onClick={(e)=>setIsOpen(!isOpen)}>
                 <div className="img" style={{width:height, height:height}}>
-                    <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                    <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                 </div>
                 <div className='pdetails' onClick={(e)=>setIsOpen(!isOpen)}>
                     <div className="prodname" style={{fontSize:pdsize}}>

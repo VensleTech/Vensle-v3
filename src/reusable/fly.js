@@ -10,10 +10,10 @@ const Fly = ({getcats, info, icon, titles}) => {
     },[])
     const getparners = async () => {
         try {
-            const categories = await axios.get('http://geo.vensle.com/api/states')
+            const categories = await axios.get('http://vensle.com/api/api/states')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const getreadstate = (readstate)=> {
@@ -21,7 +21,7 @@ const Fly = ({getcats, info, icon, titles}) => {
     }
     const getcat = (cat, type)=> {
         // setfill({...fill, type:cat})
-        // console.log(cat + ' '+type)
+        //// console.log(cat + ' '+type)
         getcats(cat,type)
     }
     const [openfly, setopenfly] = useState(false)

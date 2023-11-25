@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBasketShopping, faSearch, faClose, faUserAlt, faCancel, faHome, faAdd, faMessage, faPerson, faInfo, faInfoCircle, faQuestion, faQuestionCircle, faUser, faBars, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 import Foot from '../reusable/footer'
+import Topheader from '../reusable/topheader'
 
 const Plisting = () => {
   const reveal = (ref) => {
@@ -21,17 +22,7 @@ const flash = useRef('')
     const ham = useRef('')
   return (
     <div>
-      <div className="topbar">
-            <div className="logo">
-                <Link to={'/'}>Vensle</Link>
-            </div>
-            <div className="rightside">
-                <div></div>
-                <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveal(ham)}/></div>
-                <div><Link to={'/signin'}>Sign in/Sign up</Link></div>
-                <div ref={flash} ><Link to={'/admin/upload'} style={{color:'black'}}>Start Selling</Link></div>
-            </div>
-        </div>
+      <Topheader/>
         <div className='PPol'>
           <h2>Product Listing</h2>
           <div className='sections'>

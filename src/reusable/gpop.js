@@ -50,7 +50,7 @@ console.log(cat_name)
                   {
                     img.split(',').slice(sstart, sstop).map((a, i)=>(
                           <div className='board'>
-                          <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                          <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                               <div className='pre' onClick={prev}><FontAwesomeIcon icon={faCaretLeft}/></div>
                               <div className='nex' onClick={next}><FontAwesomeIcon icon={faCaretRight}/></div>
                           </div>
@@ -62,7 +62,7 @@ console.log(cat_name)
                   {
                     img.split(',').map((a, i)=>(
                           <div className='image' onClick={(e)=>{setsstart(i); setsstop(i+1);}}>
-                            <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                            <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                           </div>
                           
                       ))
@@ -78,7 +78,7 @@ console.log(cat_name)
                           <div className="caption">
                               <h3>{title}</h3> <p><FontAwesomeIcon icon={faHeart} /></p>
                               {
-                                console.log(adata)
+                               // console.log(adata)
                               }
                           </div>
                           <div className="dr-price">

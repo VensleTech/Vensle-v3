@@ -1,51 +1,97 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useContext} from "react";
-import maps from '../map.png'
 import Carousels from "../reusable/carousel";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faSearch, faClose, faLocationDot, faNairaSign, faDollarSign, faUser, faBars, faShoppingCart, faShoppingBag, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faClose, faLocationDot, faUser, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {UserContext} from "../auth/usercontext"
-import { useGeoLocation } from "use-geo-location";
 import Map from "./maps";
-import { specialCharMap } from "@testing-library/user-event/dist/keyboard";
+import Topheader from "./topheader";
+import { Fade, Slide, Zoom } from "react-slideshow-image";
+import 'react-slideshow-image/dist/styles.css'
 
 const Menus  = () => {
     // destructure context
-    const {details, details:{item, userlocation, specialref, name},products, requests, groceries, setDetails} = useContext(UserContext)
-    // console.log(userlocation)
+    const {details, details:{userlocation, specialref, name},products, requests, groceries, setDetails} = useContext(UserContext)
+    console.log(userlocation)
+    const nav = useNavigate()
     // states
     const  location = useLocation()
     const [popmap, setpopmap] = useState(false)
-    const [product, setproduct] = useState([])
-    const [truefalse, settruefalse] = useState(false)
     const [popout, setpopout] = useState(false)
     const [word, setword] = useState('')
     const [route, setroute] = useState('pro')
     const [routes, setroutes] = useState(products)
-    const [cats, setcats] = useState('All')
     const [radius, setradius] = useState(2000)
-    const flash = useRef('')
     const stick = useRef('')
     const stick2 = useRef('')
+    const [catone, setcatone] = useState([])
     const ham = useRef('')
     const h = useRef('')
     const r = useRef('')
     const g = useRef('')
+    const cloner = useRef('')
     const [all, setall] = useState([])
 
-    // console.log(userlocation)
+    const slidecontent = [
+        {
+            id:1,
+            heading:'70% off fashion',
+            par:'Save on wardrobe staples, unique finds & more. Ends 11 September 2023, 10am',
+            mainlink:'./pro/1/Fashion',
+            cats:[
+                {
+                    id:1,
+                    img:'./rr12.png',
+                    category:'Shop watches',
+                    link:'./pr/1/Fashion/18/Jewelries%20&%20watches'
+                },
+                {
+                    id:2,
+                    img:'./rr7.jpg',
+                    category:'Shop men\'s fashion',
+                    link:'./pr/1/Fashion/16/Men%E2%80%99s%20clothing%20&%20Accessories'
+                },
+                {
+                    id:3,
+                    img:'./rr3.jpg',
+                    category:'Shop women\'s fashion',
+                    link:'./pr/1/Fashion/17/Women\'s%20clothing%20&%20Accessories'
+                }
+            ]
+        },
+        {
+            id:2,
+            heading:'Up to 95% off cosmetics',
+            par:'Good timing for all things cosmetics',
+            mainlink:'./pro/4/Health%20and%20beauty',
+            cats:[
+                {
+                    id:1,
+                    img:'./rr9.png',
+                    category:'Shop lip glimmer',
+                    link:'./pr/4/Health%20and%20beauty/37/Makeup'
+                },
+                {
+                    id:2,
+                    img:'./rr10.png',
+                    category:'Shop makeup bag',
+                    link:'./pr/4/Health%20and%20beauty/37/Makeup'
+                },
+                {
+                    id:3,
+                    img:'./rr11.png',
+                    category:'Shop hair cream',
+                    link:'./pr/4/Health%20and%20beauty/39/Hair%20care'
+                }
+            ]
+        }
+        
+
+    ]
+
+    console.log(userlocation.country)
     // effects
-    setTimeout(() => {
-       if(truefalse === false){
-            flash.current.style.opacity = 0.2
-            settruefalse(!truefalse)
-       }
-       else{
-            flash.current.style.opacity = 1
-            settruefalse(!truefalse)
-       }
-    }, 100);
     useEffect(()=>{
         highlight()
     }, [])
@@ -71,8 +117,16 @@ const Menus  = () => {
 
     location.pathname === '/requests' ? setroutes(requests)
     : location.pathname === '/groceries' ? setroutes(groceries)
-    : setroute('products')
+    : setroutes(products)
    }
+//    useEffect(()=>{
+//         document.body.addEventListener('click', (e)=>{
+//             if(!cloner.current.contains(e.target)){
+//                 setpopout(false)
+//                 document.body.style.overflow = 'unset';
+//             }
+//         })
+//     })
     const fetchresults = async (val) => {
         setword(val)
         const upp = val.toUpperCase()
@@ -128,45 +182,77 @@ const Menus  = () => {
         setradius(name)
     }
 
-    
+    const destroy = () => {
+        localStorage.removeItem('logs')
+        setDetails({...details, 
+            name:'',
+            authlev:'',
+            business_name:'',
+            email:'',
+            phone:'',
+            address:'',
+            specialref:'',
+        })
+        nav('/signin')
+    }
+    const categoryone = async (id, step) => {
+        try {
+            const categs = await axios.get("http://vensle.com/api/api/fresh/category/"+id)
+            step(categs.data)
+            //// console.log(categs.data)
+        } catch (error) {
+           // console.log(error);
+        }
+    } 
+    useEffect(()=>{
+        categoryone(0, setcatone)
+    },[userlocation])
     
     return(
         <div className='gray'>
             <div>
-                <div className="topbar">
-                <div className="logo">
-                <div><FontAwesomeIcon icon={faBars} /></div> <Link to={'/'}>Vensle</Link>
-                </div>
-                <div className="rightside">
-                    <div><FontAwesomeIcon icon={faSearch}  onClick={(e)=>reveals(stick2)}/></div>
-                    <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveals(ham)}/></div>
-                    <div>
-                    {
-                        specialref !== '' ?
-                        <Link to={'/admin/profile'}><FontAwesomeIcon icon={faUser}/> {name}</Link>
-                        :
-                        <Link to={'/signin'}>Sign in/Sign up</Link>
-                    }
+                <Topheader />
+                {/* <div className="topbar2">
+                    <div className="all"><FontAwesomeIcon icon={faList}/> All</div>
+                    <div className="catlist">
+                        {
+                            catone.slice(7, 11).map(({id,name,image})=>(
+                                <Link to={'/pro/'+id+'/'+name}>
+                                <div  className="inner-box">
+                                    <p>{name}</p>
+                                </div></Link>
+                            ))
+                        }
                     </div>
-                    <div ref={flash} className="glob">
-                    {
-                        specialref !== '' ?
-                        <Link to={'/admin/place'}>Start Selling</Link>
-                        :
-                        <Link to={'/signin'}>Start Selling</Link>
-                    }
-                    </div>
-                    <div><Link to={'/cart'}><FontAwesomeIcon icon={faShoppingBasket} /> <span>{item.length}</span></Link></div>
-                    </div>
-                </div>
+                </div> */}
                 <div className="spread-banner">
-                <div  className="upon">
-                <h3>Best Deals</h3>
-                <h5>Only on Vensle MarketPlace</h5>
+                    {/* <Carousels slide={true} thumbs={false} /> */}
+                    <Zoom scale={0.4} duration={5000} infinite={true} arrows={false}> 
+                        {
+                            slidecontent.map(({id, heading, par,mainlink, cats}, index)=>(
+                                <div className="newslide" key={index}>
+                                    <div className="slidelhs">
+                                        <h2>{heading}</h2>
+                                        <p>{par}</p>
+                                        <Link to={mainlink}><button>Shop now <FontAwesomeIcon icon={faArrowRight}/></button></Link>
+                                    </div>
+                                    <div className="sliderhs">
+                                        {
+                                            cats.map(({id, img, category, link}, i)=>(
+                                                <div className="slidecontent" key={i}>
+                                                    <img src={img} alt=""/>
+                                                    <Link to={link}><p>{category} <FontAwesomeIcon icon={faArrowRight}/></p></Link>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        
+                    </Zoom>
                 </div>
-                <Carousels slide={true} thumbs={false} />
-                </div>
-                <div className="gc" style={{backgroundColor:'white', width:'95%', margin:'0 auto', padding:'0 0 5px 0'}}>
+                <div className="gc" style={{backgroundColor:'white',borderRadius: '10px 10px 0 0', width:'95%', margin:'0 auto', padding:'0 0 5px 0', position:'relative'}}>
                     <div className={'menu-tab'} ref={stick}>
                         <div ref={h}><Link to={"/"}>For Sale</Link></div>
                         <div ref={r}><Link to={"/requests"}>Requests</Link></div>
@@ -176,28 +262,30 @@ const Menus  = () => {
                         <div className="location-input">
                             <div className="loca" onClick={(e)=>setpopmap(true)}>
                             <FontAwesomeIcon icon={faLocationDot}/>
+                            {/* { Object.keys(userlocation).length > 0 ? locats:''} */}
                             { Object.keys(userlocation).length > 0 ? userlocation.city +' '+radius/1000+' km' : ''}
                             </div>
                             <div style={{position:'relative'}}>
                                 <div className="searcher">
-                                    <input type="text" placeholder="What are you searching for" onChange={(e)=>fetchresults(e.target.value)}  onClick={(e)=>setpopout(true)}/>
+                                    <input type="text" placeholder="What are you searching for" onChange={(e)=>{fetchresults(e.target.value);setpopout(true);document.body.style.overflow = 'hidden';} }/>
                                     <div className="s-button">
-                                        {word === '' ? <FontAwesomeIcon icon={faSearch} /> : <Link to={"../../search/"+cats.trim().replaceAll('-', ',').replaceAll(' ', '-').replaceAll('/', '&')+"/"+word.trim().replaceAll(' ', '-').replaceAll('/', '&')}><FontAwesomeIcon icon={faSearch} /></Link>}
+                                        {word === '' ? <FontAwesomeIcon icon={faSearch} /> : <Link to={"../../search/"+route+"/"+word}><FontAwesomeIcon icon={faSearch} onClick={(e)=>{setpopout(false); document.body.style.overflow = 'unset';}}/></Link>}
+                                        {/* {word === '' ? <FontAwesomeIcon icon={faSearch} /> : <Link to={"../../search/"+cats.trim().replaceAll('-', ',').replaceAll(' ', '-').replaceAll('/', '&')+"/"+word.trim().replaceAll(' ', '-').replaceAll('/', '&')}><FontAwesomeIcon icon={faSearch} /></Link>} */}
                                     </div>
                                 </div>
                                 {
                                     popout === true ?
-                                    <div className="s-results">
-                                    <div className="sidebyside">
+                                    <div className="s-results" ref={cloner}>
+                                    <div className="sidebyside" useEffect>
                                         <div className="lo"></div>
-                                        <div  className="clo" onClick={(e)=>setpopout(false)}>Close</div>
+                                        <div  className="clo" onClick={(e)=>{setpopout(false); document.body.style.overflow = 'unset';}}>Close</div>
                                     </div>
                                     {
                                         all.length  === 0 ?
                                         <div className="srs">
-                                        {    groceries.map(({category_tree, id, title}, i)=>(
+                                        {    routes.slice(0,7).map(({category_tree, id, title}, i)=>(
                                                 <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
-                                                        <span>{title}</span>
+                                                    {title.length > 15 ? title.substr(0, 15)+'...' : title}
                                                 </Link>
                                             )) }
                                         </div>
@@ -205,7 +293,7 @@ const Menus  = () => {
                                         all.slice(0,10).map(({prodname, img, imgfolder,category_tree, id, title,feat_image}, i)=>(
                                             <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
                                                 <div className="sr">
-                                                    <div><img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
+                                                    <div><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
                                                     <div>{title}</div>
                                                 </div>
                                             </Link>
@@ -223,14 +311,14 @@ const Menus  = () => {
                             <div className="sidebyside">
                                 <div className="lo">
                                 </div>
-                                <div  className="clo" onClick={(e)=>setpopout(false)}>Close</div>
+                                <div  className="clo" onClick={(e)=>{setpopout(false); document.body.style.overflow = 'unset';}}>Close</div>
                             </div>
                             {
                                         all.length  === 0 ?
                                         <div className="srs">
-                                        {    groceries.slice(0,10).map(({category_tree, id, title}, i)=>(
+                                        {    routes.slice(0,7).map(({category_tree, id, title}, i)=>(
                                                 <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
-                                                        <span>{title}</span>
+                                                    {title.length > 15 ? title.substr(0, 15)+'...' : title}
                                                 </Link>
                                             )) }
                                         </div>
@@ -238,7 +326,7 @@ const Menus  = () => {
                                     all.slice(0,10).map(({prodname, img, imgfolder,category_tree, id, title,feat_image}, i)=>(
                                         <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
                                             <div className="sr">
-                                                <div><img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
+                                                <div><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
                                                 <div>{title}</div>
                                             </div>
                                         </Link>
@@ -285,6 +373,12 @@ const Menus  = () => {
                             <Link to={'/signin'}>Start Selling</Link>
                         }
                     </div>
+                    {
+                        specialref !== '' ?
+                        <div onClick={destroy} style={{padding:'20px 0', cursor:'pointer'}}>Logout</div>
+                        :
+                        ''
+                    }
                     </div>
                     
                     </div>

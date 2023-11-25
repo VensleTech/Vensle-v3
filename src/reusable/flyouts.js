@@ -9,13 +9,13 @@ const Flyouts = ({position, margin, title, icon, cat, background, align, type, g
       const billy = (name, type)=>{
         getreadstate(false)
         getcat(name)
-        // console.log('object')
+        //// console.log('object')
       }
       const bills = (name, type)=>{
         getreadstate(false)
         getcat(name, type)
       }
-    //   console.log(gc)
+    //  // console.log(gc)
     return (
         <div style={{position:position, top:0, left:0,margin:margin, zIndex:'1900', background:background, width:'100%', height:'100%', display:'grid', justifyContent:'center', alignItems:align}} onScroll={bill} onWheel={bill} onClick={bill}>
             <div className="flyouts">

@@ -21,16 +21,17 @@ const OrdersTable = ({sn, orderid, location, created_at, cost}) => {
     ])
     useEffect(() => {
         getparners()
-    }, [causerefresh])
+    }, [causerefresh, orderid])
     const getparners = async () => {
-        const data = payload;
-        console.log(data)
+        const data = {
+            'orderid': orderid
+        };
         try {
-            const product = await axios.post('http://geo.vensle.com/api/osearch', data)
+            const product = await axios.post('http://vensle.com/api/api/osearch', data)
             setgroceries(product.data)
-            console.log(product.data)
+           // console.log(product.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const dropupdate = async (val, valu, prodref, ordid) => {
@@ -40,17 +41,18 @@ const OrdersTable = ({sn, orderid, location, created_at, cost}) => {
             status: valu,
             orderid: ordid 
         };
-        console.log(data)
+       // console.log(data)
         try {
-            const product = await axios.put('http://geo.vensle.com/api/order/'+val, data)
+            const product = await axios.put('http://vensle.com/api/api/order/'+val, data)
             // setgroceries(product.data)
-            console.log(product.data)
+           // console.log(product.data)
             setcauserefresh(causerefresh+1)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
-    console.log(authlev)
+   console.log(orderid)
+   console.log(payload)
     return(
         <div>
                                 

@@ -24,26 +24,26 @@ const Messages = () => {
     useEffect(()=>{
         authorise()
     }, [last])
-    // console.log(last[0])
+    //// console.log(last[0])
     const axe =async ()=>{
-        // console.log('coming up')
+        //// console.log('coming up')
         var data ={accountid:''+identifyer};
 
-        console.log(data)
+       // console.log(data)
         try {
-			const response = await axios.post('http://geo.vensle.com/api/lastmessage', data);
-            console.log(response.data)
+			const response = await axios.post('http://vensle.com/api/api/lastmessage', data);
+           // console.log(response.data)
             setmessages(response.data);
             // setlast(response.data[0].msg);
-            console.log(response.data);
+           // console.log(response.data);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			// setpayload('An error occured');
 		}
     }
     // PUSHER
     useEffect(() => {
-        var pusher = new Pusher('2ee6d4aa15f34a5f2876', {
+        var pusher = new Pusher(process.env.REACT_APP_PUSHER, {
           cluster: 'eu'
         });
         var channel = pusher.subscribe('chat');
@@ -57,7 +57,7 @@ const Messages = () => {
             setrefr(refr+1)
         }
         else{
-            console.log('not a match')
+           // console.log('not a match')
         }
     }
     return(

@@ -8,7 +8,7 @@ const CurrContext = (props) => {
         symbol:''
     })
 
-    // console.log(currency)
+    //// console.log(currency)
     return(
         <CurrencyContext.Provider value={{currency, setcurrency}}>
             {props.children}

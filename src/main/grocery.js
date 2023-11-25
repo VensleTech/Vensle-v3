@@ -25,7 +25,7 @@ const Gdetails = () => {
         window.scrollTo(0,0)
     },[])
     const {id, group, name} = useParams()
-    console.log(name)
+   // console.log(name)
     const [isOpen, setIsOpen] = useState(false)
     const [read, setread] = useState(false)
     const [feat, setfeat] = useState(false)
@@ -43,10 +43,10 @@ const Gdetails = () => {
     },[])
     const getparners = async () => {
         try {
-            const product = await axios.get('http://geo.vensle.com/api/fresh/groceries')
+            const product = await axios.get('http://vensle.com/api/api/fresh/groceries')
             setproduct(product.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     function formatMoney(n) {
@@ -64,7 +64,7 @@ const Gdetails = () => {
                         {
                             product.filter(item => item.id === id).map(({gimage, imgfolder})=>(
                                 <Gcarouse prodname={name.replaceAll('-', ' ').replaceAll('&', '/')} img={gimage}  imgfolder={imgfolder}  id={id}/>
-                            // console.log(product.filter(item => item.id === id))
+                            //// console.log(product.filter(item => item.id === id))
                             ))
                         }
                     </div>    

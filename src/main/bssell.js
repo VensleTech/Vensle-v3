@@ -16,6 +16,7 @@ import Vertice from "./vertice"
 import Fly from "../reusable/fly"
 import Foot from "../reusable/footer"
 import Drop from "../reusable/drop"
+import Topheader from "../reusable/topheader"
 const Bssell = () => {
     const reveal = (ref) => {
         if (ref.current.style.display === 'grid') {
@@ -33,17 +34,7 @@ const Bssell = () => {
         const ham = useRef('')
       return (
         <div>
-          <div className="topbar">
-                <div className="logo">
-                    <Link to={'/'}>Vensle</Link>
-                </div>
-                <div className="rightside">
-                    <div></div>
-                    <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveal(ham)}/></div>
-                    <div><Link to={'/signin'}>Sign in/Sign up</Link></div>
-                    <div ref={flash} ><Link to={'/admin/upload'} style={{color:'black'}}>Start Selling</Link></div>
-                </div>
-            </div>
+          <Topheader/>
             <div className='PPol main-s'>
                 <div className="main-sidebar">
                     <Link to={'/tutorial'}><Drop info={"HOME PAGE"}/></Link>

@@ -40,11 +40,11 @@ const Settings = () => {
         },[address])
     const getparners = async () => {
         try {
-           const product = await axios.get("http://geo.vensle.com/api/product/"+address)
+           const product = await axios.get("http://vensle.com/api/api/product/"+address)
             setproduct(product.data)
-            console.log(product)
+           // console.log(product)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     const data = [
@@ -73,9 +73,9 @@ const Settings = () => {
             try {
                 const response = await axios.get('http://ip-api.com/json/');
                 setDetails({...details, address:response.data.country})
-                console.log(response.data.country)
+               // console.log(response.data.country)
             } catch (error) {
-                console.log(error);
+               // console.log(error);
             }
         }
    

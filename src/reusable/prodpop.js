@@ -6,9 +6,10 @@ import { faHeart, faStar, faStarHalfAlt, faHandshake, faTruck, faLocationDot, fa
 import { bodyScrollToggle } from 'body-scroll-toggle'
 import disableScroll from 'disable-scroll';
 import { UserContext } from '../auth/usercontext'
+import { Fade } from 'react-awesome-reveal'
 
 const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
-    const {id, feat_image, min_price, max_price, title, price, gimage, imgfolder, category_tree, phone, location, currency} = information
+    const {id, description, min_price, max_price, title, price, gimage, imgfolder, category_tree, phone, location, currency, full_name} = information
     const {details:{specialref}, details, setDetails} = useContext(UserContext)
     function formatMoney(n) {
       return (Math.round(n * 100) / 100).toLocaleString();
@@ -81,14 +82,15 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
   },[])
     return (
         <div className='popcontainer' onWheel={billow} onClick={bill}> 
+        <Fade>
             <div  className="inner-container" >
-              <div style={{color:'black', fontSize:'1em', justifySelf:'end', cursor:'pointer'}} onClick={billy}><FontAwesomeIcon icon={faClose} /></div>
+              <div className='vix' style={{color:'black', fontSize:'2em', justifySelf:'end', cursor:'pointer'}} onClick={billy}><FontAwesomeIcon icon={faClose} /></div>
               <div className='details-container'>
                   <div style={{width:'100%', display:'grid', gap:'20px'}} className='picture' ref={pic}>
                   {
                     gimage.split(',').slice(sstart, sstop).map((a, i)=>(
                           <div className='board'>
-                            <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+a} alt=""/>
+                            <Fade><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+a} alt=""/></Fade>
                               {
                                 pre === true ? <div className='pre' onClick={prev}><FontAwesomeIcon icon={faCaretLeft}/></div>:''
                               }
@@ -107,7 +109,7 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                         {
                             gimage.split(',').map((a, i)=>(
                                 <div className='image' onClick={(e)=>{setsstart(i); setsstop(i+1);}}>
-                                <img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+a} alt=""/>
+                                <Fade><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+a} alt=""/></Fade>
                                 </div>
                                 
                             ))
@@ -122,6 +124,7 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                   {   
                     openchat === false ?
                       <div className="dr-first">
+                          <div>
                           <div className="caption">
                               <h3>{title}</h3> 
                               {/* <p><FontAwesomeIcon icon={faHeart} /></p> */}
@@ -146,9 +149,11 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                                 {/* <div  className="green" title={"Can be delivered"}><FontAwesomeIcon icon={faTruck}/> <p>Can be delivered</p></div> */}
                             {/* </div> */}
                             <div>
-                              {/* <div className="table-within">
-                                  <h3>Features</h3>
-                                  <table>
+                              
+                              <div className="table-within">
+                                  <h3>Description</h3>
+                                  <div>{description.length > 200 ? description.substr(0, 200)+'...' : description}</div>
+                                  {/* <table>
                                         <tr>
                                             <td>Category</td>
                                             <td>{category_tree}</td>
@@ -157,9 +162,22 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                                             <td>Condition</td>
                                             <td>Fairly used, Very Neat</td>
                                         </tr>
-                                    </table>
-                              </div> */}
-                              <div className='message-container'>
+                                    </table> */}
+                              </div>
+                              <div className="table-within">
+                                <div>
+                                <h3>Category</h3>
+                                    <div>{category_tree.split(',')[0]}</div>
+                                </div>
+                              </div>
+
+                              <div className="table-within">
+                                <div>
+                                <h3>Vendor</h3>
+                                    <div>{full_name}</div>
+                                </div>
+                              </div>
+                              {/* <div className='message-container'>
                                 <div className='preset'>
                                 <p onClick={(e)=>{setpredef(e.target.innerText); textref.current.focus()}}>I'm not interested</p>
                                 <p onClick={(e)=>{setpredef(e.target.innerText); textref.current.focus()}}>I would prefer the home delivery</p>
@@ -178,7 +196,8 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                                     <button className="click-send" ><FontAwesomeIcon icon={faMessage}></FontAwesomeIcon> Send</button>
                                     
                                 }  
-                            </div>
+                            </div> */}
+                          </div>
                           </div>
                           </div>
                           
@@ -195,9 +214,9 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                                   } 
                                   
                               </div>
-                              {/* <div className="chat" onClick={cutout}>
+                              <div className="chat" onClick={cutout}>
                                   <FontAwesomeIcon icon={faMessage} />
-                              </div> */}
+                              </div>
                           </div>
                       </div>
                       :
@@ -229,6 +248,7 @@ const ProdPop = ({information,  getreadstate, route, getscrollstate}) => {
                   
               </div> 
           </div>
+        </Fade>
       </div>
     )
 }

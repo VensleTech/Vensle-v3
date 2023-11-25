@@ -35,10 +35,10 @@ const Confirm = () => {
             orderid:orderno,
         }
         try {
-            const product = await axios.post('http://geo.vensle.com/api/csearch', data)
+            const product = await axios.post('http://vensle.com/api/api/csearch', data)
             setgroceries(product.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     return(

@@ -102,7 +102,7 @@ const Cart = () => {
         cartitems.forEach((items)=>{
             if(items.productid === id){
                 items.quantity = items.quantity + 1
-                console.log(items.product)
+               // console.log(items.product)
                 // setsuccess(1)
             }
         })
@@ -118,14 +118,14 @@ const Cart = () => {
                 }
             }
         })
-        console.log(item)
+       // console.log(item)
     setinfo(info+1)
     } 
     
      const remove = (id) =>{
         let index = cartitems.findIndex(item=>item.productid === id);
-        console.log(index)
-        console.log(cartitems.splice(index, 1))
+       // console.log(index)
+       // console.log(cartitems.splice(index, 1))
         setcartitems(cartitems)
         setinfo(info-1)
 
@@ -138,7 +138,7 @@ const Cart = () => {
         return sums
      }
      const checkout = (currency) => {
-        console.log(currency)
+       // console.log(currency)
         const products = item.filter(items=>items.currency === currency)
         setcurrentproducts(products)
         setcurrentcurrency(currency)
@@ -159,7 +159,7 @@ const Cart = () => {
             price: ''+accumulate(currentcurrency),
         }
         try {
-			const response = await axios.post('http://geo.vensle.com/api/order', data);
+			const response = await axios.post('http://vensle.com/api/api/order', data);
                 setmsg(response.data.msg);
                 setdone(true)
                 let remainder = cartitems.filter(prod => prod.currency !== currentcurrency)
@@ -172,14 +172,14 @@ const Cart = () => {
             //     return rest;
             //   });
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			// setmsg('An error occured');
 		}
     }
     const fbs =async (data)=>{
-        console.log('clicked')
+       // console.log('clicked')
         try {
-			const response = await axios.post('http://geo.vensle.com/api/lauth', data);
+			const response = await axios.post('http://vensle.com/api/api/lauth', data);
             if(response.data){
                 const {id,full_name, business_name, email, address, phone, a_lev,token } = response.data
                 setDetails({...details, 
@@ -208,7 +208,7 @@ const Cart = () => {
                 } 
             else{
                 try {
-                    const response = await axios.post('http://geo.vensle.com/api/rauth', data);
+                    const response = await axios.post('http://vensle.com/api/api/rauth', data);
                     const {id,full_name, business_name, email, address, phone, a_lev, token} = response.data
                     setDetails({...details, 
                         id:id,
@@ -235,11 +235,11 @@ const Cart = () => {
                     setsigned(true)
                 }
                 catch (err) {
-                        console.log(err)
+                       // console.log(err)
                     }
                 }
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 		}
         
         }
@@ -272,11 +272,11 @@ const Cart = () => {
     const check = () =>{
         if (acc.email ===  '' || acc.phone === '' || acc.name ===''){
             setsigned(false)
-            console.log('jgjffgjfffhd')
+           // console.log('jgjffgjfffhd')
         }
         else{
             setacc({...acc, custref:'guest'+getRndInteger(1000, 200000000)})
-            console.log(acc)
+           // console.log(acc)
             setsigned(true)
         }
     }
@@ -284,7 +284,7 @@ const Cart = () => {
         return Math.floor(Math.random() * (max - min) ) + min;
       }
 
-    console.log(Object.entries(groups))
+   // console.log(Object.entries(groups))
     return (
         <div className="sign">
         <div className="topbar">
@@ -408,12 +408,12 @@ const Cart = () => {
                                         <LoginSocialFacebook
                                                     appId="519240347027384"
                                                     onResolve={(response)=>{
-                                                        console.log(response)
+                                                       // console.log(response)
                                                         setacc(response.data)
                                                         setfacebook(response.data)
                                                     }}
                                                     onReject={(error)=>{
-                                                        console.log(error)
+                                                       // console.log(error)
                                                     }}
                                         >
                                         <div className="icon"><img  src={fb} alt='' /></div>
@@ -421,12 +421,12 @@ const Cart = () => {
                                         <LoginSocialGoogle
                                                     client_id="6784803343-a7237i4s172lg9b4kvu1bse5946ga5i1.apps.googleusercontent.com"
                                                     onResolve={(response)=>{
-                                                        console.log(response)
+                                                       // console.log(response)
                                                         setacc(response.data)
                                                         setfacebook(response.data)
                                                     }}
                                                     onReject={(error)=>{
-                                                        console.log(error)
+                                                       // console.log(error)
                                                     }}
                                                     scope="https://www.googleapis.com/auth/userinfo.email"
                                         >
@@ -435,10 +435,10 @@ const Cart = () => {
                                         <LoginSocialFacebook
                                                     appId="519240347027384"
                                                     onResolve={(response)=>{
-                                                        console.log(response)
+                                                       // console.log(response)
                                                     }}
                                                     onReject={(error)=>{
-                                                        console.log(error)
+                                                       // console.log(error)
                                                     }}
                                         >
                                         <div className="icon"><img  src={ap} alt='' /></div>

@@ -32,7 +32,7 @@ const Gcarouse = ({prodname, img, id, imgfolder}) => {
                 {
                   img.split(',').slice(sstart, sstop).map((a, i)=>(
                     <div className='board'>
-                      <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                      <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                         <div className='pre' onClick={prev}><FontAwesomeIcon icon={faCaretLeft}/></div>
                         <div className='nex' onClick={next}><FontAwesomeIcon icon={faCaretRight}/></div>
                     </div>
@@ -44,7 +44,7 @@ const Gcarouse = ({prodname, img, id, imgfolder}) => {
                 {
                   img.split(',').map((a, i)=>(
                     <div className='image' onClick={(e)=>{setsstart(i); setsstop(i+1);}}>
-                      <img src={"http://geo.vensle.com/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
+                      <img src={"http://vensle.com/api/storage/groceries/"+imgfolder+"/"+img.split(',')[0]} alt=""/>
                     </div>
                     ))
                 }

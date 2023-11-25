@@ -26,16 +26,16 @@ const Menu = () => {
         if(truth){
             const kept = JSON.parse(localStorage.getItem('logs'))
             const {id,full_name, business_name, email, address, is_admin,phone,location } = kept
-            setDetails({
-                id:id,
-                name:full_name,
-                authlev:is_admin,
-                business_name: business_name,
-                email: email,
-                phone: phone,
-                address: address,
-                location: location,
-            })
+            // setDetails({
+            //     id:id,
+            //     name:full_name,
+            //     authlev:is_admin,
+            //     business_name: business_name,
+            //     email: email,
+            //     phone: phone,
+            //     address: address,
+            //     location: location,
+            // })
             nav('/admin')
         }
     }, [])
@@ -54,10 +54,10 @@ const Menu = () => {
     const [show, setshow] = useState(false)
     const axe =async (e)=>{
         e.preventDefault()
-        console.log('clicked')
+       // console.log('clicked')
         var data = payload;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/login', data);
+			const response = await axios.post('http://vensle.com/api/api/login', data);
             setmsg(response.data.msg);
             if(response.data.status === 200){
                 const {id,full_name, business_name, email, address, phone, is_admin, } = response.data.credentials
@@ -85,32 +85,32 @@ const Menu = () => {
                 nav('/admin')
             }
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsg('An error occured');
 		}
     }
     const axes =async (e)=>{
         e.preventDefault()
-        console.log('clicked')
+       // console.log('clicked')
         var data = payload2;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/register', data);
+			const response = await axios.post('http://vensle.com/api/api/register', data);
             setmsg2(response.data.msg);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsg2('An error occured');
 		}
     }
     const loc =async (e)=>{
         try {
 			const response = await axios.get('http://api.positionstack.com/v1/reverse?access_key=0ec2ec85f10f677e66b410b2526fd84b&query='+latitude+','+longitude);
-            console.log(response.data.data[0]);
+           // console.log(response.data.data[0]);
             setlocat(response.data.data[0])
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 		}
     }
-    // console.log()
+    //// console.log()
     return (
         <div className="mcontainer" >
             <div className="menu">

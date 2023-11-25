@@ -8,18 +8,21 @@ import bannerimg2 from '../winter.webp'
 import lowlev from '../image 23.png'
 import Carousels from "../reusable/carousel";
 import Foot from "../reusable/footer";
-import { Link, useLocation, useParams } from "react-router-dom";
+import logo from "../logo2.png"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList, faSearch, faClose, faLocationDot, faMessage, faQuestionCircle, faUser, faBars, faShoppingBag, faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
 import Iframe from "react-iframe";
 import { UserContext } from "../auth/usercontext";
 import Map from "./maps";
+import Topheader from "./topheader";
 
 
 const Menu  = () => {
+    const nav = useNavigate()
         // destructure context
         const {details, details:{item, userlocation, specialref, name},products, requests, groceries, setDetails} = useContext(UserContext)
-        // console.log(userlocation)
+        //// console.log(userlocation)
         // states
         const  location = useLocation()
         const [popmap, setpopmap] = useState(false)
@@ -37,9 +40,10 @@ const Menu  = () => {
         const h = useRef('')
         const r = useRef('')
         const g = useRef('')
+        const cloner = useRef('')
         const [all, setall] = useState([])
     
-        // console.log(userlocation)
+        //// console.log(userlocation)
         // effects
         setTimeout(() => {
            if(truefalse === false){
@@ -60,6 +64,14 @@ const Menu  = () => {
                 // jones()
         }, [window.scrollY])
     
+        // useEffect(()=>{
+        //     document.body.addEventListener('click', (e)=>{
+        //         if(cloner && !cloner.current.contains(e.target)){
+        //             setpopout(false)
+        //             document.body.style.overflow = 'unset';
+        //         }
+        //     })
+        // })
         // pure functions
        const spar = ()=>{
         location.pathname.split('/')[2] === 'req' ? setroute('req')
@@ -118,30 +130,25 @@ const Menu  = () => {
         const rad = (name)=> {
             setradius(name)
         }
+        const destroy = () => {
+            localStorage.removeItem('logs')
+            setDetails({...details, 
+                name:'',
+                authlev:'',
+                business_name:'',
+                email:'',
+                phone:'',
+                address:'',
+                specialref:'',
+            })
+            nav('/')
+        }
     return(
-        <div className='gray' className='menu-new'>
+        <div className='gray menu-new'>
         <div >
-            <div className="topbar" >
-                <div className="logo">
-                    <Link to={'/'}>Vensle</Link>
-                </div>
-                <div className="rightside">
-                <div><FontAwesomeIcon icon={faSearch}  onClick={(e)=>reveals(stick2)}/></div>
-                <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveals(ham)}/></div>
-                <div>
-                {
-                    specialref !== '' ?
-                    <Link to={'/admin/profile'}><FontAwesomeIcon icon={faUser}/>{name}</Link>
-                    :
-                    <Link to={'/signin'}>Sign in/Sign up</Link>
-                }
-                </div>
-                <div ref={flash}>Start Selling</div>
-                <div><Link to={'/cart'}><FontAwesomeIcon icon={faShoppingBasket} /> <span>{item.length}</span></Link></div>
-                
-                </div>
-            </div>
-            <div className="gc" style={{backgroundColor:'white', width:'95%', margin:'0 auto', padding:'5px 0'}}>
+            
+            <Topheader/>
+            <div className="gc" style={{backgroundColor:'white', width:'100%', margin:'0 auto', padding:'5px 20px', boxSizing:'border-box'}}>
                 <div className="search-location" ref={stick2}>
                     <div className="location-input">
                         <div className="loca" onClick={(e)=>setpopmap(true)}>
@@ -150,23 +157,23 @@ const Menu  = () => {
                         </div>
                         <div style={{position:'relative'}}>
                             <div className="searcher">
-                                <input type="text" placeholder="What are you searching for" onChange={(e)=>fetchresults(e.target.value)}  onClick={(e)=>setpopout(true)}/>
+                                <input type="text" placeholder="What are you searching for" onChange={(e)=>{fetchresults(e.target.value);setpopout(true)}}/>
                                 <div className="s-button">
                                     {word === '' ? <FontAwesomeIcon icon={faSearch} /> : <Link to={"../../search/"+cats.trim().replaceAll('-', ',').replaceAll(' ', '-').replaceAll('/', '&')+"/"+word.trim().replaceAll(' ', '-').replaceAll('/', '&')}><FontAwesomeIcon icon={faSearch} /></Link>}
                                 </div>
                             </div>
                             {
                                 popout === true ?
-                                <div className="s-results">
+                                <div className="s-results" ref={cloner}>
                                 <div className="sidebyside">
                                     <div className="lo"></div>
                                     <div  className="clo" onClick={(e)=>setpopout(false)}>Close</div>
                                 </div>
                                {
                                 all.slice(0,10).map(({prodname, img, imgfolder,category_tree, id, title,feat_image}, i)=>(
-                                    <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
+                                    <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')} onClick={(e)=>setpopout(false)}>
                                         <div className="sr">
-                                            <div><img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
+                                            <div><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
                                             <div>{title}</div>
                                         </div>
                                     </Link>
@@ -189,7 +196,7 @@ const Menu  = () => {
                         all.slice(0,10).map(({prodname, img, imgfolder,category_tree, id, title,feat_image}, i)=>(
                             <Link to={"/details/"+route+"/"+id+"/"+category_tree.split(",")[category_tree.split(",").length -1].replaceAll(' ', '-').replaceAll('/', ')')+"/"+title.trim().replaceAll(' ', '-').replaceAll('/', '&')}>
                                 <div className="sr">
-                                    <div><img src={"http://geo.vensle.com/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
+                                    <div><img src={"http://vensle.com/api/storage/"+imgfolder+"/"+feat_image} alt=""/></div>
                                     <div>{title}</div>
                                 </div>
                             </Link>
@@ -236,6 +243,12 @@ const Menu  = () => {
                             <Link to={'/signin'}>Start Selling</Link>
                         }
                     </div>
+                    {
+                        specialref !== '' ?
+                        <div onClick={destroy} style={{padding:'20px 0', cursor:'pointer'}}>Logout</div>
+                        :
+                        ''
+                    }
                     </div>
                     
                     </div>

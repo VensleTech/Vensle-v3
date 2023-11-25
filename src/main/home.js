@@ -27,16 +27,16 @@ const Home = () => {
     },[])
     const getparners = async () => {
         try {
-            // const partners = await axios.get("http://geo.vensle.com/partners.json")
-            const groceries = await axios.get("http://geo.vensle.com/api/fresh/groceries")
-            const product = await axios.get("http://geo.vensle.com/api/products")
-            const group = await axios.get("http://geo.vensle.com/api/group")
+            // const partners = await axios.get("http://vensle.com/api/partners.json")
+            const groceries = await axios.get("http://vensle.com/api/api/fresh/groceries")
+            const product = await axios.get("http://vensle.com/api/api/products")
+            const group = await axios.get("http://vensle.com/api/api/group")
             // setpartners(partners.data)
             setgroceries(groceries.data)
             setproduct(product.data)
             setgroup(group.data)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     const categ = product.filter(items => items.category === 174)
@@ -350,7 +350,7 @@ const Home = () => {
                                 ))
                             }
                             {
-                                console.log(categ)
+                               // console.log(categ)
                             }
                             </div>
                         </div>
@@ -415,7 +415,7 @@ const Home = () => {
                                 ))
                             }
                             {
-                                console.log(categ)
+                               // console.log(categ)
                             }
                             </div>
                         </div>
@@ -480,7 +480,7 @@ const Home = () => {
                                 ))
                             }
                             {
-                                console.log(categ)
+                               // console.log(categ)
                             }
                             </div>
                         </div>
@@ -545,7 +545,7 @@ const Home = () => {
                                 ))
                             }
                             {
-                                console.log(categ)
+                               // console.log(categ)
                             }
                             </div>
                         </div>

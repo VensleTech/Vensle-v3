@@ -7,6 +7,7 @@ import { faList, faPhone, faMessage, faBowlFood, faWheatAwn, faShirt, faBaby, fa
 import { faPaintbrush, faTree, faVolleyball, faBars, faMicrophone, faBook, faHouseChimney, faClose, faCaretLeft, faCaretRight} from "@fortawesome/free-solid-svg-icons"
 import Foot from "../reusable/footer"
 import Drop from "../reusable/drop"
+import Topheader from "../reusable/topheader"
 const Bsmes = () => {
     const reveal = (ref) => {
         if (ref.current.style.display === 'grid') {
@@ -24,17 +25,7 @@ const Bsmes = () => {
         const ham = useRef('')
       return (
         <div>
-          <div className="topbar">
-                <div className="logo">
-                    <Link to={'/'}>Vensle</Link>
-                </div>
-                <div className="rightside">
-                    <div></div>
-                    <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveal(ham)}/></div>
-                    <div><Link to={'/signin'}>Sign in/Sign up</Link></div>
-                    <div ref={flash} ><Link to={'/admin/upload'} style={{color:'black'}}>Start Selling</Link></div>
-                </div>
-            </div>
+          <Topheader/>
             <div className='PPol main-s'>
                 <div className="main-sidebar">
                     <Link to={'/tutorial'}><Drop info={"HOME PAGE"}/></Link>

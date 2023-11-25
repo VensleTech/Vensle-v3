@@ -9,14 +9,16 @@ import Sorts from "./sorts"
 import Input from "./input"
 import axios from "axios"
 import { UserContext } from "../auth/usercontext"
+import Confirm from "../reusable/confirm"
+import Disppic from "../reusable/disppic"
 
 
 
 const Profile = () => {
     const pwdref = useRef('')
-    console.log(pwdref)
+   // console.log(pwdref)
 
-    const {details:{id, name, authlev, business_name, email, phone, address }, setDetails} = useContext(UserContext)
+    const {details:{id, name, authlev, business_name, email, phone, address,profile_image }, setDetails} = useContext(UserContext)
     const {details} = useContext(UserContext)
     const [isOpen, setisOpen] = useState(false)
     const [groceries, setgroceries] = useState([
@@ -40,7 +42,7 @@ const Profile = () => {
         },
         {
             id:2,
-            img:"../../pics (3).jpg",
+            img:"../../vector8.jpg",
             title:"Premium sneakers",
             price:"22,000",
             transaction:[
@@ -158,8 +160,16 @@ const Profile = () => {
             
         }
     )
+    const getreadstate = (readstate)=> {
+        if (readstate === true) {
+            setupgrade(0)
+        }
+        else{
+            setupgrade(0)
+        }
+    }
     const [payload3, setpayload3] = useState({})
-    console.log(id)
+   // console.log(id)
     const [msg, setmsg] = useState('')
     const [msge, setmsge] = useState('')
     const [msgp, setmsgp] = useState('')
@@ -179,24 +189,24 @@ const Profile = () => {
 
     const axe =async (e)=>{
         e.preventDefault()
-        console.log('clicked')
+       // console.log('clicked')
         var data = payload;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/verified', data);
+			const response = await axios.post('http://vensle.com/api/api/verified', data);
             setmsg(response.data.msg);
-            console.log(response.data);
+           // console.log(response.data);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsg('An error occured');
 		}
     }
     const axle =async (e)=>{
         e.preventDefault()
-        console.log('clicked')
+       // console.log('clicked')
         var loid = id
         var data = payload2;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/edit/'+loid, data);
+			const response = await axios.post('http://vensle.com/api/api/edit/'+loid, data);
             setmsge(response.data.msg);
             const {id,full_name, business_name, email, address, phone, is_admin, } = response.data.user
                 setDetails({...details,
@@ -216,27 +226,28 @@ const Profile = () => {
                     address: address,
                 }
                 localStorage.setItem('logs', JSON.stringify(itemize))
-            console.log(response.data);
+           // console.log(response.data);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsge('An error occured');
 		}
     }
+    
     const pwc =async (e)=>{
         e.preventDefault()
-        console.log('changed')
+       // console.log('changed')
         var loid = id
         var data = payload3;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/edit/'+loid, data);
+			const response = await axios.post('http://vensle.com/api/api/edit/'+loid, data);
             setmsgp(response.data.msg);
-            console.log(response.data);
+           // console.log(response.data);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsge('An error occured');
 		}
     }
-    console.log(id)
+   // console.log(id)
     return(
         <div>
             <Menu />
@@ -248,7 +259,23 @@ const Profile = () => {
                         <div><span>{name} </span> <FontAwesomeIcon icon={faUser}/></div>
                     </div>
                     <div className="profile-container">
+                        
                         <div className="pf-left">
+                            {
+                                authlev === 1 ? '':
+                                <div>
+                                    <div className="dp">
+                                        { profile_image.length > 1 ?
+                                            <img src={'http://vensle.com/api/storage/'+profile_image} alt="" />
+                                        :
+                                        'No image uploaded'
+                                        }
+                                    </div>
+                                    <div className="edp" onClick={(e)=>setupgrade(3)}>
+                                        <FontAwesomeIcon icon={faEdit}/> Edit
+                                    </div>
+                                </div>
+                            }
                             <div className="pfr-img">
                                 <img src={groceries[0].img} alt="" />
                             </div>
@@ -335,6 +362,9 @@ const Profile = () => {
                             </form>
                             <div>{msgp}</div> 
                             </div>
+                            :
+                            upgrade === 3 ?
+                            <Disppic getreadstate={getreadstate} id={id}/>
                             :
                             <div className="upgradeform">
                             <span onClick={(e)=>setupgrade(0)}><FontAwesomeIcon icon={faClose}/></span>

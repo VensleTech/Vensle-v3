@@ -42,23 +42,23 @@ const Map  = ({getref, getrad, rad, height}) => {
     const fetchlocs =async (val)=>{
         try {
 			// const response = await axios.get('https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='+val+'&inputtype=textquery&key=AIzaSyDpLFDonki5cq8ESXkTqcfgQMJK2Zf8GqA&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry');
-			const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+val+'&key=AIzaSyDpLFDonki5cq8ESXkTqcfgQMJK2Zf8GqA');
-            console.log(response.data.results);
-            console.log(response.data.results[0].address_components.filter(items=>items.types[0] === 'country')[0].long_name);
+			const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+val+'&key='+process.env.REACT_APP_GMAP);
+           // console.log(response.data.results);
+           // console.log(response.data.results[0].address_components.filter(items=>items.types[0] === 'country')[0].long_name);
             
             setaddresses(response.data.results);
             
             setdrop(1)
             
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 		}
     }
 
     // 2. Change Address function
     const changeaddr =async (val)=>{
        
-        console.log(val)
+       // console.log(val)
         const {geometry, formatted_address, address_components} =val
         // then i set a state to hold the valuesthat i intend to use in the change
         // location function changefunc()

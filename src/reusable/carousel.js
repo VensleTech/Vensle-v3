@@ -1,17 +1,17 @@
 import { Carousel } from 'react-carousel-minimal';
 
 function Carousels({slide, thumbs}) {
-  // console.log(slide)
-  // console.log(thumbs)
+  //// console.log(slide)
+  //// console.log(thumbs)
  const data = [
     {
-      image: "./jop.avif",
+      image: "./vector5.jpg",
     },
     {
-      image: "./joop.avif",
+      image: "./vector6.jpg",
     },
     {
-      image: "./jooop.avif",
+      image: "./vector7.jpg",
     }
   ];
 

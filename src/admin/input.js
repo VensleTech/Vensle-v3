@@ -9,7 +9,7 @@ const Input = ({title, icon, type, getreadstate, ddcontent, numindex, name, cont
     const [desc, setdesc] = useState(values)
     // const [desc, setdesc] = useState('')
     // const combo = () => {
-    //     console.log(types+':'+desc)
+    //    // console.log(types+':'+desc)
     //     getreadstate([types+':'+desc, numindex])
     // }
     
@@ -17,7 +17,7 @@ const Input = ({title, icon, type, getreadstate, ddcontent, numindex, name, cont
         getreadstate(e.target.value)
         setdesc(e.target.value)
     }
-    // console.log(value)
+    //// console.log(value)
 
     return(
         <div className="main-input">

@@ -49,14 +49,14 @@ const Gcategory  = () => {
     },[product])
     const getparners = async () => {
         try {
-            const product = await axios.get("http://geo.vensle.com/api/search/"+name+'/'+userlocation.country)
+            const product = await axios.get("http://vensle.com/api/api/search/"+name+'/'+userlocation.country)
             setproduct(product.data)
-            const groups = await axios.get('http://geo.vensle.com/api/group')
+            const groups = await axios.get('http://vensle.com/api/api/group')
             setgroups(groups.data)
-            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const categories = await axios.get('http://vensle.com/api/api/groupcat')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const [filt, setfilt] = useState({
@@ -73,7 +73,7 @@ const Gcategory  = () => {
         setfilt({...filt, [type]:cat})
         setarea(cat)
         setall(product.filter(items => items.state === cat))
-        console.log(cat + ' '+type)
+       // console.log(cat + ' '+type)
     }
 
     setTimeout(() => {
@@ -94,7 +94,7 @@ const Gcategory  = () => {
         window.scrollTo(0,0)
     },[])
     const jones = () => {
-        // console.log(window.scrollY)
+        //// console.log(window.scrollY)
         if(window.innerHeight+window.scrollY >= document.body.offsetHeight - 500){
             setstop(stop+200)
         }
@@ -104,11 +104,11 @@ const Gcategory  = () => {
     }, [window.scrollY])
     const categoryone = async (id, step) => {
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/gcategory/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/gcategory/"+id)
             step(categs.data)
-            console.log(categs.data)
+           // console.log(categs.data)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     const bubble=[
@@ -154,7 +154,7 @@ const Gcategory  = () => {
                                 </div>
                             </div>
                         </div>
-                    <div className="filter-cont">
+                    {/* <div className="filter-cont">
                         <div className="filt-bar">
                             <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                         </div>
@@ -245,7 +245,7 @@ const Gcategory  = () => {
                             
                             
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="main-right">
                     <div className="category">

@@ -8,7 +8,7 @@ const Vertice = ({id, img, title, start, end, group}) => {
         <div>
             <div className="vertice">
                 <div className="img">
-                    <img src={"http://geo.vensle.com/storage/category/"+img} alt=""/>
+                    <img src={"http://vensle.com/api/storage/category/"+img} alt=""/>
                 </div>
                 <div className='pdetails'>
                     <div className="prodname">

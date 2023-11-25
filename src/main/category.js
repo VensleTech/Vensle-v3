@@ -8,7 +8,7 @@ import Menu from "../reusable/menu"
 import { UserContext } from "../auth/usercontext";
 import { Link, useLocation, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClose, faFilter, faAngleRight, faLocationDot, faPersonBreastfeeding, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons" 
+import { faClose, faFilter, faAngleRight, faLocationDot, faPersonBreastfeeding, faArrowAltCircleRight, faArrowCircleLeft, faArrowCircleRight } from "@fortawesome/free-solid-svg-icons" 
 import { faChevronRight, faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons"
 import { faSquare } from "@fortawesome/free-solid-svg-icons"
 import Drop from "../reusable/drop"
@@ -21,7 +21,7 @@ const Category  = () => {
     const {details:{userlocation}, setDetails} = useContext(UserContext)
     const [product, setproduct] = useState([])
     const  loc = useLocation()
-    const [path, setpath] = useState('')
+    const [path, setpath] = useState(['pro', 'category', 'pr', 'Products', 'search'])
     const [truefalse, settruefalse] = useState(false)
     const [start, setstart] = useState(51)
     const [stop, setstop] = useState(start+50)
@@ -33,6 +33,8 @@ const Category  = () => {
     const [group, setgroup] = useState(0)
     const [area, setarea] = useState('Powys')
     const [all, setall] = useState([])
+    const [page, setpage] = useState(1)
+    const [posit, setposit] = useState([0, 20])
     const sidebar = useRef('')
 
     // pure function
@@ -46,15 +48,15 @@ const Category  = () => {
         
     }
     const choose = () => {
-        console.log(loc)
-        console.log(loc.pathname.split('/')[1])
+       // console.log(loc)
+       // console.log(loc.pathname.split('/')[1])
         if( loc.pathname.split('/')[1]=== 'pro'){
             setpath(['pro', 'category', 'pr', 'Products', 'search'])
-            console.log('pro')
+           // console.log('pro')
         }
         else if(loc.pathname.split('/')[1] === 'gro'){
             setpath(['gro', 'gcategory', 'gr', 'Groceries','gsearch'])
-            console.log('gro')
+           // console.log('gro')
         }
     }
     const [filt, setfilt] = useState({
@@ -68,7 +70,7 @@ const Category  = () => {
         })
     }
     const jones = () => {
-        // console.log(window.scrollY)
+        //// console.log(window.scrollY)
         if(window.innerHeight+window.scrollY >= document.body.offsetHeight - 500){
             setstop(stop+200)
         }
@@ -77,32 +79,46 @@ const Category  = () => {
         setfilt({...filt, [type]:cat})
         setarea(cat)
         setall(product.filter(items => items.state === cat))
-        console.log(cat + ' '+type)
+       // console.log(cat + ' '+type)
     }
 
+    const paginate = (direction) => {
+        if (direction === 'forward' && posit[1] < product.length) {
+            setposit([posit[0]+20, posit[1]+20])
+            setpage(page+1)
+            window.scrollTo(0,0)
+        }
+        else if (direction === 'backward' && posit[0] > 0) {
+            setposit([posit[0]-20, posit[1]-20])
+            setpage(page-1)
+            window.scrollTo(0,0)
+        }
+        else{}
+    }
     // axios
     const getparners = async () => {
-        console.log(path[4])
+       // console.log(path[4])
+       console.log("http://vensle.com/api/api/"+path[4]+'/'+name+'/'+userlocation.region)
         try {
-            const product = await axios.get("http://geo.vensle.com/api/"+path[4]+'/'+name+'/'+userlocation.country)
+            const product = await axios.get("http://vensle.com/api/api/"+path[4]+'/'+name+'/'+userlocation.country)
             setproduct(product.data)
             console.log(product.data)
-            const groups = await axios.get('http://geo.vensle.com/api/group')
+            const groups = await axios.get('http://vensle.com/api/api/group')
             setgroups(groups.data)
-            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const categories = await axios.get('http://vensle.com/api/api/groupcat')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const categoryone = async (id, step) => {
-        console.log(path)
+       // console.log(path)
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/"+path[1]+"/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/"+path[1]+"/"+id)
             step(categs.data)
-            console.log(categs.data)
+           // console.log(categs.data)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     
@@ -121,7 +137,7 @@ const Category  = () => {
     useEffect(()=>{
         getparners()
         categoryone(catid, setcatone)
-    },[userlocation.country,path, catid])
+    },[path, userlocation.country, catid])
     useEffect(()=>{
         choose()
     },[])
@@ -176,28 +192,13 @@ const Category  = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="filter-cont">
+                    {/* <div className="filter-cont">
                         <div className="filt-bar">
                             <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                         </div>
                         <div className="hr"></div>
                         
                         <div className="filt-params">
-                            
-                            <div className="location">
-                                <h4>Location</h4>    
-                            </div>
-                            <Fly icon={<FontAwesomeIcon icon={faLocationDot} />} info={area} getcats={getcats} titles={'Location'}>
-                            </Fly>
-                            <div className="dist">
-                                <select onChange={(e)=>setfilt({...filt, distance:e.target.value})}>
-                                    <option value='' disabled>Distance</option>
-                                    <option value='100km'>100km</option>
-                                    <option value='200km'>200km</option>
-                                    <option value='300km'>300km</option>
-                                    <option value='400km'>400km</option>
-                                </select>
-                            </div>
                             <div className="Groups">
                             <p>Group</p>
                                 <select onChange={(e)=>{setgroup(e.target.value);setall(all.filter(items => items.item_group === e.target.value))}}>
@@ -267,7 +268,7 @@ const Category  = () => {
                             
                             
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="main-right">
                     <div className="mr-top">
@@ -299,14 +300,14 @@ const Category  = () => {
                     {style === 1 ? 
                         <div className="mr-third">
                         {
-                            product.map((product, i)=>(
+                            product.slice(posit[0], posit[1]).map((product, i)=>(
                                 <div><Pcards type={4} width={217} height={330} vim={'100%'} information={product} route={path[0]}/></div>
                             ))
                         }
                         </div> :
                         <div className="mr-fourth">
                         {
-                            product.map((product, i)=>(
+                            product.slice(posit[0], posit[1]).map((product, i)=>(
                                 <div><Pcards type={2} width={'100%'} height={'150px'} pdsize={'1.3em'} pcsize={'1.8em'} information={product} route={path[0]}/></div>
                             ))
                         }
@@ -314,28 +315,16 @@ const Category  = () => {
                     }
                 </div>
             </div>
-            <div className="recent">
-                {
-                    product.filter(items => items.id === 904).slice(0,1).map(({id, category})=>(
-                        
-                            <div>
-                                <div className="section">
-                                    <div className="title">
-                                        <h2>Recently Viewed Products</h2>
-                                    </div>
-                                    <div className="others">
-                                    {    
-                                        product.filter(items => items.category === category && items.id !== parseInt(id)).slice(0,4).map(({id, Images, title, price, transaction, imgfolder, category_name, item_contact_number, state, country, currency})=>(
-                                            <div><Pcards type={3} pdsize={'.9em'} pcsize={'1em'} id={id} title={title} price={price} img={Images} folder={imgfolder} information={[, category_name, item_contact_number, state, country, currency]}/></div>
-                                        ))
-                                    }
-                                    </div>
-                                </div>
-                            </div>
-                        
-                    ))
-                }
-            </div>
+            {
+                product.length > 20 ?
+                <div className="pagin">
+                    <div onClick={(e)=>paginate('backward')}><FontAwesomeIcon icon={faArrowCircleLeft}/> Prev</div>
+                    <p>Page {page} of {Math.ceil(product.length/20)}</p>
+                    <div onClick={(e)=>paginate('forward')}>Next <FontAwesomeIcon icon={faArrowCircleRight}/></div>
+                </div>
+                :
+                ''
+            }
             <div className="filters" onClick={reveal}>
                 <FontAwesomeIcon icon={faFilter}/>
             </div>

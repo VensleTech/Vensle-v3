@@ -40,23 +40,23 @@ const LocatFinder  = ({getref, getrad, rad, height}) => {
     const fetchlocs =async (val)=>{
         try {
 			// const response = await axios.get('https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='+val+'&inputtype=textquery&key=AIzaSyDpLFDonki5cq8ESXkTqcfgQMJK2Zf8GqA&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry');
-			const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+val+'&key=AIzaSyDpLFDonki5cq8ESXkTqcfgQMJK2Zf8GqA');
-            console.log(response.data.results);
-            console.log(response.data.results[0].address_components.filter(items=>items.types[0] === 'country')[0].long_name);
+			const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+val+'&key='+process.env.REACT_APP_GMAP);
+           // console.log(response.data.results);
+           // console.log(response.data.results[0].address_components.filter(items=>items.types[0] === 'country')[0].long_name);
             
             setaddresses(response.data.results);
             
             setdrop(1)
             
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 		}
     }
 
     // 2. Change Address function
     const changeaddr =async (val)=>{
        
-        console.log(val)
+       // console.log(val)
         const {geometry, formatted_address, address_components} =val
         // then i set a state to hold the valuesthat i intend to use in the change
         // location function changefunc()
@@ -66,6 +66,15 @@ const LocatFinder  = ({getref, getrad, rad, height}) => {
             country:address_components.filter((items)=>items.types[0]==="country")[0].long_name,
             fadd:formatted_address,
             city:address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name,
+        })
+        setDetails( {...details,
+            userlocation:{
+                lat:geometry.location.lat,
+            long:geometry.location.lng,
+            country:address_components.filter((items)=>items.types[0]==="country")[0].long_name,
+            fadd:formatted_address,
+            city:address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name,
+            }
         })
        setzoom(11)
        setradius(2000)
@@ -86,53 +95,6 @@ const LocatFinder  = ({getref, getrad, rad, height}) => {
         getrad(radius)
     }
 
-    // 4. Choose the zoom level
-    const zoomer = (val) => {
-        switch (parseInt(val)) {
-            case 2000:
-                setzoom(12.5)
-                return;
-            case 5000:
-                setzoom(11.5)
-                return;
-            case 10000:
-                setzoom(10.5)
-                return;
-            case 15000:
-                setzoom(9.5)
-                return;
-            case 20000:
-                setzoom(8.5)
-                return;
-            case 50000:
-                setzoom(7.5)
-                return;
-            case 100000:
-                setzoom(5.6)
-                return;
-            case 200000:
-                setzoom(4.5)
-                return;
-            case 300000:
-                setzoom(4.3)
-                return;
-            case 400000:
-                setzoom(4.6)
-                return;
-            case 500000:
-                setzoom(4.4)
-                return;
-            default:
-                break;
-        }
-    }
-    const options = {
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.4,
-        strokeWeight: .5,
-        fillColor: '#FF0000',
-        fillOpacity: 0.15,
-    }
     return(
         <div className="lp-inner-two">
             <div><FontAwesomeIcon icon={faLocationDot} /></div>
@@ -147,7 +109,7 @@ const LocatFinder  = ({getref, getrad, rad, height}) => {
                     addresses.map((locations, i)=>(
                         <div className="list">
                             <p><FontAwesomeIcon icon={faLocationDot}/> </p>
-                            <p onClick={(e)=>{changeaddr(locations); changeloc();setdrop(0); setinpval(locations.address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name)}}>{locations.formatted_address }</p>
+                            <p onClick={(e)=>{changeaddr(locations); setdrop(0); setinpval(locations.address_components.filter((items)=>items.types[1]==="sublocality" || items.types[0]==="postal_town" || items.types[0]==="locality" || items.types[0]==="administrative_area_level_1")[0].long_name)}}>{locations.formatted_address }</p>
                         </div>
                     ))
                 }

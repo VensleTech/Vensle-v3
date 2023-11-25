@@ -37,11 +37,11 @@ const Roles = () => {
     }
     const getparners = async () => {
         try {
-            const product = await axios.get('http://geo.vensle.com/api/allusers')
+            const product = await axios.get('http://vensle.com/api/api/allusers')
             setgroceries(product.data)
-            console.log(product.data)
+           // console.log(product.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     return(

@@ -22,7 +22,6 @@ import Drafts from './admin/drafts';
 import Customers from './admin/customers';
 import Contact from './admin/support';
 import Profile from './admin/profile';
-import Foot from './reusable/footer';
 import Groceries from './main/groceries';
 import Gdetails from './main/grocery';
 import Placead from './admin/placead';
@@ -31,12 +30,9 @@ import UsedContext from './auth/usercontext';
 import Redir from './auth/redir';
 import Requests from './main/requests';
 import Sign from './reusable/sign';
-import CurrContext from './auth/currencycontext';
 import Category from './main/category';
 import Subone from './main/subone';
 import Settings from './admin/settings';
-import Gcategory from './main/gcategory';
-import Gsubcategory from './main/gsubcategory';
 import Subtwo from './main/subtwo';
 import Cart from './main/cart';
 import Track from './admin/track';
@@ -54,13 +50,13 @@ import Bsdash from './main/bsdash';
 import Bsprod from './main/bsprod';
 import Bsset from './main/bsset';
 import Bsmes from './main/bmess';
+import PrEdit from './admin/predit';
+import Contactus from './main/contact';
 
 
 
 function App() {
   
-  const [read, setread] = useState(false)
-
   return (
     <UsedContext>
       <BrowserRouter>
@@ -69,6 +65,7 @@ function App() {
           <Route path="/" element={<Base />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/signin" element={<Sign />} />
+          <Route path="/register" element={<Sign />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/privacy-policy" element={<Privacy />} />
           <Route path="/terms-of-use" element={<Terms/>} />
@@ -81,6 +78,7 @@ function App() {
           <Route path="/tutorial-settings" element={<Bsset />} />
           <Route path="/tutorial-message" element={<Bsmes />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/contact" element={<Contactus />} />
 
 
           <Route path="/search/:cat/:name" element={<SearchPage />} />
@@ -111,6 +109,7 @@ function App() {
           <Route path="/admin/products" element={<Reauth><MyProducts /></Reauth>} />
           <Route path="/admin/orders" element={<Reauth><MyOrders /></Reauth>} />
           <Route path="/admin/upload" element={<Reauth><Upload /></Reauth>} />
+          <Route path="/admin/predit/:id" element={<Reauth><PrEdit /></Reauth>} />
           <Route path="/admin/grocery" element={<Reauth><Grocery /></Reauth>} />
           <Route path="/admin/place" element={<Reauth><Placead /></Reauth>} />
           <Route path="/admin/messages" element={<Reauth><Messages /></Reauth>} />

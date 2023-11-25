@@ -17,7 +17,7 @@ const RolesTable = ({sn, id, orderid, location, created_at, cost, phone, getread
     const [payload, setpayload] = useState({
         'orderid': orderid
     })
-    console.log(cost)
+   // console.log(cost)
     const [groceries, setgroceries] = useState([
     ])
     useEffect(() => {
@@ -25,13 +25,13 @@ const RolesTable = ({sn, id, orderid, location, created_at, cost, phone, getread
     }, [causerefresh])
     const getparners = async () => {
         const data = payload;
-        console.log(data)
+       // console.log(data)
         try {
-            const product = await axios.post('http://geo.vensle.com/api/osearch', data)
+            const product = await axios.post('http://vensle.com/api/api/osearch', data)
             setgroceries(product.data)
-            console.log(product.data)
+           // console.log(product.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const dropupdate = async (val, valu) => {
@@ -39,14 +39,14 @@ const RolesTable = ({sn, id, orderid, location, created_at, cost, phone, getread
             authlevel: valu,
         };
         setshowdrops(!showdrops)
-        console.log(data)
+       // console.log(data)
         try {
-            const product = await axios.post('http://geo.vensle.com/api/assign/'+val, data)
+            const product = await axios.post('http://vensle.com/api/api/assign/'+val, data)
             // setgroceries(product.data)
-            console.log(product.data)
+           // console.log(product.data)
             getreadstate(causerefresh+1)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     // getreadstate(e.target.value)

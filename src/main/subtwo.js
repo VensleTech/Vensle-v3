@@ -19,7 +19,7 @@ const Subtwo  = () => {
     const {catid, name, parname, parid} = useParams()
     const {details:{userlocation}, setDetails} = useContext(UserContext)
     const  loc = useLocation()
-    const [path, setpath] = useState('')
+    const [path, setpath] = useState(['p', 'category', 'pro', 'Products', 'search'])
     const [product, setproduct] = useState([])
     const [truefalse, settruefalse] = useState(false)
     const [start, setstart] = useState(51)
@@ -50,14 +50,14 @@ const Subtwo  = () => {
     },[product])
     const getparners = async () => {
         try {
-            const product = await axios.get(" http://geo.vensle.com/api/"+path[4]+'/'+name+'/'+userlocation.country)
+            const product = await axios.get(" http://vensle.com/api/api/"+path[4]+'/'+name+'/'+userlocation.country)
             setproduct(product.data)
-            const groups = await axios.get('http://geo.vensle.com/api/group')
+            const groups = await axios.get('http://vensle.com/api/api/group')
             setgroups(groups.data)
-            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const categories = await axios.get('http://vensle.com/api/api/groupcat')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const [filt, setfilt] = useState({
@@ -74,7 +74,7 @@ const Subtwo  = () => {
         setfilt({...filt, [type]:cat})
         setarea(cat)
         setall(product.filter(items => items.state === cat))
-        console.log(cat + ' '+type)
+       // console.log(cat + ' '+type)
     }
 
     // setTimeout(() => {
@@ -97,20 +97,20 @@ const Subtwo  = () => {
         choose()
     },[])
     const choose = () => {
-        console.log(loc)
-        console.log(loc.pathname.split('/')[1])
+       // console.log(loc)
+       // console.log(loc.pathname.split('/')[1])
         if( loc.pathname.split('/')[1]=== 'p'){
             setpath(['pr', 'category', 'pro', 'Products','search'])
-            console.log('pro')
+           // console.log('pro')
         }
         else if(loc.pathname.split('/')[1] === 'g'){
             setpath(['gr', 'gcategory','gro', 'Groceries','gsearch'])
-            console.log('gro')
+           // console.log('gro')
         }
     }
 
     const jones = () => {
-        // console.log(window.scrollY)
+        //// console.log(window.scrollY)
         if(window.innerHeight+window.scrollY >= document.body.offsetHeight - 500){
             setstop(stop+200)
         }
@@ -120,11 +120,11 @@ const Subtwo  = () => {
     }, [window.scrollY])
     const categoryone = async (id, step) => {
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/"+path[1]+"/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/"+path[1]+"/"+id)
             step(categs.data)
-            console.log(categs.data)
+           // console.log(categs.data)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     const bubble=[
@@ -146,7 +146,7 @@ const Subtwo  = () => {
         }
     ]
     return(
-        <div style={{backgroundColor:'#fcfcfc'}}>
+        <div>
             <div>
                 <Menu/>
                 <div className="breadcrumbs">
@@ -171,9 +171,16 @@ const Subtwo  = () => {
                                     </div>
                                 </div>
                         </div>
-                    :
-                ''}
-                    <div className="filter-cont">
+                        :
+                        <div className="sidemenus">
+                            <h3>Category</h3>
+                            <div className="hr"></div>
+                            <div>
+                                <h4>{name}</h4>
+                            </div>
+                        </div>
+                    }
+                    {/* <div className="filter-cont">
                         <div className="filt-bar">
                             <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                         </div>
@@ -264,12 +271,12 @@ const Subtwo  = () => {
                             
                             
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="main-right">
                 {catone.length > 0 ? 
                     <div>
-                    <div className="category">
+                    {/* <div className="category">
                         <h2>{name}</h2>
                         <div className="slider">
                         <div className="slider-inner">
@@ -277,7 +284,7 @@ const Subtwo  = () => {
                                     catone.map(({id,name,image})=>(
                                         <div className="inner-box">
                                             <div className="imcont">
-                                                <img src={'http://geo.vensle.com/storage/category/'+image} alt=""/>
+                                                <img src={'http://vensle.com/api/storage/category/'+image} alt=""/>
                                             </div>
                                             <p>{name.length > 24 ? name.substr(0, 24)+'...':name.substr(0, 24)}</p>
                                         </div>
@@ -304,13 +311,13 @@ const Subtwo  = () => {
                     </div>
                     <div className="low-banner">
                         <img src={lowlev} alt=""/>
-                    </div>
+                    </div> */}
                     </div>
                     : ''
                 }
                     <div className="mr-top">
                         <div className="mrt-left">
-                            <h3>{name}</h3><span>({all.length+' results'})</span>
+                            <h3>{name}</h3><span>({product.length+' results'})</span>
                         </div>
                         <div className="mrt-right">
                             <select>

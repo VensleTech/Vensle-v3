@@ -34,24 +34,24 @@ const MyOrders = () => {
     const getparners = async (val, auth) => {
         if (auth !== 1) {
             const data = payload;
-            console.log(val)
+           // console.log(val)
             try {
-                const product = await axios.post('http://geo.vensle.com/api/'+val, data)
+                const product = await axios.post('http://vensle.com/api/api/'+val, data)
                 setgroceries(product.data)
-                console.log(product.data)
+               // console.log(product.data)
             } catch (error) {
-                console.log(error);
+               // console.log(error);
             }
         }
         else{
             const data = payload;
-            console.log(val)
+           // console.log(val)
             try {
-                const product = await axios.get('http://geo.vensle.com/api/order')
+                const product = await axios.get('http://vensle.com/api/api/order')
                 setgroceries(product.data)
-                console.log(product.data)
+               // console.log(product.data)
             } catch (error) {
-                console.log(error);
+               // console.log(error);
             }
         }
     }

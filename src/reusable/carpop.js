@@ -1,8 +1,8 @@
 import { Carousel } from 'react-carousel-minimal';
 
 function CarouselPop({slide, thumbs}) {
-  console.log(slide)
-  console.log(thumbs)
+ // console.log(slide)
+ // console.log(thumbs)
  const data = [
     {
       image: "./pics (12).jpg",

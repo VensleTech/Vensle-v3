@@ -13,7 +13,7 @@ const Redir = () => {
     const axe =async (e)=>{
         const data = id
         try {
-			const response = await axios.post('http://geo.vensle.com/api/verify', data);
+			const response = await axios.post('http://vensle.com/api/api/verify', data);
             if(response.data.status === 200){
                 nav('/')
             }
@@ -21,7 +21,7 @@ const Redir = () => {
                 setmsg(response.data.message);
             }
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			setmsg('An error occured');
 		}
     }

@@ -48,14 +48,14 @@ const Gsubcategory  = () => {
     },[product])
     const getparners = async () => {
         try {
-            const product = await axios.get(" http://geo.vensle.com/api/search/"+name+'/'+location)
+            const product = await axios.get(" http://vensle.com/api/api/search/"+name+'/'+location)
             setproduct(product.data)
-            const groups = await axios.get('http://geo.vensle.com/api/group')
+            const groups = await axios.get('http://vensle.com/api/api/group')
             setgroups(groups.data)
-            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const categories = await axios.get('http://vensle.com/api/api/groupcat')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const [filt, setfilt] = useState({
@@ -72,7 +72,7 @@ const Gsubcategory  = () => {
         setfilt({...filt, [type]:cat})
         setarea(cat)
         setall(product.filter(items => items.state === cat))
-        console.log(cat + ' '+type)
+       // console.log(cat + ' '+type)
     }
 
     setTimeout(() => {
@@ -93,7 +93,7 @@ const Gsubcategory  = () => {
         window.scrollTo(0,0)
     },[])
     const jones = () => {
-        // console.log(window.scrollY)
+        //// console.log(window.scrollY)
         if(window.innerHeight+window.scrollY >= document.body.offsetHeight - 500){
             setstop(stop+200)
         }
@@ -103,11 +103,11 @@ const Gsubcategory  = () => {
     }, [window.scrollY])
     const categoryone = async (id, step) => {
         try {
-            const categs = await axios.get("http://geo.vensle.com/api/fresh/gcategory/"+id)
+            const categs = await axios.get("http://vensle.com/api/api/fresh/gcategory/"+id)
             step(categs.data)
-            console.log(categs.data)
+           // console.log(categs.data)
         } catch (error) {
-            console.log(error);
+           // console.log(error);
         }
     }
     const bubble=[
@@ -156,7 +156,7 @@ const Gsubcategory  = () => {
                         </div>
                     :
                 ''}
-                    <div className="filter-cont">
+                    {/* <div className="filter-cont">
                         <div className="filt-bar">
                             <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
                         </div>
@@ -247,7 +247,7 @@ const Gsubcategory  = () => {
                             
                             
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="main-right">
                 {catone.length > 0 ? 
@@ -260,7 +260,7 @@ const Gsubcategory  = () => {
                                     catone.map(({id,name,image})=>(
                                         <div className="inner-box">
                                             <div className="imcont">
-                                                <img src={'http://geo.vensle.com/storage/category/'+image} alt=""/>
+                                                <img src={'http://vensle.com/api/storage/category/'+image} alt=""/>
                                             </div>
                                             <p>{name.length > 24 ? name.substr(0, 24)+'...':name.substr(0, 24)}</p>
                                         </div>

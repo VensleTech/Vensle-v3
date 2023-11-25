@@ -44,12 +44,12 @@ const Track = () => {
             customerref:'cus54948'
         }
         try {
-            const product = await axios.post('http://geo.vensle.com/api/tsearch', data)
-            console.log(product.data)
+            const product = await axios.post('http://vensle.com/api/api/tsearch', data)
+           // console.log(product.data)
             setgroceries(product.data)
             setisOpen(true)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
 
@@ -60,12 +60,12 @@ const Track = () => {
             customerref:'cus54948'
         }
         try {
-            const product = await axios.post('http://geo.vensle.com/api/pinsearch', data)
-            console.log(product.data)
+            const product = await axios.post('http://vensle.com/api/api/pinsearch', data)
+           // console.log(product.data)
             setprod(product.data)
             settopic(true)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     return(

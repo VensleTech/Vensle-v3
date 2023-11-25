@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useContext } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import ap from '../apple-icon.webp'
 import go from '../google.png'
 import fb from '../Facebook.webp'
@@ -17,13 +17,13 @@ import Details from "../main/details"
 import { LoginSocialApple, LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login"
 import { createButton, FacebookLoginButton } from "react-social-login-buttons"
 import random from "random-string-generator"
+import Topheader from "./topheader"
 
 
 const Sign = () => {
     const [isOpen, setisOpen] = useState(true)
     const nav = useNavigate()
     const location = useLocation()
-
     const redirectpath = location.state?.path || '/admin/profile'
 
     const [log, setlog] = useState(true)
@@ -43,22 +43,22 @@ const Sign = () => {
     const [shp, setshp] = useState(false)
     const flash = useRef('')
     const ham = useRef('')
-    
-    
-   
+    const reg = useRef('')
+    const emails = useRef('')
+
     const axe =async (e)=>{
         e.preventDefault()
-        console.log('clickedddddddd')
+       // console.log('clickedddddddd')
         var data = payload;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/login', data);
+			const response = await axios.post('http://vensle.com/api/api/login', data);
             // setsucl(response.data.msg);
-            console.log(response.data)
+           // console.log(response.data)
             if(response.data.status !== 200){
                 setsucl(<div className="feedbacks">{response.data.msg}</div>)
             }
             if(response.data.status === 200){
-                const {id,full_name, business_name, email, address, phone, a_lev,token } = response.data.credentials
+                const {id,full_name, business_name, email, address, phone, a_lev,token,profile_img } = response.data.credentials
                 setDetails({...details, 
                     id:id,
                     name:full_name,
@@ -67,7 +67,9 @@ const Sign = () => {
                     email: email,
                     phone: phone,
                     address: address,
-                    specialref:token
+                    profile_image:profile_img, 
+                    specialref:token                
+
                 })
                 const itemize = {...details,
                     id:id,
@@ -79,21 +81,22 @@ const Sign = () => {
                     address: address,
                     specialref:token
                 }
+                console.log(itemize)
                 localStorage.setItem('logs', JSON.stringify(itemize))
-                nav(redirectpath, {replace:true})
+                nav('/')
             }
 		} catch (err) {
-            console.log(err)
+           console.log(err)
             setsucl('')
 			setmsg(err.response.data.errors);
 		}
     }
     const axes =async (e)=>{
         e.preventDefault()
-        console.log('clicked')
+       // console.log('clicked')
         var data = payload2;
         try {
-			const response = await axios.post('http://geo.vensle.com/api/register', data);
+			const response = await axios.post('http://vensle.com/api/api/register', data);
             setsucl2(<div className="feedback">{response.data.msg}</div>);
             setmsg2('')
 		} catch (err) {
@@ -103,9 +106,9 @@ const Sign = () => {
 		}
     }
     const fbs =async (data)=>{
-        console.log('clicked')
+       // console.log('clicked')
         try {
-			const response = await axios.post('http://geo.vensle.com/api/lauth', data);
+			const response = await axios.post('http://vensle.com/api/api/lauth', data);
             if(response.data){
                 const {id,full_name, business_name, email, address, phone, a_lev,token } = response.data
                 setDetails({...details, 
@@ -133,7 +136,7 @@ const Sign = () => {
                 } 
             else{
                 try {
-                    const response = await axios.post('http://geo.vensle.com/api/rauth', data);
+                    const response = await axios.post('http://vensle.com/api/api/rauth', data);
                     const {id,full_name, business_name, email, address, phone, a_lev,token } = response.data
                     setDetails({...details, 
                         id:id,
@@ -159,11 +162,11 @@ const Sign = () => {
                     nav(redirectpath, {replace:true})
                 }
                 catch (err) {
-                        console.log(err)
+                       // console.log(err)
                     }
                 }
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 		}
         
         }
@@ -176,27 +179,21 @@ const Sign = () => {
         }
         
     }
-
+    useEffect(()=>{
+        if(location.pathname === '/register'){
+            reg.current.click()
+        }
+    },[location])
     return (
         <div className="sign">
-        <div className="topbar">
-            <div className="logo">
-                <Link to={'/'}>Vensle</Link>
-            </div>
-            <div className="rightside">
-                <div></div>
-                <div><FontAwesomeIcon icon={faBars} onClick={(e)=>reveal(ham)}/></div>
-                    <div><Link to={'/signin'}>Sign in/Sign up</Link></div>
-                    <div ref={flash}>Start Selling</div>
-                </div>
-            </div>
+        <Topheader/>
                 <div className='popcont' > 
                     <div  className="" >
                        
                             <div className="loginform">
                                 <div className="tabs">
                                 { log === true ? <div className="und">Sign In</div> : <div onClick={(e)=>setlog(!log)} className="curs">Sign In</div> }
-                                { log === false ? <div className="und">Register</div> : <div onClick={(e)=>setlog(!log)} className="curs">Register</div> }
+                                { log === false ? <div className="und">Register</div> : <div onClick={(e)=>setlog(!log)} className="curs" ref={reg}>Register</div> }
                                 </div>
                                 { log === true ? 
                                     <form>
@@ -216,14 +213,14 @@ const Sign = () => {
                                         }
                                         
                                             <label>Email</label>
-                                            <div className="input">
+                                            <div className="input" ref={emails}>
                                                 <input type='email' placeholder="Email" onChange={(e)=>{if(e.target.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
                                                     setpayload({...payload, email:e.target.value})
-                                                    e.target.style.border = '1px solid rgba(0,255,0, 0)'
+                                                    emails.current.style.border = '1px solid rgba(0,255,0, 0)'
                                                     setsucl('');
                                                 }
                                             else{
-                                                e.target.style.border = '1px solid red'
+                                                emails.current.style.border = '1px solid red'
                                                 setsucl(<div className="feedbacks">Invalid email address</div>)
                                             }}}/>
                                             </div>
@@ -243,7 +240,7 @@ const Sign = () => {
                         <LoginSocialFacebook
                                     appId="519240347027384"
                                     onResolve={(response)=>{
-                                        console.log(response)
+                                       // console.log(response)
                                         const data =  {
                                             'full_name': response.data.name,
                                             'email': response.data.email,
@@ -254,7 +251,7 @@ const Sign = () => {
                                         fbs(data)
                                     }}
                                     onReject={(error)=>{
-                                        console.log(error)
+                                       // console.log(error)
                                     }}
                         >
                         <div className="icon"><img  src={fb} alt='' /></div>
@@ -262,7 +259,7 @@ const Sign = () => {
                         <LoginSocialGoogle
                                     client_id="6784803343-a7237i4s172lg9b4kvu1bse5946ga5i1.apps.googleusercontent.com"
                                     onResolve={(response)=>{
-                                        console.log(response)
+                                       // console.log(response)
                                         const data =  {
                                             'full_name': response.data.name,
                                             'email': response.data.email,
@@ -273,7 +270,7 @@ const Sign = () => {
                                         fbs(data)
                                     }}
                                     onReject={(error)=>{
-                                        console.log(error)
+                                       // console.log(error)
                                     }}
                                     scope="https://www.googleapis.com/auth/userinfo.email"
                         >
@@ -282,10 +279,10 @@ const Sign = () => {
                         <LoginSocialFacebook
                                     appId="519240347027384"
                                     onResolve={(response)=>{
-                                        console.log(response)
+                                       // console.log(response)
                                     }}
                                     onReject={(error)=>{
-                                        console.log(error)
+                                       // console.log(error)
                                     }}
                         >
                         <div className="icon"><img  src={ap} alt='' /></div>
@@ -331,7 +328,7 @@ const Sign = () => {
                                         </div>
                                         <label>Password *</label>
                                         <span style={{textAlign:'right',color:'gray',fontSize:'.6em', border:'1px solid gray', padding:'5px', borderRadius:'4px', cursor:'pointer'}} onClick={(e)=>setpayload2({...payload2,password:random(16)})}>Generate Password</span>
-                                        <div className="input">
+                                        <div className="inputed">
                                             <input type={shp === true ?'text':'password'} placeholder="Password" onChange={(e)=>setpayload2({...payload2,password:e.target.value})} value={payload2.password}/>
                                             <p><FontAwesomeIcon icon={shp === true ?faEyeLowVision:faEye} onClick={(e)=>setshp(!shp)}/></p>
                                         </div>

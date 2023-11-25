@@ -1,6 +1,9 @@
 import { faArrowRight, faEnvelope, faMessage } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
+import fb from "../face.png"
+import tw from "../twitter.png"
+import wh from "../whatsapp.png"
 
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -14,11 +17,11 @@ const Foot = () => {
             email:email
         }
         try {
-            const partners = await axios.post('http://geo.vensle.com/api/subscribe', data)
+            const partners = await axios.post('http://vensle.com/api/api/subscribe', data)
             setmsg('Subscribed')
-            console.log(partners)
+           // console.log(partners)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     return (
@@ -46,34 +49,39 @@ const Foot = () => {
                         You can sell or buy new and used items to people around you. With vensle.com buying and 
                         selling is very fast and easy.</p>
 
-                    <p>You can visit our frequently asked question FAQ or you can click on the Sell/Buy Tutorial 
+                    <p>You can visit our <Link to={'/faq'} style={{color:'blue'}}>frequently asked question FAQ</Link> or you can click on the  
+                    <Link to={'/tutorial'} style={{color:'blue'}}> Sell/Buy Tutorial </Link>
                         link to have a comprehensive guide of all the functionalities and how you can take good 
                         advantage of them. Thank you for using vensle.com</p>
 
                     </div>
                     <div className="joinus">
-                        <h3>Join us on</h3>
+                        {/* <h3>Join us on</h3> */}
                         <div>
-                            <img src="../twitter.png" alt="twitter"/>
-                            <img src="../face.png" alt="facebook"/>
-                            <img src="../whatsapp.png" alt="whatsapp"/>
+                            <img src={tw} alt="twitter"/>
+                            <img src={fb} alt="facebook"/>
+                            <img src={wh} alt="whatsapp"/>
                         </div>
                         
                     </div>
                 </div>
                 
-                <div>
+                <div className="company">
                     <h3>Company</h3>
-                    <p><Link to={'/privacy-policy'} style={{color:'black'}}>Privacy Policy</Link></p>
-                    <p><Link to={'/terms-of-use'} style={{color:'black'}}>Terms of Use</Link></p>
-                    <p><Link to={'/product-listing'} style={{color:'black'}}>Product Listing</Link></p>
-                    <p><Link to={'/faq'} style={{color:'black'}}>FAQ</Link></p>
+                    <div>
+                        <p><Link to={'/privacy-policy'} style={{color:'black'}}>Privacy Policy</Link></p>
+                        <p><Link to={'/terms-of-use'} style={{color:'black'}}>Terms of Use</Link></p>
+                        <p><Link to={'/product-listing'} style={{color:'black'}}>Product Listing</Link></p>
+                        <p><Link to={'/faq'} style={{color:'black'}}>FAQ</Link></p>
+                    </div>
                 </div>
-                <div>
+                <div className="company">
                     <h3>Sell</h3>
-                    <p><Link to={'/admin/place'} style={{color:'black'}}>Start Selling</Link></p>
-                    <p><Link to={'/tutorial'} style={{color:'black'}}>Learn to sell</Link></p>
-                    <p><Link to={'/tutorial-settings'} style={{color:'black'}}>Quick setup</Link></p>
+                    <div >
+                        <p><Link to={'/admin/place'} style={{color:'black'}}>Start Selling</Link></p>
+                        <p><Link to={'/tutorial'} style={{color:'black'}}>Learn to sell</Link></p>
+                        <p><Link to={'/tutorial-settings'} style={{color:'black'}}>Quick setup</Link></p>
+                    </div>
                 </div>
                 {/* <div>
                     <h3>About</h3>
@@ -107,8 +115,8 @@ const Foot = () => {
             </div> */}
             
             <div className="foot-bottom">
-                <div className="hr"></div>
-                <p>Copyright &copy 2022. Vensle MarketPlace All Rights Reserved</p>
+                {/* <div className="hr"></div> */}
+                <p>Copyright &copy; {Date('Y').split(' ')[3]} Vensle MarketPlace All Rights Reserved</p>
             </div>
         </div>
     )

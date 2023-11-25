@@ -12,7 +12,7 @@ import Popmessage from "./popmessage"
 import axios from "axios"
 import Mcards from "../reusable/mcards"
 import Pusher from 'pusher-js'
-
+import { format} from 'timeago.js';
 const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [prcard, setprcard] = useState([])
@@ -61,28 +61,28 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
     const axe =async ()=>{
         var data ={accountid:''+identify+'',messageid:chatid};
         try {
-			const response = await axios.post('http://geo.vensle.com/api/productsofchat', data);
+			const response = await axios.post('http://vensle.com/api/api/productsofchat', data);
             setprcard(response.data);
-            // console.log(response.data);
+            //// console.log(response.data);
 		} catch (err) {
-            console.log(err)
+           // console.log(err)
 			// setpayload('An error occured');
 		}
     } 
     const chat =async ()=>{
-        console.log('working')
+       // console.log('working')
         var data ={accountid:''+identify+'',messageid:chatid,productid:prodid};
         try {
-			const response = await axios.post('http://geo.vensle.com/api/chat', data);
+			const response = await axios.post('http://vensle.com/api/api/chat', data);
             setchatscard(response.data);
-            // console.log(response.data);
+            //// console.log(response.data);
       } catch (err) {
-              console.log(err)
+             // console.log(err)
         // setpayload('An error occured');
       }
     }
     const send = async ()=>{
-      console.log('clicked')
+     // console.log('clicked')
       var data = {
           senderid:''+identify+'',
           receiverid:''+pair+'',
@@ -94,11 +94,11 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
             position:1
           }]);
       try {
-          const response = await axios.post('http://geo.vensle.com/api/message', data);
+          const response = await axios.post('http://vensle.com/api/api/message', data);
           
-              console.log(response.data);
+             // console.log(response.data);
         } catch (err) {
-                console.log(err)
+               // console.log(err)
           // setpayload('An error occured');
         }
       }
@@ -106,7 +106,7 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
       // PUSHER
       useEffect(() => {
         // Pusher.logToConsole = true;
-        var pusher = new Pusher('2ee6d4aa15f34a5f2876', {
+        var pusher = new Pusher(process.env.REACT_APP_PUSHER, {
           cluster: 'eu'
         });
         var channel = pusher.subscribe('chat');
@@ -119,14 +119,14 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
 
     const authorise = () =>{
         if(last.length > 1 && parseInt(last.receiverid) === identify){
-            console.log(parseInt(last[0].receiverid))
-            // console.log('refresh '+ refr + ' times')
-            console.log('a match')
+           // console.log(parseInt(last[0].receiverid))
+            //// console.log('refresh '+ refr + ' times')
+           // console.log('a match')
         }
         else{
-            // console.log(parseInt(last[0].receiverid))
-            console.log(identify)
-            console.log('not a match')
+            //// console.log(parseInt(last[0].receiverid))
+           // console.log(identify)
+           // console.log('not a match')
         }
     }
 
@@ -147,7 +147,7 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
             <div>{id+1}</div>
             <div>{sender}</div>
             <div>{body}</div>
-            <div>12:16</div>
+            <div>{format(Date.parse(time.substr(0, 19)), 'en_US')}</div>
             <div className="viewer" onClick={(e)=>setIsOpen(!isOpen)} ><FontAwesomeIcon icon={faEye}/> View</div>
         </div>
             <div className="small-table" onClick={(e)=>setIsOpen(!isOpen)}>
@@ -172,8 +172,8 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
                                       // prcard.map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency}, index)=>(
                                       //     <div 
                                       //     onClick={(e)=>{setprodid(''+id+''); 
-                                      //     // console.log(e.currentTarget)
-                                      //     // console.log(acpr.current[index])
+                                      //     //// console.log(e.currentTarget)
+                                      //     //// console.log(acpr.current[index])
                                       //         if(e.currentTarget === acpr.current[index]){
                                       //           acpr.current[index].style.opacity = 1
                                       //             // acpr.current[index].style.border = '1px solid red'
@@ -220,8 +220,8 @@ const MessageTable = ({id, sender, body, time, chatid, prod, identify, pair, rer
                                   // prcard.map(({id, Images, title, price, transaction, group_name, category_name, item_contact_number, state, country, currency}, index)=>(
                                   //     <div 
                                   //     onClick={(e)=>{setprodid(''+id+''); 
-                                  //     // console.log(e.currentTarget)
-                                  //     // console.log(acpr.current[index])
+                                  //     //// console.log(e.currentTarget)
+                                  //     //// console.log(acpr.current[index])
                                   //         if(e.currentTarget === acpr.current[index]){
                                   //           acpr.current[index].style.opacity = 1
                                   //             // acpr.current[index].style.border = '1px solid red'

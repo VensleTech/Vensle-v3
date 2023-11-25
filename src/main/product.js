@@ -47,14 +47,14 @@ const Products = () => {
     },[product])
     const getparners = async () => {
         try {
-            const product = await axios.get("http://geo.vensle.com/api/groceries/"+location)
+            const product = await axios.get("http://vensle.com/api/api/groceries/"+location)
             setproduct(product.data)
-            const groups = await axios.get('http://geo.vensle.com/api/group')
+            const groups = await axios.get('http://vensle.com/api/api/group')
             setgroups(groups.data)
-            const categories = await axios.get('http://geo.vensle.com/api/groupcat')
+            const categories = await axios.get('http://vensle.com/api/api/groupcat')
             setcategories(categories.data)
          } catch (error) {
-            console.log(error);
+           // console.log(error);
          }
     }
     const [filt, setfilt] = useState({
@@ -71,7 +71,7 @@ const Products = () => {
         setfilt({...filt, [type]:cat})
         setarea(cat)
         setall(product.filter(items => items.state === cat))
-        console.log(cat + ' '+type)
+       // console.log(cat + ' '+type)
     }
     
     return(
@@ -81,7 +81,7 @@ const Products = () => {
             <div className="breadcrumbs">
                 <div><Link to={'/'}>Home</Link> <FontAwesomeIcon icon={faAngleRight} /> Products <FontAwesomeIcon icon={faAngleRight} /> {name}</div>
             </div>
-            <div className="main">
+            {/* <div className="main">
                 <div className="main-sidebar" ref={sidebar}>
                     <div className="filt-bar">
                         <FontAwesomeIcon icon={faBars} /><h3>Filter By</h3>
@@ -115,7 +115,7 @@ const Products = () => {
                         </div>
 
                         {
-                            console.log(group)
+                           // console.log(group)
                         }
                         <div className="Categories">
                             <p>Categories</p>
@@ -224,7 +224,7 @@ const Products = () => {
                         </div>
                     }
                 </div>
-            </div>
+            </div> */}
             <div className="recent">
                 {
                     product.filter(items => items.id === 904).slice(0,1).map(({id, category})=>(

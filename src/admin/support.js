@@ -26,7 +26,7 @@ const Contact = () => {
       }, [])
 
       const send = async ()=>{
-        console.log('clicked')
+       // console.log('clicked')
         var data = {
             senderid:''+identifyer+'',
             receiverid:''+1,
@@ -38,11 +38,11 @@ const Contact = () => {
               position:1
             }]);
         try {
-            const response = await axios.post('http://geo.vensle.com/api/message', data);
+            const response = await axios.post('http://vensle.com/api/api/message', data);
             
-                console.log(response.data);
+               // console.log(response.data);
           } catch (err) {
-                  console.log(err)
+                 // console.log(err)
             // setpayload('An error occured');
           }
         }
@@ -63,14 +63,14 @@ const Contact = () => {
   
       const authorise = () =>{
           if(last.length > 1 && parseInt(last.receiverid) === 1){
-              console.log(parseInt(last[0].receiverid))
-              // console.log('refresh '+ refr + ' times')
-              console.log('a match')
+             // console.log(parseInt(last[0].receiverid))
+              //// console.log('refresh '+ refr + ' times')
+             // console.log('a match')
           }
           else{
-              console.log(parseInt(last.receiverid))
-              console.log(1)
-              console.log('not a match')
+             // console.log(parseInt(last.receiverid))
+             // console.log(1)
+             // console.log('not a match')
           }
       }
     return(
